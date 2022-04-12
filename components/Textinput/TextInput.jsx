@@ -58,6 +58,51 @@ export const RNTextInput = ({ ...props }) => {
   );
 };
 
+export const RNCheckoutTextInput = ({ ...props }) => {
+  return (
+    <View style={{ marginBottom: props.spacing ? props.spacingVal : 0 }}>
+      {props.masked ? (
+        <View>
+          <TouchableOpacity
+            onPress={() => props.setIsCalendar(!props.isCalendar)}
+            style={[styles.box]}
+          >
+            <Typography
+              content={props.selectedStartDate || "date or time"}
+              color="#fff"
+              size={14}
+              roman={true}
+            />
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <TextInput
+          style={[styles.container, styles.grayBG]}
+          placeholder={props.placeholder}
+          keyboardType={props.type}
+          placeholderTextColor={colors.dark_blue}
+          selectionColor={colors.dark_blue}
+          secureTextEntry={props.password}
+          value={props.value}
+          onChangeText={props.handleChange}
+          placeholderStyle={styles.textboxfieldd}
+        />
+      )}
+
+      <View style={styles.error}>
+        {props.isError && (
+          <Typography
+            content={props.error}
+            color="red"
+            size={12}
+            align="left"
+          />
+        )}
+      </View>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     width: SCREEN_WIDTH * 0.9,
@@ -69,6 +114,9 @@ const styles = StyleSheet.create({
 
     height: 40,
     fontFamily: "HelveticaLight",
+  },
+  grayBG:{
+    backgroundColor:colors.light_grey
   },
   error: {},
   textboxfieldd: {

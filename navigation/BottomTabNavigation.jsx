@@ -14,6 +14,7 @@ import JobsSVG from "../SVGR/BottomTabIcons/Jobs";
 import ExpertSVG from "../SVGR/BottomTabIcons/Expert";
 import ProfileSVG from "../SVGR/BottomTabIcons/Profile";
 import MenuSVG from "../SVGR/BottomTabIcons/Menu";
+import TaelimSVG from "../SVGR/Menu/Taelim";
 import { JobScreen } from "../screens/Job/JobScreen";
 import { StoreScreen } from "../screens/Store/StoreScreen";
 import { ExpertScreen } from "../screens/Expert/ExpertScreen";
@@ -36,6 +37,20 @@ import ResultScreen from "../components/ResultScreen/ResultScreen";
 import { UserQuestionsScreen } from "../screens/Questions/UserQuestionsScreen";
 import { SingleQuestionScreen } from "../screens/Questions/SingleQuestion/SingleQuestionScreen";
 import { AboutScreen } from "../screens/About/AboutScreen";
+
+/** ELearning Screens */
+import { ELearningScreen } from "../screens/ELearning/ELearningScreen";
+import { CategoriesScreen } from "../screens/ELearning/CategoriesScreen/CategoriesScreen";
+import { TutorsScreen } from "../screens/ELearning/TutorsScreen/TutorsScreen";
+import { FilterScreen } from "../screens/ELearning/FilterScreen/FilterScreen";
+import { CourseScreen } from "../screens/ELearning/CourseScreen/CourseScreen";
+import { CartScreen } from "../screens/ELearning/CartScreen/CartScreen";
+import { CheckoutScreen } from "../screens/ELearning/CartScreen/CheckoutScreen";
+import { MyCoursesScreen } from "../screens/ELearning/CourseScreen/MyCoursesScreen";
+import { CourseUnitsDetailsScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CourseUnitsDetailsScreen";
+import { TestIntroScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/TestIntroScreen";
+import { MultipleAnswersTestScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/MultipleAnswersTestScreen/MultipleAnswersTestScreen";
+
 const BottomTab = createBottomTabNavigator();
 
 export const BottomTabNavigator = ({ navigation, route }) => {
@@ -188,6 +203,26 @@ function ExpertNavigator() {
     </ExpertStack.Navigator>
   );
 }
+
+const ELearningStack = createStackNavigator();
+function ELearniNgavigator() {
+  return (
+    <ELearningStack.Navigator screenOptions={{ headerShown: false }}>
+      <ELearningStack.Screen name="eLearningScreen" component={ELearningScreen} />
+      <ELearningStack.Screen name="categoriesScreen" component={CategoriesScreen} />
+      <ELearningStack.Screen name="tutorsScreen" component={TutorsScreen} />
+      <ELearningStack.Screen name="filterScreen" component={FilterScreen} />
+      <ELearningStack.Screen name="courseScreen" component={CourseScreen} />
+      <ELearningStack.Screen name="cartScreen" component={CartScreen} />
+      <ELearningStack.Screen name="checkoutScreen" component={CheckoutScreen} />
+      <ELearningStack.Screen name="myCoursesScreen" component={MyCoursesScreen} />
+      <ELearningStack.Screen name="courseUnitsDetailsScreen" component={CourseUnitsDetailsScreen} />
+      <ELearningStack.Screen name="testIntroScreen" component={TestIntroScreen} />
+      <ELearningStack.Screen name="multipleAnswersTestScreen" component={MultipleAnswersTestScreen} />
+    </ELearningStack.Navigator>
+  )
+}
+
 const ProfileStack = createStackNavigator();
 function ProfileNavigator() {
   return (
@@ -219,6 +254,16 @@ function MenuNavigator() {
       <MenuStack.Screen name="settings" component={SettingsScreen} />
       <MenuStack.Screen name="chooseLang" component={ChooseLangScreen} />
       <MenuStack.Screen name="AboutScreen" component={AboutScreen} />
+      <MenuStack.Screen
+        initialRouteName="ELearning"
+        name="ELearning"
+        component={ELearniNgavigator}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => <TaelimSVG focused={focused} />,
+          tabBarActiveTintColor: colors.focused,
+          title: "ELearning",
+        }} />
     </MenuStack.Navigator>
   );
 }

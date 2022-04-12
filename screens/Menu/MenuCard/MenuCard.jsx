@@ -8,6 +8,9 @@ export const MenuCard = ({ item, navigation }) => {
   const navigationHandler = (slug) => {
     // console.log(slug);
     switch (slug) {
+      case 2:
+        navigation.navigate("ELearning");
+        break;
       case 4:
         navigation.navigate("settings");
         break;

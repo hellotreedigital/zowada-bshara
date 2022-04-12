@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   image: {
     borderRadius: 10,
     overflow: "hidden",
+    zIndex: 99999
   },
   info: {
     flexDirection: "row",

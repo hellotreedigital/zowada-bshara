@@ -41,7 +41,6 @@ const MessageModal = ({ visible, message, ...props }) => {
                     align="center"
                     bold={true}
                     size={20}
-                    bold={true}
                   />
                 </View>
               </View>
@@ -49,11 +48,18 @@ const MessageModal = ({ visible, message, ...props }) => {
             <>
               {props.expert && (
                 <View>
+                  {props.showCloseBtn && 
+                    <TouchableOpacity
+                    onPress={() => props.closeBtnHandler()}
+                    style={styles.modalHeader}
+                  >
+                    <CloseSVG stroke={props.closeBtnColor ? props.closeBtnColor : "#E8AF2E"} />
+                  </TouchableOpacity>}
                   <View style={styles.title}>
                     <Typography
                       content={props.title}
-                      color="#E54C2E"
-                      size={20}
+                      color={props.textColor ? props.textColor :"#E54C2E"}
+                      size={props.textSize ? props.textSize : 20}
                       bold={true}
                     />
                   </View>
@@ -68,7 +74,7 @@ const MessageModal = ({ visible, message, ...props }) => {
                   {props.withButton && (
                     <View style={styles.btn}>
                       <SecondaryButton
-                        content="تم"
+                        content={props.buttonText ? props.buttonText :"تم"}
                         onPress={() => props.close()}
                       />
                     </View>

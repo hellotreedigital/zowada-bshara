@@ -40,7 +40,7 @@ export const TermsConditionsScreen = ({ navigation }) => {
             <RedArrowSVG
               style={{
                 transform: [
-                  { rotateY: I18nManagers.isRTL ? "0deg" : "180deg" },
+                  { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
                 ],
               }}
             />

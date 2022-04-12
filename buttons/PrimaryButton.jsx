@@ -9,7 +9,7 @@ export const PrimaryButton = ({ content, onPress, ...props }) => {
     <TouchableOpacity
       style={[
         styles.button,
-        { width: props.type === "large" ? SCREEN_WIDTH * 0.51 : 151 },
+        { width: props.type === "large" ? SCREEN_WIDTH * 0.51 : props.type === "larger" ? "100%" : 151 },
       ]}
       onPress={onPress}
     >

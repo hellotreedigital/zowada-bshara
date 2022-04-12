@@ -4,13 +4,13 @@ import Typography from "../components/Typography/Typography";
 import { colors } from "../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../globals/globals";
 
-export const SecondaryButton = ({ onPress, ...props }) => {
+export const TransparentButton = ({ onPress, ...props }) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.button, props.fullWidth && styles.fullWidth]}>
       <Typography
         roman={true}
         content={props.content}
-        color={colors.white}
+        color={colors.dark_blue}
         size={16}
       />
     </TouchableOpacity>
@@ -23,17 +23,8 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT * 0.05,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.dark_blue,
+    backgroundColor: 'white',
     borderRadius: 10,
-    shadowColor: "#00000070",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.45,
-    shadowRadius: 3.84,
-
-    elevation: 5,
   },
   fullWidth:{
     width: '100%'

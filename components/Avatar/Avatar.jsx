@@ -22,8 +22,8 @@ const Avatar = ({ name, loader, small, profilePic, custom, customSize }) => {
 							small
 								? SCREEN_HEIGHT * 0.06
 								: SCREEN_HEIGHT * customSize
-								? SCREEN_HEIGHT * 0.17
-								: SCREEN_HEIGHT * 0.11
+									? SCREEN_HEIGHT * 0.17
+									: SCREEN_HEIGHT * 0.11
 						}
 						name={name}
 						style={{ paddingTop: 4, borderRadius: custom ? 10 : 100 }}

@@ -69,7 +69,8 @@ export default function App() {
     registerForPushNotificationsAsync()
       .then((token) => setExpoPushToken(token))
       .catch((err) => {
-        alert(err);
+        //TODO: Remove this comment
+        //alert(err);
         setExpoPushToken("testing Token");
       });
 
