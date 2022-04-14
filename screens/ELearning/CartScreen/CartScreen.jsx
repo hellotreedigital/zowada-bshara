@@ -44,7 +44,7 @@ export const CartScreen = ({navigation}) => {
     function deleteCartItem(){}
     return(
         <View style={[globalStyles.body]}>
-            <CustomPageHeader navigation={navigation} title="عربة التسوق" showShare={false} showNotification={false} color={colors.blue}/>
+            <CustomPageHeader navigation={navigation} title="عربة التسوق" showShare={false} showNotification={false} color={colors.blue} spaceHorizontally={true}/>
 
             <View style={[styles.mainPageContainer]}>
             <FlatList

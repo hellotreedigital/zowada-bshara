@@ -25,7 +25,8 @@ export const CustomPageHeaderWithProgress = ({
   showShare,
   showNotification,
   color,
-  isAbsolute
+  isAbsolute,
+  showProgress
 }) => {
   return (
     <View style={[styles.status, isAbsolute && styles.statusPosition, globalStyles.verticalTopSpacer10]}>
@@ -41,7 +42,7 @@ export const CustomPageHeaderWithProgress = ({
             stroke={color}
           />
         </TouchableOpacity>
-        <Progress.Bar progress={0.5} width={SCREEN_WIDTH * 0.8} height={7} color={color}/>
+        {showProgress && <Progress.Bar progress={0.5} width={SCREEN_WIDTH * 0.8} height={7} color={color}/>}
       </View>
       <View style={styles.right}>
         {showNotification && (

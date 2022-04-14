@@ -93,7 +93,9 @@ export const MultipleAnswersTestScreen = ({ navigation }) => {
       {allQuestions.map((question, index) =>(
             <TestQuestionTemplate key={index} ind={index} question={question} onAnswerSelected={onAnswerSelected}/>
         ))}
+      <View style={[globalStyles.verticalTopSpacer20]}><SecondaryButton content="استمر" fullWidth={true} onPress={()=> navigation.push('testResultsScreen')}/></View>
       </View>
+
     </ScrollView>
   );
 };

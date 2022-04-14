@@ -6,30 +6,28 @@ import { CustomPageHeader } from "../../../../components/CustomPageHeader/Custom
 import { colors } from "../../../../globals/colors";
 import { SecondaryButton } from "../../../../buttons/SecondaryButton";
 
-const longText = `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، 
-هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحر
+export const TestIntroScreen = ({ navigation, route }) => {
+
+  const { data } = route.params;
 
 
-صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، 
-هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحرف)هنا يوجد ف)هنا يوجد `;
-
-export const TestIntroScreen = ({ navigation }) => {
   function goToTest() {
-    navigation.push("multipleAnswersTestScreen");
+    navigation.push(data.continueTo);
   }
 
   return (
     <ScrollView style={[globalStyles.body, globalStyles.backgrounWhite]}>
       <CustomPageHeader
         navigation={navigation}
-        title="اختبار"
+        title={data.backButtonTitle}
         showShare={false}
         showNotification={false}
         color={colors.blue}
+        spaceHorizontally={true}
       />
 
       <View style={[styles.mainPageContainer]}>
-        <Text>{longText}</Text>
+        <Text>{data.contentText}</Text>
 
         <View style={globalStyles.verticalTopSpacer20}>
           <SecondaryButton

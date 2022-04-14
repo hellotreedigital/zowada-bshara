@@ -63,6 +63,7 @@ export const CheckoutForm = ({
         handleChange={handleChange("email")}
         error={errorObject.emailError}
         isError={errorObject.errorVisible}
+        numberOfLines={6}
       />
       <>
         <ModalDropdown

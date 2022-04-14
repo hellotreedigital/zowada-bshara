@@ -22,22 +22,23 @@ export const CustomPageHeader = ({
   showShare,
   showNotification,
   color,
+  spaceHorizontally,
   isAbsolute
 }) => {
   return (
-    <View style={[styles.status, isAbsolute && styles.statusPosition]}>
-      <View style={[styles.left, styles.headTitle]}>
-        <TouchableOpacity
+    <View style={[styles.status, isAbsolute && styles.statusPosition, spaceHorizontally && styles.horizontalSpacing]}>
+      <TouchableOpacity
           onPress={() => navigation.pop()}
-          style={styles.spacing}
+          style={[]}
         >
+      <View style={[styles.spacing, styles.headTitle, ]}>
+        
           <ArrowSVG
-            style={{
+            style={[{
               transform: [{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" }],
-            }}
+            }, styles.spacing]}
             fill={color}
           />
-        </TouchableOpacity>
         <Typography
           content={title}
           color={color}
@@ -47,6 +48,7 @@ export const CustomPageHeader = ({
           align="left"
         />
       </View>
+        </TouchableOpacity>
       <View style={styles.right}>
         {showNotification && (
           <TouchableOpacity style={styles.icon}>
@@ -69,8 +71,6 @@ const styles = StyleSheet.create({
     // marginHorizontal: 24,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
   },
   statusPosition: {
     position: "absolute",
@@ -97,8 +97,10 @@ const styles = StyleSheet.create({
   },
   headTitle: {
     marginVertical: 20,
-    marginHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
   },
+  horizontalSpacing:{
+    marginHorizontal: 20
+  }
 });

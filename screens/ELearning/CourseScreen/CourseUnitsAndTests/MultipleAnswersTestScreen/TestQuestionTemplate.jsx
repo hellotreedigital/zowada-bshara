@@ -35,7 +35,7 @@ export const TestQuestionTemplate = ({ ind, question, onAnswerSelected }) => {
         </View>
 
                 {question.answers.map((answer, index) => (
-                    <AnswerItem aind={index} qind={ind} answer={answer} onAnswerSelected={onAnswerSelected}/>
+                    <AnswerItem key={`${ind} ${index}`} aind={index} qind={ind} answer={answer} onAnswerSelected={onAnswerSelected}/>
                 ))}
       </View>
     </View>

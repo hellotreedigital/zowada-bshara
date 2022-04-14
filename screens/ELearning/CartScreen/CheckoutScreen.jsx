@@ -87,7 +87,7 @@ export const CheckoutScreen = ({navigation}) => {
 
     return(
         <View style={[globalStyles.body, globalStyles.backgrounWhite]}>
-            <CustomPageHeader navigation={navigation} title="التسجيل" showShare={false} showNotification={false} color={colors.blue}/>
+            <CustomPageHeader navigation={navigation} title="التسجيل" showShare={false} showNotification={false} color={colors.blue} spaceHorizontally={true}/>
 
             <View style={[styles.mainPageContainer]}>
             <Formik

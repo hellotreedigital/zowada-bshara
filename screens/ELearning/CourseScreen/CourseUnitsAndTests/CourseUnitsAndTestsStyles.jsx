@@ -190,5 +190,65 @@ export const CourseUnitsAndTestsStyles = StyleSheet.create({
       paddingBottom: 60
     },SelectedAnswer:{
       backgroundColor:colors.blue
+    },
+    resultContainer:{
+      display:'flex',
+      flexDirection:'row',
+      justifyContent:'center',
+      alignItems: 'baseline'
+    },
+    score:{
+      fontSize: 70
+    },
+    totalValue:{
+      fontSize:50
+    },
+    caseStudyInput: {
+      width: SCREEN_WIDTH*0.75,
+      textAlign: I18nManager.isRTL ? "right" : "left",
+      backgroundColor: "rgba(255,255,255,0.3)",
+      borderRadius: 10,
+      padding: 15,
+      color: "white",
+      fontFamily: "HelveticaLight",
+      backgroundColor:colors.light_grey,
+      textAlignVertical: "top"
+    },
+    textboxfieldd: {
+      fontFamily: "HelveticaLight",
+    },
+    articleSpacer:{
+      height: SCREEN_HEIGHT*0.1
+    },
+    columnWrapper: {        
+      margin: 0,
+      display: "flex",
+      justifyContent: "space-between"
+    },
+    articleImageCollectionHeader:{
+      color:colors.blue,
+      textDecorationLine: "underline",
+      textDecorationStyle:"solid",
+      textDecorationColor:colors.blue,
+      marginBottom: 25,
+      fontWeight: "bold"
+    },
+    topPart:{
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10
+    },
+    bottomPart:{
+        paddingTop: 0,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10
+    },
+    imagee:{
+        width:20,
+        height:20,
+        margin: 5
+    },
+    posterImage:{
+        width:"100%",
+        margin: 5
     }
 })

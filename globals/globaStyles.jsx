@@ -42,6 +42,15 @@ export const globalStyles = StyleSheet.create({
     backgrounWhite:{
         backgroundColor:'white'
     },
+    backgrounLightBlue:{
+        backgroundColor:colors.light_blue
+    },
+    backgrounLightGrey:{
+        backgroundColor:colors.light_grey
+    },
+    textCenter:{
+        textAlign:'center'
+    },
     icon: {
         width: SCREEN_HEIGHT * 0.037,
         height: SCREEN_HEIGHT * 0.037,
@@ -61,6 +70,19 @@ export const globalStyles = StyleSheet.create({
         borderRadius: 10,
         padding: 20,
         backgroundColor: "#ffffff"
+    },
+    cardShadowStyle1:{
+        borderRadius: 16,
+        paddingHorizontal: 2,
+        backgroundColor: 'transparent',
+        shadowColor: '#444',
+        shadowOffset: {
+          width: 6,
+          height: 3,
+        },
+        shadowOpacity: 0.05,
+        shadowRadius: 5,
+        elevation: 4,
     },
     cardShadow:{
         borderRadius: 16,

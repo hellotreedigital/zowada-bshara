@@ -10,20 +10,17 @@ import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import Typography from "../Typography/Typography";
 
-export const ImageBoxForList = ({ item, handleClickEvent }) => {
+export const ImageBoxForList = ({ item, handleClickEvent, ...props }) => {
     return (
-        <TouchableOpacity style={styles.card} onPress={()=> handleClickEvent ? handleClickEvent(item.item) : {}}>
+        <TouchableOpacity style={[props.isArticle ? styles.articleCard : styles.card]} onPress={()=> handleClickEvent ? handleClickEvent(item.item) : {}}>
             <View>
                 <ImageBackground
-                    style={[
-                        styles.image,
-                        { width: SCREEN_WIDTH * 0.43, height: SCREEN_HEIGHT * 0.13 },
-                    ]}
+                    style={[props.isArticle ? styles.articleImage : styles.image]}
                     resizeMode="cover"
                     source={{ uri: item.item.image }}
                 />
             </View>
-            <View style={styles.info}>
+            {!props.isArticle ? <View style={styles.info}>
                 <View style={styles.infoRight}>
                     <Typography
                         color={colors.dark_blue}
@@ -32,7 +29,7 @@ export const ImageBoxForList = ({ item, handleClickEvent }) => {
                     />
                 </View>
                 <View style={styles.infoLeft}></View>
-            </View>
+            </View>: null}
         </TouchableOpacity>
     );
 };
@@ -45,6 +42,18 @@ const styles = StyleSheet.create({
     image: {
         borderRadius: 10,
         overflow: "hidden",
+        width: SCREEN_WIDTH * 0.43,
+        height:SCREEN_HEIGHT * 0.13
+    },
+    articleCard: {
+        height: SCREEN_HEIGHT * 0.145,
+        width: SCREEN_WIDTH * 0.437,
+    },
+    articleImage:{
+        borderRadius: 10,
+        overflow: "hidden",
+        width: SCREEN_WIDTH * 0.437,
+        height:SCREEN_HEIGHT * 0.13
     },
     info: {
         flexDirection: "row",

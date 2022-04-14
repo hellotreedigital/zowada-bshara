@@ -50,6 +50,11 @@ import { MyCoursesScreen } from "../screens/ELearning/CourseScreen/MyCoursesScre
 import { CourseUnitsDetailsScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CourseUnitsDetailsScreen";
 import { TestIntroScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/TestIntroScreen";
 import { MultipleAnswersTestScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/MultipleAnswersTestScreen/MultipleAnswersTestScreen";
+import { TestResultsScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/MultipleAnswersTestScreen/TestResultsScreen";
+import { CaseStudyScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CaseStudyScreen/CaseStudyScreen";
+import { CaseStudyAnswersScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CaseStudyScreen/CaseStudyAnswersScreen";
+import { CourseArticleScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CourseArticleScreen";
+import { CoursePosterScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CoursePosterScreen";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -219,6 +224,11 @@ function ELearniNgavigator() {
       <ELearningStack.Screen name="courseUnitsDetailsScreen" component={CourseUnitsDetailsScreen} />
       <ELearningStack.Screen name="testIntroScreen" component={TestIntroScreen} />
       <ELearningStack.Screen name="multipleAnswersTestScreen" component={MultipleAnswersTestScreen} />
+      <ELearningStack.Screen name="testResultsScreen" component={TestResultsScreen} />
+      <ELearningStack.Screen name="caseStudyScreen" component={CaseStudyScreen} />
+      <ELearningStack.Screen name="caseStudyAnswersScreen" component={CaseStudyAnswersScreen} />
+      <ELearningStack.Screen name="courseArticleScreen" component={CourseArticleScreen} />
+      <ELearningStack.Screen name="coursePosterScreen" component={CoursePosterScreen} />
     </ELearningStack.Navigator>
   )
 }

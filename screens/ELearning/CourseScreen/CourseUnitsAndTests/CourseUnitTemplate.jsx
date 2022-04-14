@@ -19,23 +19,43 @@ import {ImagePopUpModal} from "../../../../components/Modals/ImagePopUpModal"
 
 
 
-export const CourseUnitTemplate = ({ item, handleClickEvent, ...props }) => {
+export const CourseUnitTemplate = ({ item, handleClickEvent, continueWithCourse, ...props }) => {
+    
+if(item.item.image !== null && item.item.image !== undefined){
+    return (
+        <ItemTemplate1 item={item} handleClickEvent={handleClickEvent} continueWithCourse={continueWithCourse} props={props}/>
+        
+    );
+}else{
+    return (
+        <ItemTemplate2 item={item} handleClickEvent={handleClickEvent} continueWithCourse={continueWithCourse} props={props}/>
+        
+    );
+}
+};
+
+
+const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =>{
+
     let[visible, setVisible] = useState(false);
     
     function closeImageModel(){
         setVisible(false)
     }
     
-    function continueWithCourse(){
+    function continueWithCoursee(){
         setVisible(false);
-        props.continueWithCourse();
+        continueWithCourse();
     }
 
-    return (
+
+    return(
+
+<View style={[globalStyles.cardShadowStyle1, globalStyles.verticalBottomSpacer20]}>
         <View style={[styles.card]} onPress={()=> handleClickEvent ? handleClickEvent(item) : {}}>
             <View style={[styles.columns]}>
                 <View style={[styles.rows, styles.backgroundGrey, styles.topPart]}>
-                <ImagePopUpModal visible={visible} imageUrl={item.item.image} closeBtnHandler={() => {closeImageModel()}} continueWithCourse={continueWithCourse}/>
+                <ImagePopUpModal visible={visible} imageUrl={item.item.image} closeBtnHandler={() => {closeImageModel()}} continueWithCourse={continueWithCoursee}/>
 
                         <TouchableOpacity onPress={() => {setVisible(true)}}>
                         <ImageBackground
@@ -62,10 +82,10 @@ export const CourseUnitTemplate = ({ item, handleClickEvent, ...props }) => {
                 <View style={[styles.columns]}>
                 <View style={[styles.rows, styles.bottomPart]}>
                     <Image resizeMode="cover" source={ThumbsUp} style={styles.imagee} /> 
-                    <Text style={{height: 'auto'}}>135000</Text>
+                    <Text style={{height: 'auto', textAlignVertical:"center"}}>135000</Text>
 
-                    <Image resizeMode="cover" source={ThumbsDown} style={styles.imagee} /> 
-                    <Text style={{height: 'auto'}}>7500</Text>                    
+                    {/* <Image resizeMode="cover" source={ThumbsDown} style={styles.imagee} /> 
+                    <Text style={{height: 'auto'}}>7500</Text>                     */}
                 </View>
 
                 <View style={[styles.rows, styles.bottomPart]}>
@@ -77,15 +97,53 @@ export const CourseUnitTemplate = ({ item, handleClickEvent, ...props }) => {
                 </View>
             </View>
         </View>
-    );
-};
+        </View>
+    )
+}
+
+const ItemTemplate2 = ({item, handleClickEvent, continueWithCourse, ...props}) =>{
+
+    let[visible, setVisible] = useState(false);
+    
+    function closeImageModel(){
+        setVisible(false)
+    }
+    
+    function continueWithCoursee(){
+        setVisible(false);
+        continueWithCourse();
+    }
+
+    
+    return(
+
+<View style={[globalStyles.cardShadowStyle1, globalStyles.verticalBottomSpacer20]}>
+        <View style={[styles.card]} onPress={()=> handleClickEvent ? handleClickEvent(item) : {}}>
+            <View style={[styles.columns]}>
+                <View style={[styles.rows, styles.topPart]}>
+                <ImagePopUpModal visible={visible} imageUrl={item.item.image} closeBtnHandler={() => {closeImageModel()}} continueWithCourse={continueWithCoursee}/>
+
+                    
+                    <View style={[styles.columns, styles.spaceHorizontal]}>
+                        <Typography
+                        color={colors.blue}
+                        size={14}
+                        content={item.item.name}
+                    />
+                    <Text style={{height: 'auto'}}>{item.item.title}</Text>
+                    
+                    </View>
+                </View>
+            </View>
+        </View>
+        </View>
+    )
+}
 
 const styles = StyleSheet.create({
-    card: {
-        display:'flex',
-        marginTop:15,
+    card:{
         borderRadius: 10,
-        shadowColor: "#00000070",
+        backgroundColor: "#ffffff"
     },
     columns:{
         display:'flex',
