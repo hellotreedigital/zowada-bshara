@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { CourseUnitsAndTestsStyles as styles } from "../CourseUnitsAndTestsStyles";
 import { globalStyles } from "../../../../../globals/globaStyles";
 import { render } from "react-dom"; 
 
 export const TestQuestionTemplate = ({ ind, question, onAnswerSelected }) => {
+
   return (
     <View
       style={[
@@ -35,7 +36,7 @@ export const TestQuestionTemplate = ({ ind, question, onAnswerSelected }) => {
         </View>
 
                 {question.answers.map((answer, index) => (
-                    <AnswerItem key={`${ind} ${index}`} aind={index} qind={ind} answer={answer} onAnswerSelected={onAnswerSelected}/>
+                    <AnswerItem key={`${ind}/${index}`} aind={index} qind={ind} answer={answer} onAnswerSelected={onAnswerSelected}/>
                 ))}
       </View>
     </View>
@@ -44,7 +45,8 @@ export const TestQuestionTemplate = ({ ind, question, onAnswerSelected }) => {
 
 
 
-const AnswerItem = ({aind, qind, answer, onAnswerSelected}) =>{
+const AnswerItem = ({aind, qind, answer, onAnswerSelected}) =>{  
+
     return(
         <TouchableOpacity style={[styles.rows, styles.answerRow, answer.isSelected && styles.SelectedAnswer]} onPress={() => onAnswerSelected(qind, aind)}>
             <Text

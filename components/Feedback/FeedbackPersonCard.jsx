@@ -20,7 +20,7 @@ export const FeedbackPersonCard = ({ data, onPress, size }) => {
 				<View style={styles.userinfo}>
 					<View style={styles.image}>
 						<ImageBackground
-							source={{ uri: data.image || data.image_absolute_url }}
+							source={{ uri: data?.image_absolute_url || data?.image }}
 							style={size === 'small' ? styles.dp : styles.dpLarger}
 						/>
 					</View>
@@ -28,20 +28,20 @@ export const FeedbackPersonCard = ({ data, onPress, size }) => {
 				<View style={styles.userinfo}>
 					<View>
 						<Typography
-							content={data.full_name}
+							content={data?.full_name}
 							size={14}
 							bold={true}
 							color={colors.dark_blue}
 							align="left"
 						/>
 					</View>
-					{data.experience_domain.title && <View style={styles.experience}>
+					{data?.experience_domain.title && <View style={styles.experience}>
 						<View>
 							<Typography
 								size={12}
 								roman={true}
 								color={colors.dark_blue}
-								content={data.experience_domain.title}
+								content={data?.experience_domain.title}
 								align="left"
 							/>
 						</View>
@@ -62,9 +62,9 @@ export const FeedbackPersonCard = ({ data, onPress, size }) => {
 
 
 			</View>
-                {data.comment && <View style={[styles.verticalTopSpacer20, styles.verticalBottomSpacer20]}>
+                {data?.comment && <View style={[styles.verticalTopSpacer20, styles.verticalBottomSpacer20]}>
                     <Text>
-                        {data.comment}
+                        {data?.comment}
                     </Text>
                 </View>}
             </View>

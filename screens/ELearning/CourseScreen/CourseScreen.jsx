@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {View} from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { colors } from "../../../globals/colors";
@@ -6,6 +6,7 @@ import {AboutCourseScreen} from './AboutCourseScreen';
 import {CourseSyllabusScreen} from './CourseSyllabusScreen';
 import { PageHeadImageContainer } from "../../../components/PageHeadImageContainer/PageHeadImageContainer";
 import {globalStyles} from '../../../globals/globaStyles';
+import { getSingleCourse } from '../../../api/ELearning/ELearning'
 
 
 
@@ -13,7 +14,17 @@ const Tab = createMaterialTopTabNavigator();
 
 export const CourseScreen = ({ navigation, route }) => {
 
-  const [topImageUrl, setTopImageUrl] = useState("https://images.pexels.com/photos/2627945/pexels-photo-2627945.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+  let [courseInfo, setCourseInfo] = useState();
+  const [topImageUrl, setTopImageUrl] = useState("");
+
+  useEffect(() => {
+    (async () => {
+        let singleCoureInfo = await getSingleCourse(route.params.data.id);
+        setCourseInfo(singleCoureInfo.data.course);
+        setTopImageUrl(`${singleCoureInfo.data.course.formatted_image}${singleCoureInfo.data.course.background_image}`)
+    })()
+  }, [])
+
 
 
     return(
@@ -41,23 +52,30 @@ export const CourseScreen = ({ navigation, route }) => {
         },
       }}>
       <Tab.Screen
-        name="CourseSyllabusScreen"
-        component={AboutCourseScreen}
+        name="AboutCourseScreen"
+        
         options={{
           tabBarLabel: 'حول',
           // tabBarIcon: ({ color, size }) => (
           //   <MaterialCommunityIcons name="home" color={color} size={size} />
           // ),
-        }}  />
+        }}>
+        {() => (
+                  <AboutCourseScreen name="AboutCourseScreen" navigation={navigation} courseInfo={courseInfo} />
+                )}
+          </Tab.Screen>
       <Tab.Screen
-        name="AboutCourseScreen"
-        component={CourseSyllabusScreen}
+        name="CourseSyllabusScreen"
         options={{
           tabBarLabel: 'مواد',
           // tabBarIcon: ({ color, size }) => (
           //   <MaterialCommunityIcons name="settings" color={color} size={size} />
           // ),
-        }} />
+        }}>
+          {() => (
+                  <CourseSyllabusScreen name="CourseSyllabusScreen" navigation={navigation} courseInfo={courseInfo} />
+                )}
+        </Tab.Screen>
     </Tab.Navigator>
     </View>
     )

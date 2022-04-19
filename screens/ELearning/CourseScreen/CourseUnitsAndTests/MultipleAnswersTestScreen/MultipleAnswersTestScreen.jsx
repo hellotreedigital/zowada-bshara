@@ -69,14 +69,14 @@ export const MultipleAnswersTestScreen = ({ navigation }) => {
     
     
     function onAnswerSelected(qi,ai){
-        let allQ = allQuestions;
+        let allQ = [...allQuestions];
         allQ[qi].answers.forEach((a, i) => {
             if(i !== ai) allQ[qi].answers[i].isSelected = false;
         })
         allQ[qi].answers[ai].isSelected = true;
 
         setAllQuestions(allQ);
-        
+        console.log('a')
     }
 
   return (

@@ -13,12 +13,12 @@ import Typography from "../Typography/Typography";
 export const ProfileWithNameBox = ({ item }) => {
     // console.log(item);
     return (
-        <TouchableOpacity style={styles.card}>
+        <TouchableOpacity style={[styles.card, {backgroundColor:'red'}]}>
             <View>
-                <Avatar loader={false} name={item.full_name} custom={true} profilePic={item.image} />
+                <Avatar loader={false} name={item.teacher.full_name} custom={true} profilePic={item.teacher.image_absolute_url} />
             </View>
-            <View style={styles.info}>
-                <Text style={styles.tutorName}>{item.full_name}</Text>
+            <View style={[styles.info, {flexDirection:'row'}]}>
+                <Text style={[styles.tutorName, {flex: 1, flexWrap: 'wrap', height:'auto'}]}>{item.teacher.full_name}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -47,6 +47,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 12,
     },
     tutorName: {
-        textAlign: "center"
+        textAlign: "center",
+        flex: 1,
+        flexWrap: 'wrap',
+        width: SCREEN_HEIGHT * 0.156
     }
 });

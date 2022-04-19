@@ -68,13 +68,16 @@ const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =
                     />
                         </TouchableOpacity>
                     
-                    <View style={[styles.columns, styles.spaceHorizontal]}>
+                    <View style={[styles.columns, styles.spaceHorizontal, {width:'70%'}]}>
                         <Typography
                         color={colors.blue}
                         size={14}
                         content={item.item.name}
                     />
-                    <Text style={{height: 'auto'}}>{item.item.title}</Text>
+                    <View style={{flexDirection:'row', width:'100%'}}>
+                    <Text style={{flex: 1, flexWrap: 'wrap', height:'auto'}}>{item.item.title}</Text>
+
+                    </View>
                     
                     </View>
                 </View>

@@ -17,7 +17,7 @@ export const ImageBoxForList = ({ item, handleClickEvent, ...props }) => {
                 <ImageBackground
                     style={[props.isArticle ? styles.articleImage : styles.image]}
                     resizeMode="cover"
-                    source={{ uri: item.item.image }}
+                    source={{ uri: item.item.formatted_image }}
                 />
             </View>
             {!props.isArticle ? <View style={styles.info}>

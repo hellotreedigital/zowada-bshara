@@ -8,7 +8,7 @@ import Typography from "../../../components/Typography/Typography";
 
 import {globalStyles} from '../../../globals/globaStyles';
 import { SecondaryButton } from "../../../buttons/SecondaryButton";
-
+import { addToCart } from '../../../api/ELearning/ELearning';
 
 const personData = {
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3744&q=80",
@@ -45,42 +45,46 @@ const List = [
 }
 ]
 
-export const AboutCourseScreen = ({ navigation }) => {
+export const AboutCourseScreen = ({ navigation, courseInfo }) => {
 
     let [courseDescription, setCourseDescription] = useState([]);
+    //const courseInfo = route.params.courseInfo
 
-    useEffect(() => {
-      setCourseDescription(List);
-    }, [])
+    // useEffect(() => {
+    //   setCourseDescription(List);
+    // }, [])
     
     function personPressed(){}
 
     function goToCart(){
-      navigation.push('cartScreen');
+      (async () => {
+        const a = await addToCart(courseInfo.id);
+        navigation.push('cartScreen');
+    })()
     }
 
   return (
     <ScrollView style={styles.paragraph} showsVerticalScrollIndicator={false}>
       <View style={[globalStyles.verticalTopSpacer20, globalStyles.verticalBottomSpacer20]}>
         <Text>
-          صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع
-          الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم
-          لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا
-          يوجد محتوى نصي، هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحرف)هنا يوجد{" "}
+        {courseInfo?.about}
+        </Text>
+        <Text>
         </Text>
       </View>
       <View style={[styles.rowContainer, globalStyles.verticalTopSpacer10]}>
         <Text>سعر الدورة:</Text>
-        <Text style={[globalStyles.textBlue, styles.extraMargin]}>89.00$</Text>
+        <Text style={[globalStyles.textBlue, styles.extraMargin]}>{courseInfo?.price}$</Text>
       </View>
 
       <View style={[globalStyles.cardShadow, globalStyles.verticalTopSpacer20]}>
         <View style={[globalStyles.whiteCard]}>
           <Text style={globalStyles.textBlue}>ماذا ستتعلم</Text>
+          <Text style={globalStyles.textDarkBlue}>{courseInfo?.learning_objectives}</Text>
 
-          {courseDescription.map(desc =>(
+          {/* {courseDescription.map(desc =>(
               <ListItem key={desc.id} content={desc.text} />
-          ))}
+          ))} */}
 
           
         </View>
@@ -90,7 +94,7 @@ export const AboutCourseScreen = ({ navigation }) => {
 
         <View style={[globalStyles.verticalBottomSpacer20, globalStyles.verticalTopSpacer20]}>
         <Text style={[globalStyles.textBlue, styles.verticalTopSpacer10]}>المدرب</Text>
-            <FeedbackPersonCard data={personData} size="large"/>
+            <FeedbackPersonCard data={courseInfo?.teacher} size="large"/>
         </View>
 
       <View style={[styles.cardShadow, globalStyles.verticalTopSpacer20]}>

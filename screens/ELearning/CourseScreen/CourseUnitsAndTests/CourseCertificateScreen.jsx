@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, FlatList, ImageBackground, Image } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  FlatList,
+  ImageBackground,
+  Image,
+} from "react-native";
 import { globalStyles } from "../../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "./CourseUnitsAndTestsStyles";
 import { CustomPageHeaderWithProgress } from "../../../../components/CustomPageHeader/CustomPageHeaderWithProgress";
@@ -7,7 +14,10 @@ import { colors } from "../../../../globals/colors";
 import { SecondaryButton } from "../../../../buttons/SecondaryButton";
 import ThumbsUp from "../../../../assets/ThumbsUp.png";
 import Comment from "../../../../assets/Comment.png";
-import { SCREEN_HEIGHT } from "../../../../globals/globals";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../globals/globals";
+import badge from "../../../../assets/Group498.png";
+import badge1 from "../../../../assets/Group4186.png";
+import Certificate from "../../../../assets/Certificate.png";
 
 const questionsAndAnswers = [
   {
@@ -34,24 +44,23 @@ const longText = `صفحة ما سيلهي القارئ عن التركيز عل
 صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، 
 هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحرف)هنا يوجد ف)هنا يوجد `;
 
-export const CoursePosterScreen = ({ navigation }) => {
+export const CourseCertificateScreen = ({ navigation }) => {
   let [allQuestionsAndAnswers, setAllQuestionsAndAnswers] = useState([]);
 
   useEffect(() => {
     setAllQuestionsAndAnswers(questionsAndAnswers);
   }, []);
 
-  function goToResultCertificate(){
+  function goToResultCertificate() {
+    const screenData = {
+      backButtonTitle: "دراسة الحالة",
+      contentText: longText,
+      continueTo: "caseStudyScreen",
+    };
 
-    const screenData ={
-        backButtonTitle:"دراسة الحالة",
-        contentText: longText,
-        continueTo:"caseStudyScreen"
-      }
-
-    navigation.push('courseCertificateScreen',{
-        data: screenData
-    })
+    navigation.push("testIntroScreen", {
+      data: screenData,
+    });
   }
 
   return (
@@ -70,50 +79,29 @@ export const CoursePosterScreen = ({ navigation }) => {
         color={colors.blue}
       />
 
-      <View style={[styles.mainPageContainer, styles.bottomPadding]}>
-
-      <View style={[globalStyles.cardShadowStyle1, globalStyles.verticalBottomSpacer20]}>
-        <View style={[styles.posterContainer]}>
-            <View style={[styles.noPaddingNoMargin]}>
-                <View style={[styles.backgroundGrey, styles.topPart, styles.noPaddingNoMargin, {backgroundColor:'red'}]}>
-
-                        <Image
-                        style={[
-                            styles.posterImage,
-                            { height: SCREEN_HEIGHT * 0.3 },
-                        ]}
-                        resizeMode="cover"
-                        source={{ uri: "https://images.pexels.com/photos/2627945/pexels-photo-2627945.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"}}
-                    />
-                </View>
-
-                <View style={[styles.columns, {padding: 5}]}>
-                <View style={[styles.rows, styles.bottomPart]}>
-                    <Image resizeMode="cover" source={ThumbsUp} style={styles.imagee} /> 
-                    <Text style={{height: 'auto', textAlignVertical:"center"}}>135000</Text>
-
-                    {/* <Image resizeMode="cover" source={ThumbsDown} style={styles.imagee} /> 
-                    <Text style={{height: 'auto'}}>7500</Text>                     */}
-                </View>
-
-                <View style={[styles.rows, styles.bottomPart]}>
-                    <Image resizeMode="cover" source={Comment} style={styles.imagee} /> 
-                    <Text style={{height: 'auto'}}>عرض جميع 20 تعليق</Text>               
-                </View>
-
-
-                </View>
-            </View>
-        </View>
-        </View>
-
-
-        <View style={[globalStyles.verticalTopSpacer20]}>
-          <SecondaryButton
-            content="استمر"
-            fullWidth={true}
-            onPress={() => goToResultCertificate()}
-          />
+      <View
+        style={[
+          styles.mainPageContainer,
+          styles.bottomPadding,
+          {
+            width: "100%",
+            justifyContent: "center",
+            position: "relative",
+            marginHorizontal: 0,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-around",
+          },
+        ]}
+      >
+        <View style={[styles.certificateImagesContainer]}>
+          <View style={[styles.posterImageContainer]}>
+            <Image
+              style={[styles.posterImage, { width: SCREEN_WIDTH * 0.4 }]}
+              resizeMode="contain"
+              source={Certificate}
+            />
+          </View>
         </View>
       </View>
     </ScrollView>

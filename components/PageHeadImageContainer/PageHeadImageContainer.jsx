@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import AppContext from "../../appContext/AppContext";
@@ -24,6 +24,7 @@ const DATA =
 export const PageHeadImageContainer = ({imageUrl}) => {
     const [activeSlide, setActiveSlide] = useState(0);
     const carousel = useRef();
+    
     return (
         <View>
             <View style={styles.carouselItem}>

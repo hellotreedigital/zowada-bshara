@@ -55,6 +55,8 @@ import { CaseStudyScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAn
 import { CaseStudyAnswersScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CaseStudyScreen/CaseStudyAnswersScreen";
 import { CourseArticleScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CourseArticleScreen";
 import { CoursePosterScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CoursePosterScreen";
+import { CourseCertificateScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CourseCertificateScreen";
+import { AllCoursesScreen } from "../screens/ELearning/AllCoursesScreen/AllCoursesScreen";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -229,6 +231,8 @@ function ELearniNgavigator() {
       <ELearningStack.Screen name="caseStudyAnswersScreen" component={CaseStudyAnswersScreen} />
       <ELearningStack.Screen name="courseArticleScreen" component={CourseArticleScreen} />
       <ELearningStack.Screen name="coursePosterScreen" component={CoursePosterScreen} />
+      <ELearningStack.Screen name="courseCertificateScreen" component={CourseCertificateScreen} />
+      <ELearningStack.Screen name="allCoursesScreen" component={AllCoursesScreen} />
     </ELearningStack.Navigator>
   )
 }

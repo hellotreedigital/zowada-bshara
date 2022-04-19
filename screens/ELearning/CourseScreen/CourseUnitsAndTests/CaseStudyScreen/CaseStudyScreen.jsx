@@ -137,7 +137,7 @@ export const CaseStudyScreen = ({ navigation }) => {
                     <TextInput
                       style={[styles.caseStudyInput]}
                       placeholder={'dcn'}
-                      keyboardType="text"
+                      keyboardType="default"
                       placeholderTextColor={colors.blue}
                       selectionColor={colors.dark_blue}
                       secureTextEntry={false}

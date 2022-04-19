@@ -247,8 +247,29 @@ export const CourseUnitsAndTestsStyles = StyleSheet.create({
         height:20,
         margin: 5
     },
+    certificateImagesContainer:{
+      position:'relative',
+      display:'flex',
+      width:SCREEN_WIDTH*0.5,
+      height:SCREEN_HEIGHT* 0.75,
+    },
+    posterImageContainer:{
+      width:'auto',
+      position:'absolute'
+    }, 
     posterImage:{
         width:"100%",
-        margin: 5
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+    },
+    posterContainer:{
+      padding: 0,
+      backgroundColor: "#ffffff",
+      borderRadius:10
+    },
+    noPaddingNoMargin:{
+      padding: 0,
+      margin: 0
     }
+
 })

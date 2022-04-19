@@ -36,7 +36,7 @@ const syllabusItems = [
 
 //const image = { uri: "../../../assets/emptyStar.png" };
 
-export const CourseSyllabusScreen = ({ navigation }) => {
+export const CourseSyllabusScreen = ({ navigation, courseInfo }) => {
   let [syllabusContent, setSyllabusContent] = useState([]);
 
   useEffect(() => {
@@ -46,12 +46,12 @@ export const CourseSyllabusScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.paragraph} showsVerticalScrollIndicator={false}>
       <View style={globalStyles.verticalTopSpacer20}>
-        {syllabusContent.map((item, index) => (
+        {courseInfo?.lessons.map((item, index) => (
           <SyllabusItem
             key={item.id}
             content={item}
             isFirst={index === 0}
-            isLast={index === syllabusContent.length - 1}
+            isLast={index === courseInfo?.lessons.length - 1}
             ind={index}
             navigation={navigation}
           />
@@ -77,7 +77,7 @@ const SyllabusItem = ({ content, isFirst, isLast, ind, navigation }) => {
         </View>
         <View style={styles.columns}>
           <Text style={globalStyles.textBlue}>{content.title}</Text>
-          <Text>{content.text}</Text>
+          <Text>{content.subtitle}</Text>
         </View>
       </View>
 

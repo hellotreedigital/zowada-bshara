@@ -9,7 +9,7 @@ import {CourseUnitTemplate} from './CourseUnitTemplate'
 const data=[
     {
         id: "0",
-        title: "العنوان هنا فلا أحد يرفض أو يكره أو يتجنب الشعور ",
+        title: " العنوان هنا فلا أحد يرفض أو يكره أو يتجنب الشعور العنوان هنا فلا أحد يرفض أو يكره أو يتجنب الشعور ",
         name: 'فلان الفلاني',
         location: "موقع",
         topRanked: true,

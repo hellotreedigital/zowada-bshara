@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ScrollView, View, Text, TouchableOpacity, ActivityIndicator, I18nManager, FlatList, SafeAreaView } from "react-native";
 import { eLearnineStyles as styles } from './ELearningStyles';
 import AppContext from "../../appContext/AppContext";
@@ -19,6 +19,7 @@ import ShareSVG from "../../SVGR/Home/Share";
 import {
     SCREEN_WIDTH
 } from "../../globals/globals";
+import { getHomeData } from '../../api/ELearning/ELearning';
 
 const data = [
     {
@@ -26,7 +27,7 @@ const data = [
         title: "اسم",
         location: "موقع",
         topRanked: true,
-        image:
+        formatted_image:
             "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
     },
     {
@@ -34,7 +35,7 @@ const data = [
         title: "اسم",
         location: "موقع",
         topRanked: true,
-        image:
+        formatted_image:
             "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
     },
     {
@@ -42,14 +43,14 @@ const data = [
         title: "اسم",
         location: "موقع",
         topRanked: true,
-        image:
+        formatted_image:
             "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
     }, {
         id: "3",
         title: "اسم",
         location: "موقع",
         topRanked: true,
-        image:
+        formatted_image:
             "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
     },
     {
@@ -57,44 +58,18 @@ const data = [
         title: "اسم",
         location: "موقع",
         topRanked: true,
-        image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    }
-];
-
-const dataTutor = [
-    {
-        id: "0",
-        full_name: "اسم",
-        image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    },
-    {
-        id: "1",
-        full_name: "اسم",
-        image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    },
-    {
-        id: "2",
-        full_name: "اسم",
-        image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    }, {
-        id: "3",
-        full_name: "اسم",
-        image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    },
-    {
-        id: "4",
-        full_name: "اسم",
-        image:
+        formatted_image:
             "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
     }
 ];
 
 export const ELearningScreen = ({ navigation }) => {
+
+    let [homePageData, setHomePageData] = useState({
+        homepage_courses:[],
+        special_courses:[],
+        top_teachers:[]
+    });
 
     const {
         appLanguage,
@@ -107,6 +82,16 @@ export const ELearningScreen = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [searchString, setSearchString] = useState(null);
 
+    useEffect(() => {
+
+        (async () => {
+            let homePageData = await getHomeData();
+            setHomePageData(homePageData.data);
+        })()
+
+    }, [])
+    
+
     return (
         <FlatList
             style={styles.whiteBackground}
@@ -115,24 +100,39 @@ export const ELearningScreen = ({ navigation }) => {
                     <ImageBoxForList item={item}/>
                 )
             }}
-            data={data}
+            data={homePageData.homepage_courses}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             columnWrapperStyle={styles.columnWrapper}
             numColumns={2}
             nestedScrollEnabled
-            ListHeaderComponent={<ListHeaderComponent navigation={navigation} />}
+            ListHeaderComponent={<ListHeaderComponent navigation={navigation} homePageData={homePageData}/>}
         />
     )
 }
 
 
 
-const ListHeaderComponent = ({ navigation }) => {
+const ListHeaderComponent = ({ navigation, homePageData }) => {
+    let [homeData, setHomeData] = useState({
+        homepage_courses:[],
+        special_courses:[],
+        top_teachers:[]
+    });
     const [loading, setLoading] = useState(false);
     const [searchString, setSearchString] = useState(null);
     const [topImageUrl, setTopImageUrl] = useState("https://images.pexels.com/photos/2627945/pexels-photo-2627945.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+
+    useEffect(() => {
+            if(homePageData){
+            homePageData ? setHomeData(homePageData) : {};
+            //alert(JSON.stringify(homePageData.homepage_courses))
+        }
+            //alert(JSON.stringify(homePageData.data.homepage_courses))
+
+    }, [homePageData])
+
 
     function goToCategories(categoryId, title) {
         let data = {
@@ -146,12 +146,16 @@ const ListHeaderComponent = ({ navigation }) => {
             data: data
         })
     }
+    
+    function goToShowAllCourses() {
+        navigation.push("allCoursesScreen")
+    }
 
     function CategoriesListClickEvent(category){
         goToCategories(category.id, category.title);
     }
 
-    function CourseistClickEvent(course){
+    function CourseListItemClickEvent(course){
         let data = {
             allowSearch: true,
             allowFilter: true,
@@ -246,6 +250,7 @@ const ListHeaderComponent = ({ navigation }) => {
                         }}
                         data={data}
                         keyExtractor={(item) => item.id}
+                        contentContainerStyle={{flex: 1}}
                         horizontal
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
@@ -267,11 +272,12 @@ const ListHeaderComponent = ({ navigation }) => {
                     <FlatList
                         renderItem={(item) => {
                             return(
-                                <ImageBoxForList item={item} handleClickEvent={CourseistClickEvent}/>
+                                <ImageBoxForList item={item} handleClickEvent={CourseListItemClickEvent}/>
                             )
                         }}
-                        data={data}
+                        data={homeData.special_courses}
                         keyExtractor={(item) => item.id}
+                        contentContainerStyle={{flex: 1}}
                         horizontal
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
@@ -292,10 +298,15 @@ const ListHeaderComponent = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.list}>
+
+
+            <Text>
+                </Text>
+                <View style={[styles.list]}>
                     <FlatList
                         renderItem={ProfileWithNameBox}
-                        data={dataTutor}
+                        data={homeData.top_teachers}
+                        contentContainerStyle={{flex: 1}}
                         keyExtractor={(item) => item.id}
                         horizontal
                         showsVerticalScrollIndicator={false}
@@ -315,6 +326,7 @@ const ListHeaderComponent = ({ navigation }) => {
                     </View>
                     <TouchableOpacity
                         style={styles.aboutRight}
+                        onPress={()=> goToShowAllCourses()}
                     >
                         <Typography
                             color={colors.dark_blue}

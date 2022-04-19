@@ -25,6 +25,7 @@ import { Formik } from "formik";
 import { CheckoutForm } from '../../../components/RegisterForm/CheckoutForm'
 import { SecondaryButton } from "../../../buttons/SecondaryButton";
 import MessageModal from "../../../components/Modals/MessageModal";
+import { buyCourses } from '../../../api/ELearning/ELearning';
 
 
 export const CheckoutScreen = ({navigation}) => {
@@ -53,6 +54,13 @@ export const CheckoutScreen = ({navigation}) => {
       const closeModal = () =>{
         navigation.pop(4);
         navigation.push("myCoursesScreen");
+      }
+
+      function buyCourse(){
+        (async () => {
+          const a = await buyCourses();
+          setCheckoutModalVisible(true);
+      })()
       }
 
 
@@ -135,7 +143,7 @@ export const CheckoutScreen = ({navigation}) => {
                         <SecondaryButton
                           size={16}
                           content={'التسجيل'}
-                          onPress={() => {setCheckoutModalVisible(true)}}
+                          onPress={() => {buyCourse()}}
                           fullWidth={true}
                         />
                       </View>

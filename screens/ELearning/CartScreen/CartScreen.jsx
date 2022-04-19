@@ -8,6 +8,7 @@ import {CartItem} from './CartItem';
 import { CartItemImageBox } from './CartItemImageBox';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../globals/globals";
 import {CartCheckoutPop} from './CartCheckoutPop';
+import { getCart, deleteFromCart } from '../../../api/ELearning/ELearning';
 
 const data=[
     {
@@ -41,7 +42,30 @@ const data=[
 
 export const CartScreen = ({navigation}) => {
 
-    function deleteCartItem(){}
+    let [myCart, setMyCart] = useState({
+        total:null,
+        items:[]
+    });
+
+    useEffect(() => {
+        (async () => {
+            let cartList = await getCart();
+            setMyCart(cartList.data);
+        })()
+    }, [])
+    
+    function deleteCartItem(item){
+        (async () => {
+            const a = await deleteFromCart(item.id);
+            let cartList = await getCart();
+            //console.log(cartList)
+
+            setMyCart(cartList.data);
+        })()
+
+    }
+
+    
     return(
         <View style={[globalStyles.body]}>
             <CustomPageHeader navigation={navigation} title="عربة التسوق" showShare={false} showNotification={false} color={colors.blue} spaceHorizontally={true}/>
@@ -53,8 +77,8 @@ export const CartScreen = ({navigation}) => {
                                 <CartItemImageBox item={item} handleClickEvent={deleteCartItem}/>
                             )
                         }}
-                        data={data}
-                        keyExtractor={(item) => item.id}
+                        data={myCart.items}
+                        keyExtractor={(item) => item.course.id}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
                         ItemSeparatorComponent={() => <ItemDivider/>}
@@ -62,7 +86,7 @@ export const CartScreen = ({navigation}) => {
 
             </View>
             
-            <CartCheckoutPop navigation={navigation}/>
+            <CartCheckoutPop navigation={navigation} total={myCart.total}/>
         </View>
     )
 }

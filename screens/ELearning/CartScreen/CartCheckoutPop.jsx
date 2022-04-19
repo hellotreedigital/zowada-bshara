@@ -9,7 +9,7 @@ import { SecondaryButton } from "../../../buttons/SecondaryButton";
 import { TransparentButton } from "../../../buttons/TransparentButton";
 import {globalStyles} from '../../../globals/globaStyles'
 
-export const CartCheckoutPop = ({navigation}) => {
+export const CartCheckoutPop = ({navigation, total}) => {
 
     function goToCheckout(){
       navigation.push('checkoutScreen');
@@ -29,7 +29,7 @@ export const CartCheckoutPop = ({navigation}) => {
       </View>
       <View style={styles.right}>
       <Typography
-          content={'346$'}
+          content={`${total}$`}
           color={colors.blue}
           size={14}
           bold={true}
