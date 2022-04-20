@@ -4,6 +4,7 @@ import { courseStyles as styles } from "./CourseStyles";
 import image from "../../../assets/correctMark.png";
 import ArrowSVG from "../../../SVGR/Globals/Arrow";
 import {globalStyles} from '../../../globals/globaStyles';
+import MessageModal from "../../../components/Modals/MessageModal";
 import { colors } from "../../../globals/colors";
 
 
@@ -36,7 +37,7 @@ const syllabusItems = [
 
 //const image = { uri: "../../../assets/emptyStar.png" };
 
-export const CourseSyllabusScreen = ({ navigation, courseInfo }) => {
+export const CourseSyllabusScreen = ({ navigation, courseInfo, registered }) => {
   let [syllabusContent, setSyllabusContent] = useState([]);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ export const CourseSyllabusScreen = ({ navigation, courseInfo }) => {
             isLast={index === courseInfo?.lessons.length - 1}
             ind={index}
             navigation={navigation}
+            registered={registered}
           />
         ))}
       </View>
@@ -61,7 +63,14 @@ export const CourseSyllabusScreen = ({ navigation, courseInfo }) => {
   );
 };
 
-const SyllabusItem = ({ content, isFirst, isLast, ind, navigation }) => {
+const SyllabusItem = ({ content, isFirst, isLast, ind, navigation, registered }) => {
+
+  let [modalVisible, setModalVisible] = useState(false);
+  function goToLesson(){
+    if(registered === 1) navigation.push('courseUnitsDetailsScreen')
+    else setModalVisible(true)
+    }
+
   return (
     <TouchableOpacity
       style={[
@@ -69,8 +78,15 @@ const SyllabusItem = ({ content, isFirst, isLast, ind, navigation }) => {
         isFirst && styles.firstItemBorder,
         isLast && styles.lastItemBorder,
       ]}
-      onPress={() => {navigation.push('courseUnitsDetailsScreen')}}
+      onPress={() => {goToLesson() }}
     >
+      <MessageModal
+                visible={modalVisible}
+                message={"You are not registered for this course yet"}
+                close={() => {
+                  setModalVisible(false);
+                }}
+              />
       <View style={[styles.rows]}>
         <View style={[styles.columns]}>
           <Text style={[globalStyles.icon, globalStyles.backgrounWhite, globalStyles.iconBorder]}>{ind + 1}</Text>

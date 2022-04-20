@@ -18,7 +18,7 @@ export const ProfileWithNameBox = ({ item }) => {
                 <Avatar loader={false} name={item.teacher.full_name} custom={true} profilePic={item.teacher.image_absolute_url} />
             </View>
             <View style={[styles.info, {flexDirection:'row'}]}>
-                <Text style={[styles.tutorName, {flex: 1, flexWrap: 'wrap', height:'auto'}]}>{item.teacher.full_name}</Text>
+                <Text style={[styles.tutorName]}>{item.teacher.full_name}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         flex: 1,
         flexWrap: 'wrap',
-        width: SCREEN_HEIGHT * 0.156
+        width: SCREEN_HEIGHT * 0.11,
+        height:'auto'
     }
 });

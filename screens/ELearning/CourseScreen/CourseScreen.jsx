@@ -19,9 +19,9 @@ export const CourseScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     (async () => {
-        let singleCoureInfo = await getSingleCourse(route.params.data.id);
-        setCourseInfo(singleCoureInfo.data.course);
-        setTopImageUrl(`${singleCoureInfo.data.course.formatted_image}${singleCoureInfo.data.course.background_image}`)
+        let singleCourseInfo = await getSingleCourse(route.params.data.id);
+        setCourseInfo(singleCourseInfo.data);
+        setTopImageUrl(`${singleCourseInfo.data.course.formatted_image}${singleCourseInfo.data.course.background_image}`)
     })()
   }, [])
 
@@ -61,7 +61,7 @@ export const CourseScreen = ({ navigation, route }) => {
           // ),
         }}>
         {() => (
-                  <AboutCourseScreen name="AboutCourseScreen" navigation={navigation} courseInfo={courseInfo} />
+                  <AboutCourseScreen name="AboutCourseScreen" navigation={navigation} courseInfo={courseInfo?.course} registered={courseInfo?.registered} />
                 )}
           </Tab.Screen>
       <Tab.Screen
@@ -73,7 +73,7 @@ export const CourseScreen = ({ navigation, route }) => {
           // ),
         }}>
           {() => (
-                  <CourseSyllabusScreen name="CourseSyllabusScreen" navigation={navigation} courseInfo={courseInfo} />
+                  <CourseSyllabusScreen name="CourseSyllabusScreen" navigation={navigation} courseInfo={courseInfo?.course} registered={courseInfo?.registered} />
                 )}
         </Tab.Screen>
     </Tab.Navigator>

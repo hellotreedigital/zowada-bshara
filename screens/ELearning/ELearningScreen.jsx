@@ -250,7 +250,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                         }}
                         data={data}
                         keyExtractor={(item) => item.id}
-                        contentContainerStyle={{flex: 1}}
+                        contentContainerStyle={{flexGrow: 1}}
                         horizontal
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
@@ -277,7 +277,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                         }}
                         data={homeData.special_courses}
                         keyExtractor={(item) => item.id}
-                        contentContainerStyle={{flex: 1}}
+                        contentContainerStyle={{flexGrow: 1}}
                         horizontal
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
@@ -306,7 +306,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                     <FlatList
                         renderItem={ProfileWithNameBox}
                         data={homeData.top_teachers}
-                        contentContainerStyle={{flex: 1}}
+                        contentContainerStyle={{flexGrow: 1}}
                         keyExtractor={(item) => item.id}
                         horizontal
                         showsVerticalScrollIndicator={false}

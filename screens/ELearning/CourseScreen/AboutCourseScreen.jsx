@@ -45,7 +45,7 @@ const List = [
 }
 ]
 
-export const AboutCourseScreen = ({ navigation, courseInfo }) => {
+export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
 
     let [courseDescription, setCourseDescription] = useState([]);
     //const courseInfo = route.params.courseInfo
@@ -69,8 +69,6 @@ export const AboutCourseScreen = ({ navigation, courseInfo }) => {
         <Text>
         {courseInfo?.about}
         </Text>
-        <Text>
-        </Text>
       </View>
       <View style={[styles.rowContainer, globalStyles.verticalTopSpacer10]}>
         <Text>سعر الدورة:</Text>
@@ -80,7 +78,7 @@ export const AboutCourseScreen = ({ navigation, courseInfo }) => {
       <View style={[globalStyles.cardShadow, globalStyles.verticalTopSpacer20]}>
         <View style={[globalStyles.whiteCard]}>
           <Text style={globalStyles.textBlue}>ماذا ستتعلم</Text>
-          <Text style={globalStyles.textDarkBlue}>{courseInfo?.learning_objectives}</Text>
+          <Text style={globalStyles.textDarkBlue}> {courseInfo?.learning_objectives}</Text>
 
           {/* {courseDescription.map(desc =>(
               <ListItem key={desc.id} content={desc.text} />
@@ -125,13 +123,12 @@ export const AboutCourseScreen = ({ navigation, courseInfo }) => {
         
       </View>
 
-
-          <View style={[globalStyles.verticalTopSpacer20]}>
+          {registered === 0 && <View style={[globalStyles.verticalTopSpacer20]}>
             <SecondaryButton content="تسجيل" fullWidth={true} onPress={() => {goToCart()}}/>
-          </View>
+          </View>}
         
 
-          <View style={[globalStyles.verticalTopSpacer10, globalStyles.verticalBottomSpacer10]}/>
+          <View style={[globalStyles.verticalTopSpacer20, globalStyles.verticalBottomSpacer10]}/>
     </ScrollView>
   );
 };
