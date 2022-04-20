@@ -269,15 +269,8 @@ function MenuNavigator() {
       <MenuStack.Screen name="chooseLang" component={ChooseLangScreen} />
       <MenuStack.Screen name="AboutScreen" component={AboutScreen} />
       <MenuStack.Screen
-        initialRouteName="ELearning"
         name="ELearning"
-        component={ELearniNgavigator}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) => <TaelimSVG focused={focused} />,
-          tabBarActiveTintColor: colors.focused,
-          title: "ELearning",
-        }} />
+        component={ELearniNgavigator} />
     </MenuStack.Navigator>
   );
 }

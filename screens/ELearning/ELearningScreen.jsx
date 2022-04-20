@@ -85,19 +85,31 @@ export const ELearningScreen = ({ navigation }) => {
     useEffect(() => {
 
         (async () => {
-            let homePageData = await getHomeData();
-            setHomePageData(homePageData.data);
+            let homePageAllData = await getHomeData();
+            setHomePageData(homePageAllData.data);
         })()
 
     }, [])
     
+    function goToCourse(course){
+        let courseScreenData = {
+            allowSearch: true,
+            allowFilter: true,
+            dataUrl: "",
+            id: course.id,
+            title: course.title
+        }
+        navigation.push("courseScreen", {
+            data: courseScreenData
+        })
+    }
 
     return (
         <FlatList
             style={styles.whiteBackground}
             renderItem={(item) => {
                 return(
-                    <ImageBoxForList item={item}/>
+                    <ImageBoxForList item={item} handleClickEvent={goToCourse}/>
                 )
             }}
             data={homePageData.homepage_courses}
@@ -126,16 +138,14 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
 
     useEffect(() => {
             if(homePageData){
-            homePageData ? setHomeData(homePageData) : {};
-            //alert(JSON.stringify(homePageData.homepage_courses))
-        }
-            //alert(JSON.stringify(homePageData.data.homepage_courses))
+                setHomeData(homePageData);
+            }
 
     }, [homePageData])
 
 
     function goToCategories(categoryId, title) {
-        let data = {
+        let categoriesData = {
             allowSearch: true,
             allowFilter: true,
             dataUrl: "",
@@ -143,7 +153,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
             title: title
         }
         navigation.push("categoriesScreen", {
-            data: data
+            data: categoriesData
         })
     }
     
@@ -152,11 +162,11 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
     }
 
     function CategoriesListClickEvent(category){
-        goToCategories(category.id, category.title);
+        //goToCategories(category.id, category.title);
     }
 
     function CourseListItemClickEvent(course){
-        let data = {
+        let courseScreenData = {
             allowSearch: true,
             allowFilter: true,
             dataUrl: "",
@@ -164,7 +174,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
             title: course.title
         }
         navigation.push("courseScreen", {
-            data: data
+            data: courseScreenData
         })
     }
 
@@ -229,8 +239,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
             <View style={styles.body}>
                 <View style={[styles.about, styles.spacing]}>
                     <View style={styles.aboutLeft}>
-                        <TouchableOpacity style={styles.clickableTitles}
-                            onPress={() => goToCategories()}>
+                        <View style={styles.clickableTitles}>
                             <Typography
                                 bold={true}
                                 color={colors.blue}
@@ -238,7 +247,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                                 content="الفئات"
                                 align="left"
                             />
-                        </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
                 <View style={styles.list}>

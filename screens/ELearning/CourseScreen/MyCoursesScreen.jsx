@@ -9,6 +9,7 @@ import SearchSVG from "../../../SVGR/Globals/Search";
 import { ImageBoxForList } from "../../../components/Boxes/ImageBoxForList";
 import FilterSVG from "../../../SVGR/Globals/Filter";
 import {globalStyles} from '../../../globals/globaStyles';
+import { getMyCourses } from '../../../api/ELearning/ELearning';
 
 const courses = [
     {
@@ -55,15 +56,37 @@ const courses = [
 export const MyCoursesScreen = ({ navigation }) => {
 
     const [loading, setLoading] = useState(false);
+    let [myCourses, setMyCourses] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            let allMyCourses = await getMyCourses();
+            setMyCourses(allMyCourses.data.courses);
+        })()
+      }, [])
+
+      function goToCourse(course){
+        let data = {
+            allowSearch: true,
+            allowFilter: true,
+            dataUrl: "",
+            id: course.id,
+            title: course.title
+        }
+        navigation.push("courseScreen", {
+            data: data
+        })
+    }
+
     return (
         <FlatList
             style={styles.whiteBackground}
             renderItem={(item) => {
                 return(
-                    <ImageBoxForList item={item}/>
+                    <ImageBoxForList item={item} handleClickEvent={goToCourse}/>
                 )
             }}
-            data={courses}
+            data={myCourses}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
@@ -78,6 +101,7 @@ export const MyCoursesScreen = ({ navigation }) => {
 const ListHeaderComponent = ({ navigation }) => {
 
     const [loading, setLoading] = useState(false);
+    
 
     return (
         <View

@@ -11,9 +11,8 @@ import Avatar from "../Avatar/Avatar";
 import Typography from "../Typography/Typography";
 
 export const ProfileWithNameBox = ({ item }) => {
-    // console.log(item);
     return (
-        <TouchableOpacity style={[styles.card, {backgroundColor:'red'}]}>
+        <TouchableOpacity style={[styles.card]}>
             <View>
                 <Avatar loader={false} name={item.teacher.full_name} custom={true} profilePic={item.teacher.image_absolute_url} />
             </View>

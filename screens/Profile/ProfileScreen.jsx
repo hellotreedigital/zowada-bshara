@@ -230,6 +230,9 @@ export const ProfileScreen = ({ navigation }) => {
       case 1:
         navigation.navigate("myCases");
         break;
+      case 3:
+        navigation.navigate('ELearning', { screen: 'myCoursesScreen' });
+        break;
       default:
         break;
     }

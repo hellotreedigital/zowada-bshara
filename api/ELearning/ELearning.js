@@ -35,6 +35,23 @@ export async function getHomeData() {
           });
       });
   }
+  
+  /** My Courses */
+  
+  export async function getMyCourses() {
+      let url = `/me${rootUrl}`;
+    
+      return new Promise(async function (resolve, reject) {
+        API.get(url)
+          .then((res) => {
+            resolve(res);
+          })
+          .catch((err) => {
+            console.log("API ERROR: getting all courses failed", err.response.data);
+            reject(err);
+          });
+      });
+  }
 
 
   /** SingleCourse */

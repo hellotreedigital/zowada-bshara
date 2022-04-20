@@ -6,7 +6,7 @@ import {AboutCourseScreen} from './AboutCourseScreen';
 import {CourseSyllabusScreen} from './CourseSyllabusScreen';
 import { PageHeadImageContainer } from "../../../components/PageHeadImageContainer/PageHeadImageContainer";
 import {globalStyles} from '../../../globals/globaStyles';
-import { getSingleCourse } from '../../../api/ELearning/ELearning'
+import { getSingleCourse } from '../../../api/ELearning/ELearning';
 
 
 
