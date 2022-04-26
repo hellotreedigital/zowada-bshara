@@ -65,6 +65,7 @@ export const CategoriesScreen = ({ navigation, route }) => {
             setAllCourses(allCoursesData.data.courses.data);
         })()
     }, []);
+    
 
     function filterCourses(filters){
         (async () => {
@@ -74,7 +75,11 @@ export const CategoriesScreen = ({ navigation, route }) => {
             else if(filters.mostExpensiveSelected) url += `&sort_by=price&sort_direction=DESC`
 
             if(filters.searchString !== '' && filters.searchString !== null && filters.searchString !== undefined) url += `&search=${filters.searchString}`
+            
+            console.log(url)
+            
             let allCoursesData = await getAllCourses(url);
+            console.log(allCoursesData);
             setAllCourses(allCoursesData.data.courses.data);
         })()
     }
@@ -119,7 +124,6 @@ const ListHeaderComponent = ({ navigation, data, filterCourses }) => {
 
     function filterCategory(filters){
         filterCourses(filters)
-        console.log(filters, 'assssss')
     }
 
     return (
