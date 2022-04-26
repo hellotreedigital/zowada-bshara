@@ -14,7 +14,7 @@ export const AllCoursesScreen = ({navigation}) => {
 
     useEffect(() => {
         (async () => {
-            let allCoursesData = await getAllCourses();
+            let allCoursesData = await getAllCourses('');
             setAllCourses(allCoursesData.data.courses.data);
         })()
     }, [])
@@ -57,7 +57,8 @@ export const AllCoursesScreen = ({navigation}) => {
     return (
       <View style={globalStyles.verticalTopSpacer20}>
         <CustomPageHeader
-          navigation={navigation} title="عنوان الوحدة الأولى" showShare={false} showNotification={false} color={colors.blue}
+          navigation={navigation} title="جميع الدورات" showShare={false} showNotification={false} color={colors.blue}
+          spaceHorizontally={true}
         />
       </View>
     );

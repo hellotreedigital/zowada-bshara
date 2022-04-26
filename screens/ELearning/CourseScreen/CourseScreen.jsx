@@ -7,8 +7,7 @@ import {CourseSyllabusScreen} from './CourseSyllabusScreen';
 import { PageHeadImageContainer } from "../../../components/PageHeadImageContainer/PageHeadImageContainer";
 import {globalStyles} from '../../../globals/globaStyles';
 import { getSingleCourse } from '../../../api/ELearning/ELearning';
-
-
+import {CustomPageHeader} from '../../../components/CustomPageHeader/CustomPageHeader';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -29,7 +28,8 @@ export const CourseScreen = ({ navigation, route }) => {
 
     return(
       <View style={[globalStyles.body]}>
-        <PageHeadImageContainer imageUrl={topImageUrl}/>
+        <CustomPageHeader  navigation={navigation} isAbsolute={true} showShare={false} showNotification={false} color={colors.white} spaceHorizontally={true}/>
+        <PageHeadImageContainer imageUrl={topImageUrl}  info={courseInfo?.course}/>
         <Tab.Navigator
       initialRouteName="Feed"
       

@@ -83,7 +83,7 @@ const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =
                 </View>
 
                 <View style={[styles.columns]}>
-                <View style={[styles.rows, styles.bottomPart]}>
+                <View style={[styles.rows, styles.bottomPart, globalStyles.verticalTopSpacer10, globalStyles.verticalBottomNoSpace]}>
                     <Image resizeMode="cover" source={ThumbsUp} style={styles.imagee} /> 
                     <Text style={{height: 'auto', textAlignVertical:"center"}}>135000</Text>
 
@@ -91,7 +91,7 @@ const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =
                     <Text style={{height: 'auto'}}>7500</Text>                     */}
                 </View>
 
-                <View style={[styles.rows, styles.bottomPart]}>
+                <View style={[styles.rows, styles.bottomPart, globalStyles.verticalTopNoSpace]}>
                     <Image resizeMode="cover" source={Comment} style={styles.imagee} /> 
                     <Text style={{height: 'auto'}}>عرض جميع 20 تعليق</Text>               
                 </View>

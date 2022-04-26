@@ -231,7 +231,7 @@ export const ProfileScreen = ({ navigation }) => {
         navigation.navigate("myCases");
         break;
       case 3:
-        navigation.navigate('ELearning', { screen: 'myCoursesScreen' });
+        navigation.navigate('Menu', {screen: 'ELearning', initial: false, params:{ screen: 'myCoursesScreen', initial: false }});
         break;
       default:
         break;

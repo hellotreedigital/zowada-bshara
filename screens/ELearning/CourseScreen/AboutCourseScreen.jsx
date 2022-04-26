@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text,TouchableOpacity } from "react-native";
+import { ScrollView, View, Text,TouchableOpacity, ActivityIndicator } from "react-native";
 import { courseStyles as styles } from "./CourseStyles";
 import {FeedbackCard} from '../../../components/Feedback/FeedbackCard';
 import {FeedbackPersonCard} from '../../../components/Feedback/FeedbackPersonCard';
@@ -8,6 +8,7 @@ import Typography from "../../../components/Typography/Typography";
 
 import {globalStyles} from '../../../globals/globaStyles';
 import { SecondaryButton } from "../../../buttons/SecondaryButton";
+import MessageModal from "../../../components/Modals/MessageModal";
 import { addToCart } from '../../../api/ELearning/ELearning';
 
 const personData = {
@@ -47,24 +48,48 @@ const List = [
 
 export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
 
-    let [courseDescription, setCourseDescription] = useState([]);
+  let [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  let [courseDescription, setCourseDescription] = useState([]);
     //const courseInfo = route.params.courseInfo
 
     // useEffect(() => {
     //   setCourseDescription(List);
     // }, [])
     
-    function personPressed(){}
+    function personPressed(){ /* TODO document why this function 'personPressed' is empty */ }
 
     function goToCart(){
+
       (async () => {
+        setLoading(true);
         const a = await addToCart(courseInfo.id);
-        navigation.push('cartScreen');
+        if(a.status ? a.status.toString()[0] : '' === '2') {          
+          setLoading(false);
+          navigation.push('cartScreen');
+        }
+        else {
+          setModalVisible(true);
+        }
     })()
     }
 
   return (
     <ScrollView style={styles.paragraph} showsVerticalScrollIndicator={false}>
+      <MessageModal
+                visible={modalVisible}
+                message={"Already in cart"}
+                close={() => {
+                  setModalVisible(false);
+                }}
+              />
+      <View style={globalStyles.loader}>
+        <ActivityIndicator
+          animating={loading}
+          size="large"
+          color={colors.dark_blue}
+        />
+      </View>
       <View style={[globalStyles.verticalTopSpacer20, globalStyles.verticalBottomSpacer20]}>
         <Text>
         {courseInfo?.about}
@@ -77,8 +102,8 @@ export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
 
       <View style={[globalStyles.cardShadow, globalStyles.verticalTopSpacer20]}>
         <View style={[globalStyles.whiteCard]}>
-          <Text style={globalStyles.textBlue}>ماذا ستتعلم</Text>
-          <Text style={globalStyles.textDarkBlue}> {courseInfo?.learning_objectives}</Text>
+          <Text style={[globalStyles.textBlue, globalStyles.leftText]}>ماذا ستتعلم</Text>
+          <Text style={[globalStyles.textDarkBlue, globalStyles.leftText]}> {courseInfo?.learning_objectives}</Text>
 
           {/* {courseDescription.map(desc =>(
               <ListItem key={desc.id} content={desc.text} />
@@ -122,7 +147,7 @@ export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
         </View>
         
       </View>
-
+          <Text>{registered}</Text>
           {registered === 0 && <View style={[globalStyles.verticalTopSpacer20]}>
             <SecondaryButton content="تسجيل" fullWidth={true} onPress={() => {goToCart()}}/>
           </View>}

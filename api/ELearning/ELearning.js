@@ -21,9 +21,8 @@ export async function getHomeData() {
   
   /** All Courses */
   
-  export async function getAllCourses() {
-      let url = `${rootUrl}`;
-    
+  export async function getAllCourses(appendedUrl) {
+      let url = `${rootUrl}${appendedUrl}`;
       return new Promise(async function (resolve, reject) {
         API.get(url)
           .then((res) => {
@@ -85,8 +84,8 @@ export async function getHomeData() {
               resolve(res);
             })
             .catch((err) => {
-              console.log("API ERROR: adding item to cart failed", err.response.data);
-              reject(err);
+              //console.log("API ERROR: adding item to cart failed", err.response.data);
+              resolve(err.response.data);
             });
         });
     }

@@ -9,6 +9,7 @@ import SearchSVG from "../../../SVGR/Globals/Search";
 import { ImageBoxForList } from "../../../components/Boxes/ImageBoxForList";
 import FilterSVG from "../../../SVGR/Globals/Filter";
 import {globalStyles} from '../../../globals/globaStyles';
+import { getAllCourses } from '../../../api/ELearning/ELearning';
 
 const courses = [
     {
@@ -54,31 +55,72 @@ const courses = [
 
 export const CategoriesScreen = ({ navigation, route }) => {
 
+    let [allCourses, setAllCourses] = useState([]);
     const [loading, setLoading] = useState(false);
     const { data } = route.params;
+
+    useEffect(() => {
+        (async () => {
+            let allCoursesData = await getAllCourses(`?courses_type_id=${data.id}`);
+            setAllCourses(allCoursesData.data.courses.data);
+        })()
+    }, []);
+
+    function filterCourses(filters){
+        (async () => {
+            let url = `?courses_type_id=${data.id}`;
+            if(filters.aZSelected) url += `&sort_by=title`
+            else if(filters.cheapestSelected) url += `&sort_by=price&sort_direction=ASC`
+            else if(filters.mostExpensiveSelected) url += `&sort_by=price&sort_direction=DESC`
+
+            if(filters.searchString !== '' && filters.searchString !== null && filters.searchString !== undefined) url += `&search=${filters.searchString}`
+            let allCoursesData = await getAllCourses(url);
+            setAllCourses(allCoursesData.data.courses.data);
+        })()
+    }
+
+    function CourseListItemClickEvent(course){
+        let courseScreenData = {
+            allowSearch: true,
+            allowFilter: true,
+            dataUrl: "",
+            id: course.id,
+            title: course.title
+        }
+        navigation.push("courseScreen", {
+            data: courseScreenData
+        })
+    }
+
+
     return (
         <FlatList
             style={styles.whiteBackground}
             renderItem={(item) => {
                 return(
-                    <ImageBoxForList item={item}/>
+                    <ImageBoxForList item={item} handleClickEvent={CourseListItemClickEvent}/>
                 )
             }}
-            data={courses}
+            data={allCourses}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             columnWrapperStyle={styles.columnWrapper}
             numColumns={2}
             nestedScrollEnabled
-            ListHeaderComponent={<ListHeaderComponent navigation={navigation} data={data} />}
+            ListHeaderComponent={<ListHeaderComponent navigation={navigation} data={data} filterCourses={filterCourses}/>}
         />
     )
 }
 
-const ListHeaderComponent = ({ navigation, data }) => {
+const ListHeaderComponent = ({ navigation, data, filterCourses }) => {
 
     const [loading, setLoading] = useState(false);
+
+    function filterCategory(filters){
+        filterCourses(filters)
+        console.log(filters, 'assssss')
+    }
 
     return (
         <View
@@ -110,7 +152,7 @@ const ListHeaderComponent = ({ navigation, data }) => {
                             />
                         </TouchableOpacity>
                         <Typography
-                            content={`${data.title} ${data.id}`}
+                            content={`${data.title}`}
                             color={colors.blue}
                             size={22}
                             bold={true}
@@ -119,7 +161,9 @@ const ListHeaderComponent = ({ navigation, data }) => {
                         />
                     </View>
                     <View style={styles.right}>
-                        {data.allowFilter && <TouchableOpacity style={styles.icon} onPress={() => navigation.push("filterScreen")}>
+                        {data.allowFilter && <TouchableOpacity style={styles.icon} onPress={() => navigation.push("filterScreen", {onGoBack: (filters) => {
+                            filterCategory(filters)
+                        }})}>
                             <FilterSVG />
                         </TouchableOpacity>}
                         {data.allowSearch && <TouchableOpacity style={styles.icon}>

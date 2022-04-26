@@ -27,6 +27,14 @@ export const globalStyles = StyleSheet.create({
     verticalBottomSpacer20:{
         marginBottom: 20
     },
+    verticalBottomNoSpace:{
+        paddingBottom:0,
+        marginBottom: 0
+    },
+    verticalTopNoSpace:{
+        paddingTop:0,
+        marginTop:0
+    },
     textBlue:{
         color: colors.blue
     },
@@ -98,4 +106,12 @@ export const globalStyles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 4,
     },
+    loader: {
+        position: "absolute",
+        top: "30%",
+        alignSelf: "center",
+    },
+    leftText:{
+        textAlign:'left'
+    }
 })

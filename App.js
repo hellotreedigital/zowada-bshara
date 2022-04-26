@@ -53,6 +53,7 @@ export default function App() {
     experienceType: null,
     bottomBarText: null,
     settingsTitles: null,
+    courses_types: null
   });
   const [authState, setAuthState] = useState({});
   const [userName, setUserName] = useState(null);
@@ -148,6 +149,7 @@ export default function App() {
           experienceType: res.data.experience_type,
           bottomBarText: res.data.bottom_menu,
           settingsTitles: res.data.setting_titles,
+          coursesTypes: res.data.courses_types
         });
 
         setAppIsReady(true);

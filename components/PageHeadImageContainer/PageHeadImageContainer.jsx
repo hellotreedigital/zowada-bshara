@@ -21,19 +21,23 @@ const DATA =
         "لوريم إيبسوم هو ببساطة نص شكلي بمعنى أن الغاية هي الشكل وليس المحتوى)",
 };
 
-export const PageHeadImageContainer = ({imageUrl}) => {
+export const PageHeadImageContainer = ({imageUrl, info}) => {
     const [activeSlide, setActiveSlide] = useState(0);
     const carousel = useRef();
     
     return (
         <View>
             <View style={styles.carouselItem}>
-                <View>
+                <View style={styles.imageContainer}>
                     <ImageBackground
                         source={{ uri: imageUrl}}
                         resizeMode="cover"
                         style={{ width: "100%", height: "100%", position: "relative" }}
                     />
+                </View>
+                <View style={styles.infoContainer}>
+                    <Text style={styles.infoText}>{info? info.title : ''}</Text>
+                    <Text style={styles.infoText}>{info? info?.teacher.full_name : ''}</Text>
                 </View>
             </View>
             <View
@@ -81,4 +85,21 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: SCREEN_WIDTH * 0.9,
     },
+    imageContainer:{
+        display:'flex',
+    },
+    infoContainer:{
+        position: "absolute",
+        display:'flex',
+        flexDirection:'column',
+        justifyContent:'center',
+        height: '100%',
+        paddingHorizontal: 35
+    },
+    infoText:{
+        marginVertical:7,
+        color:'white',
+        fontSize: 20,
+        textAlign:'left'
+    }
 });

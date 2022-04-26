@@ -16,52 +16,12 @@ import ArrowSVG from "../../SVGR/Globals/Arrow";
 import { ImageBoxForList } from "../../components/Boxes/ImageBoxForList";
 import { ProfileWithNameBox } from "../../components/Boxes/ProfileWithNameBox";
 import ShareSVG from "../../SVGR/Home/Share";
+import MyOrdersSVG from "../../SVGR/Profile/MyOrders";
+
 import {
     SCREEN_WIDTH
 } from "../../globals/globals";
 import { getHomeData } from '../../api/ELearning/ELearning';
-
-const data = [
-    {
-        id: "0",
-        title: "اسم",
-        location: "موقع",
-        topRanked: true,
-        formatted_image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    },
-    {
-        id: "1",
-        title: "اسم",
-        location: "موقع",
-        topRanked: true,
-        formatted_image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    },
-    {
-        id: "2",
-        title: "اسم",
-        location: "موقع",
-        topRanked: true,
-        formatted_image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    }, {
-        id: "3",
-        title: "اسم",
-        location: "موقع",
-        topRanked: true,
-        formatted_image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    },
-    {
-        id: "4",
-        title: "اسم",
-        location: "موقع",
-        topRanked: true,
-        formatted_image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    }
-];
 
 export const ELearningScreen = ({ navigation }) => {
 
@@ -70,20 +30,11 @@ export const ELearningScreen = ({ navigation }) => {
         special_courses:[],
         top_teachers:[]
     });
-
-    const {
-        appLanguage,
-        userName,
-        token,
-        bestExperts,
-        setBestExperts,
-    } = useContext(AppContext);
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [searchString, setSearchString] = useState(null);
 
     useEffect(() => {
-
         (async () => {
             let homePageAllData = await getHomeData();
             setHomePageData(homePageAllData.data);
@@ -132,6 +83,12 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
         special_courses:[],
         top_teachers:[]
     });
+
+    const {
+        fixedTitles
+    } = useContext(AppContext);
+
+
     const [loading, setLoading] = useState(false);
     const [searchString, setSearchString] = useState(null);
     const [topImageUrl, setTopImageUrl] = useState("https://images.pexels.com/photos/2627945/pexels-photo-2627945.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
@@ -162,7 +119,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
     }
 
     function CategoriesListClickEvent(category){
-        //goToCategories(category.id, category.title);
+        goToCategories(category.id, category.title);
     }
 
     function CourseListItemClickEvent(course){
@@ -218,6 +175,9 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                         />
                     </View>
                     <View style={styles.right}>
+                        <TouchableOpacity style={styles.icon} onPress={()=> {navigation.push('cartScreen')}}>
+                            <MyOrdersSVG  size={30} background='#fff' fill='#e54c2e'/>
+                        </TouchableOpacity>
                         <TouchableOpacity style={styles.icon}>
                             <ShareSVG />
                         </TouchableOpacity>
@@ -257,7 +217,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                                 <ImageBoxForList item={item} handleClickEvent={CategoriesListClickEvent}/>
                             )
                         }}
-                        data={data}
+                        data={fixedTitles.coursesTypes}
                         keyExtractor={(item) => item.id}
                         contentContainerStyle={{flexGrow: 1}}
                         horizontal

@@ -214,7 +214,7 @@ function ExpertNavigator() {
 const ELearningStack = createStackNavigator();
 function ELearniNgavigator() {
   return (
-    <ELearningStack.Navigator screenOptions={{ headerShown: false }}>
+    <ELearningStack.Navigator name='ELearning' screenOptions={{ headerShown: false }}>
       <ELearningStack.Screen name="eLearningScreen" component={ELearningScreen} />
       <ELearningStack.Screen name="categoriesScreen" component={CategoriesScreen} />
       <ELearningStack.Screen name="tutorsScreen" component={TutorsScreen} />
