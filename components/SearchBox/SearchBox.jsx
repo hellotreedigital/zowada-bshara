@@ -75,6 +75,65 @@ export const SearchBox = ({
   );
 };
 
+
+
+export const SearchBoxWOFilter = ({
+  filterEnabled,
+  placeholder,
+  multiline,
+  onPress,
+  width,
+  height,
+  searchString,
+  setSearchString,
+  onSearchPress,
+}) => {
+  return (
+    <>
+      {!filterEnabled ? (
+        <TextInput
+          textAlignVertical={"top"}
+          multiline={multiline}
+          style={[
+            styles.SearchBox,
+            height && { height: height },
+            width && { width: width },
+          ]}
+          value={searchString}
+          placeholderTextColor={colors.dark_blue}
+          placeholderStyle={styles.textboxfieldd}
+          onChangeText={(text) => {
+            setSearchString(text);
+          }}
+          placeholder={placeholder || "بحث"}
+        />
+      ) : (
+        <View style={styles.filteredInput}>
+          <View style={styles.row}>
+            <TouchableOpacity
+              onPress={() => onSearchPress()}
+              style={[styles.icon, { right: 0 }]}
+              disabled={searchString == null ? true : false}
+            >
+              <SearchSVG />
+            </TouchableOpacity>
+          </View>
+          <TextInput
+            style={styles.SearchBox}
+            value={searchString}
+            placeholderTextColor={colors.dark_blue}
+            placeholderStyle={styles.textboxfieldd}
+            onChangeText={(text) => {
+              setSearchString(text);
+            }}
+            placeholder="بحث"
+          />
+        </View>
+      )}
+    </>
+  );
+};
+
 const styles = StyleSheet.create({
   SearchBox: {
     color: colors.dark_blue,

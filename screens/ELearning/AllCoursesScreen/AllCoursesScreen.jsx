@@ -20,7 +20,7 @@ export const AllCoursesScreen = ({navigation}) => {
     }, [])
 
     function CourseListItemClickEvent(course){
-        let data = {
+        let courseScreenData = {
             allowSearch: true,
             allowFilter: true,
             dataUrl: "",
@@ -28,7 +28,7 @@ export const AllCoursesScreen = ({navigation}) => {
             title: course.title
         }
         navigation.push("courseScreen", {
-            data: data
+            data: courseScreenData
         })
     }
     

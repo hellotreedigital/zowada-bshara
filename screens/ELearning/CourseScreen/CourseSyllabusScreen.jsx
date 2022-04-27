@@ -7,42 +7,7 @@ import {globalStyles} from '../../../globals/globaStyles';
 import MessageModal from "../../../components/Modals/MessageModal";
 import { colors } from "../../../globals/colors";
 
-
-const syllabusItems = [
-  {
-    id: 0,
-    title: "العنوان",
-    text: "العنوان هنا فلا أحد يرفض أو يكره",
-    isPassed: true,
-  },
-  {
-    id: 1,
-    title: "العنوان",
-    text: "العنوان هنا فلا أحد يرفض أو يكره",
-    isPassed: true,
-  },
-  {
-    id: 2,
-    title: "العنوان",
-    text: "العنوان هنا فلا أحد يرفض أو يكره",
-    isPassed: false,
-  },
-  {
-    id: 3,
-    title: "العنوان",
-    text: "العنوان هنا فلا أحد يرفض أو يكره",
-    isPassed: false,
-  }
-];
-
-//const image = { uri: "../../../assets/emptyStar.png" };
-
 export const CourseSyllabusScreen = ({ navigation, courseInfo, registered }) => {
-  let [syllabusContent, setSyllabusContent] = useState([]);
-
-  useEffect(() => {
-    setSyllabusContent(syllabusItems);
-  }, []);
 
   return (
     <ScrollView style={styles.paragraph} showsVerticalScrollIndicator={false}>
@@ -66,8 +31,15 @@ export const CourseSyllabusScreen = ({ navigation, courseInfo, registered }) => 
 const SyllabusItem = ({ content, isFirst, isLast, ind, navigation, registered }) => {
 
   let [modalVisible, setModalVisible] = useState(false);
+
   function goToLesson(){
-    if(registered === 1) navigation.push('courseUnitsDetailsScreen')
+    if(registered === 1) {
+      let lessonData = {
+        lessonId: content.id,
+        courseId: content.course_id
+      }
+      navigation.push('courseUnitsDetailsScreen', {data: lessonData})
+    }
     else setModalVisible(true)
     }
 
@@ -98,9 +70,11 @@ const SyllabusItem = ({ content, isFirst, isLast, ind, navigation, registered })
       </View>
 
       <View style={[styles.columns]}>
-      {content.isPassed ? <View style={[globalStyles.icon, globalStyles.backgrounWhite, styles.columns]}>
+      {content.isPassed && content.registered ? <View style={[globalStyles.icon, globalStyles.backgrounWhite, styles.columns]}>
           <Image resizeMode="cover" source={image} style={styles.imagee} /> 
-        </View>: 
+        </View> : null}
+
+        {!content.isPassed && content.registered ? 
         <View style={globalStyles.icon}>
             <ArrowSVG
             style={{
@@ -109,7 +83,7 @@ const SyllabusItem = ({ content, isFirst, isLast, ind, navigation, registered })
                 ]
             }}
             fill={colors.blue}
-        /></View>}
+        /></View> : null}
       </View>
     </TouchableOpacity>
   );

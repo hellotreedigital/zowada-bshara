@@ -7,7 +7,7 @@ import { PageHeadImageContainer } from "../../components/PageHeadImageContainer/
 import { colors } from "../../globals/colors";
 import NotificationSVG from "../../SVGR/Home/Notification";
 import Typography from "../../components/Typography/Typography";
-import { SearchBox } from "../../components/SearchBox/SearchBox";
+import { SearchBoxWOFilter } from "../../components/SearchBox/SearchBox";
 import { AccordationList } from "../../components/AccordationList/AccordationList";
 import { ExpertCard } from "../../components/ExpertsCard/ExpertCard";
 import { FilterModal } from "../../components/Modals/FilterModal";
@@ -187,8 +187,8 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                     </View>
                 </View>
                 <View style={styles.searchBox}>
-                    <SearchBox
-                        filterEnabled={false}
+                    <SearchBoxWOFilter
+                        filterEnabled={true}
                         onPress={() => setModalVisible(true)}
                         onSearchPress={() => searchHandler()}
                         searchString={searchString}

@@ -147,7 +147,6 @@ export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
         </View>
         
       </View>
-          <Text>{registered}</Text>
           {registered === 0 && <View style={[globalStyles.verticalTopSpacer20]}>
             <SecondaryButton content="تسجيل" fullWidth={true} onPress={() => {goToCart()}}/>
           </View>}

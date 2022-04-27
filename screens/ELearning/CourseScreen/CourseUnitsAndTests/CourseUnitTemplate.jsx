@@ -72,10 +72,10 @@ const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =
                         <Typography
                         color={colors.blue}
                         size={14}
-                        content={item.item.name}
+                        content={item.item.title}
                     />
                     <View style={{flexDirection:'row', width:'100%'}}>
-                    <Text style={{flex: 1, flexWrap: 'wrap', height:'auto'}}>{item.item.title}</Text>
+                    <Text style={{flex: 1, flexWrap: 'wrap', height:'auto'}}>{item.item.subtitle}</Text>
 
                     </View>
                     
@@ -131,9 +131,9 @@ const ItemTemplate2 = ({item, handleClickEvent, continueWithCourse, ...props}) =
                         <Typography
                         color={colors.blue}
                         size={14}
-                        content={item.item.name}
+                        content={item.item.title}
                     />
-                    <Text style={{height: 'auto'}}>{item.item.title}</Text>
+                    <Text style={{height: 'auto'}}>{item.item.subtitle}</Text>
                     
                     </View>
                 </View>
