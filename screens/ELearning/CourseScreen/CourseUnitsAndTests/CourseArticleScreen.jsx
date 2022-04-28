@@ -46,7 +46,7 @@ export const CourseArticleScreen = ({ navigation, route }) => {
   const { data } = route.params;
 
   function goToPoster() {
-    navigation.push("coursePosterScreen");
+    navigation.push("coursePosterScreen", {data: {}});
   }
 
   function articleImageClicked() {}

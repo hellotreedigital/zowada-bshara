@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import {
   StyleSheet,
   Text,
@@ -13,14 +13,19 @@ import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import CloseSVG from "../../SVGR/Globals/CloseSVG";
 import Typography from "../Typography/Typography";
-import {globalStyles} from "../../globals/globaStyles"
+import {globalStyles} from "../../globals/globaStyles";
+import Video from 'react-native-video';
 
 
 export const ImagePopUpModal = ({visible, imageUrl, ...props}) =>{
-
+    const reference = useRef();
     function continueWithCourse(){
         props.continueWithCourse();
     }
+
+    function onBuffer(){}
+
+    function videoError(){}
     
     return(
         <Modal isVisible={visible} animationIn="fadeIn" animationOut="fadeOut" style={styles.modal}>
@@ -32,14 +37,27 @@ export const ImagePopUpModal = ({visible, imageUrl, ...props}) =>{
                         <CloseSVG stroke={props.closeBtnColor ? props.closeBtnColor : "#ffffff"} />
                     </TouchableOpacity>
 
-                    <ImageBackground
+                    {false ? 
+                    
+                    <Video source={{uri: imageUrl}}   // Can be a URL or a local file.
+                        ref={(ref) => {
+                            reference
+                        }}                                      // Store reference
+                        onBuffer={onBuffer}                // Callback when remote video is buffering
+                        onError={videoError}               // Callback when video cannot be loaded
+                        style={[
+                            styles.image,
+                            { width: SCREEN_WIDTH, height: SCREEN_HEIGHT * 0.25 },
+                        ]} />
+
+                    :<ImageBackground
                         style={[
                             styles.image,
                             { width: SCREEN_WIDTH, height: SCREEN_HEIGHT * 0.25 },
                         ]}
                         resizeMode="cover"
                         source={{ uri: imageUrl }}
-                    />
+                    />}
 
                     <View style={styles.buttonContainer}>
                         <PrimaryButton type="larger" content="استمر" onPress={() => continueWithCourse()}/>

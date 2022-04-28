@@ -36,11 +36,13 @@ export const CartItemImageBox = ({ item, handleClickEvent }) => {
                         color={colors.dark_blue}
                         size={14}
                         content={`${item.item.course.title}`}
+                        align='left'
                     />
                         <Typography
                         color={colors.blue}
                         size={14}
                         content={item.item.course.price}
+                        align='left'
                     />
                     </View>
                 </View>

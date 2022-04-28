@@ -70,11 +70,10 @@ const SyllabusItem = ({ content, isFirst, isLast, ind, navigation, registered })
       </View>
 
       <View style={[styles.columns]}>
-      {content.isPassed && content.registered ? <View style={[globalStyles.icon, globalStyles.backgrounWhite, styles.columns]}>
+      {content.isPassed && registered ? <View style={[globalStyles.icon, globalStyles.backgrounWhite, styles.columns]}>
           <Image resizeMode="cover" source={image} style={styles.imagee} /> 
         </View> : null}
-
-        {!content.isPassed && content.registered ? 
+        {registered ? 
         <View style={globalStyles.icon}>
             <ArrowSVG
             style={{

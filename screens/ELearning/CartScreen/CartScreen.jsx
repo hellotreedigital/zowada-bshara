@@ -67,7 +67,7 @@ export const CartScreen = ({navigation}) => {
 
     
     return(
-        <View style={[globalStyles.body]}>
+        <View style={[globalStyles.body, globalStyles.backgrounWhite]}>
             <CustomPageHeader navigation={navigation} title="عربة التسوق" showShare={false} showNotification={false} color={colors.blue} spaceHorizontally={true}/>
 
             <View style={[styles.mainPageContainer]}>
@@ -81,6 +81,8 @@ export const CartScreen = ({navigation}) => {
                         keyExtractor={(item) => item.course.id}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={[globalStyles.leftText,{flexGrow: 1}]}
+                        ListEmptyComponent={<View style={[globalStyles.leftText]}><Text style={[globalStyles.leftText, globalStyles.textDarkBlue]}>Your cart is Empty</Text></View>}
                         ItemSeparatorComponent={() => <ItemDivider/>}
                     />
 

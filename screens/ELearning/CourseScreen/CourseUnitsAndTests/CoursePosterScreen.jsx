@@ -34,7 +34,7 @@ const longText = `صفحة ما سيلهي القارئ عن التركيز عل
 صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، 
 هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحرف)هنا يوجد ف)هنا يوجد `;
 
-export const CoursePosterScreen = ({ navigation }) => {
+export const CoursePosterScreen = ({ navigation, route }) => {
   let [allQuestionsAndAnswers, setAllQuestionsAndAnswers] = useState([]);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export const CoursePosterScreen = ({ navigation }) => {
       <View style={[globalStyles.cardShadowStyle1, globalStyles.verticalBottomSpacer20]}>
         <View style={[styles.posterContainer]}>
             <View style={[styles.noPaddingNoMargin]}>
-                <View style={[styles.backgroundGrey, styles.topPart, styles.noPaddingNoMargin, {backgroundColor:'red'}]}>
+                <View style={[styles.backgroundGrey, styles.topPart, styles.noPaddingNoMargin]}>
 
                         <Image
                         style={[

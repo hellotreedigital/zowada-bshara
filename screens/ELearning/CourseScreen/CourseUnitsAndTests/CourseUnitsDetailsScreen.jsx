@@ -73,28 +73,35 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
   let [lessonDataArray, setLessonDataArray] = useState([]);
   useEffect(() => {
     (async () => {
-      let lessonData = await getSingleLesson(
+      let lessondata = await getSingleLesson(
         route.params.data.courseId,
         route.params.data.lessonId
       );
-      console.log(lessonData.data.lesson);
-      let lessonDataArray = lessonData.data.lesson.articles.concat(lessonData.data.lesson.case_studies, lessonData.data.lesson.stickers, lessonData.data.lesson.videos)
-      setLessonData(lessonData.data.lesson);
-      setLessonDataArray(lessonDataArray)
+      let lessondataArray = lessondata.data.lesson.articles.concat(lessondata.data.lesson.case_studies, lessondata.data.lesson.stickers, lessondata.data.lesson.videos)
+      setLessonData(lessondata.data.lesson);
+      setLessonDataArray(lessondataArray)
     })();
   }, []);
 
   function deleteCartItem() {}
 
-  function continueWithCourse() {
+  function continueWithCourse(item) {
+
+    if(item.item.absolute_video_url){
+      console.log('viiiii')
+      let posterData={video: absolute_video_url}
+      navigation.push("coursePosterScreen", {data: posterData});
+    }else{
     const screenData = {
       backButtonTitle: "اختبار",
       contentText: longText,
       continueTo: "multipleAnswersTestScreen",
+      item:item
     };
     navigation.push("testIntroScreen", {
       data: screenData,
     });
+  }
   }
 
   return (
@@ -110,7 +117,7 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
         );
       }}
       data={lessonDataArray}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item, index) => `${item.id}_${index}`}
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       ListHeaderComponent={<ListHeader navigation={navigation} lessonData={lessonData} />}

@@ -21,7 +21,7 @@ import {ImagePopUpModal} from "../../../../components/Modals/ImagePopUpModal"
 
 export const CourseUnitTemplate = ({ item, handleClickEvent, continueWithCourse, ...props }) => {
     
-if(item.item.image !== null && item.item.image !== undefined){
+if(item.item.image !== null && item.item.image !== undefined || true){
     return (
         <ItemTemplate1 item={item} handleClickEvent={handleClickEvent} continueWithCourse={continueWithCourse} props={props}/>
         
@@ -45,17 +45,17 @@ const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =
     
     function continueWithCoursee(){
         setVisible(false);
-        continueWithCourse();
+        continueWithCourse(item);
     }
 
 
     return(
 
 <View style={[globalStyles.cardShadowStyle1, globalStyles.verticalBottomSpacer20]}>
-        <View style={[styles.card]} onPress={()=> handleClickEvent ? handleClickEvent(item) : {}}>
+        <TouchableOpacity style={[styles.card]} onPress={()=> setVisible(true)}>
             <View style={[styles.columns]}>
                 <View style={[styles.rows, styles.backgroundGrey, styles.topPart]}>
-                <ImagePopUpModal visible={visible} imageUrl={item.item.image} closeBtnHandler={() => {closeImageModel()}} continueWithCourse={continueWithCoursee}/>
+                <ImagePopUpModal visible={visible} imageUrl={item.item.absolute_video_url} closeBtnHandler={() => {closeImageModel()}} continueWithCourse={continueWithCoursee}/>
 
                         <TouchableOpacity onPress={() => {setVisible(true)}}>
                         <ImageBackground
@@ -68,14 +68,15 @@ const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =
                     />
                         </TouchableOpacity>
                     
-                    <View style={[styles.columns, styles.spaceHorizontal, {width:'70%'}]}>
+                    <View style={[styles.columns, styles.spaceHorizontal, {width:'70%'}, globalStyles.leftText]}>
                         <Typography
+                        align='left'
                         color={colors.blue}
                         size={14}
                         content={item.item.title}
                     />
                     <View style={{flexDirection:'row', width:'100%'}}>
-                    <Text style={{flex: 1, flexWrap: 'wrap', height:'auto'}}>{item.item.subtitle}</Text>
+                    <Text style={[{flex: 1, flexWrap: 'wrap', height:'auto'}, globalStyles.leftText]}>{item.item.subtitle}</Text>
 
                     </View>
                     
@@ -85,7 +86,7 @@ const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =
                 <View style={[styles.columns]}>
                 <View style={[styles.rows, styles.bottomPart, globalStyles.verticalTopSpacer10, globalStyles.verticalBottomNoSpace]}>
                     <Image resizeMode="cover" source={ThumbsUp} style={styles.imagee} /> 
-                    <Text style={{height: 'auto', textAlignVertical:"center"}}>135000</Text>
+                    <Text style={{height: 'auto', textAlignVertical:"center"}}>{item.item.liked_by_count}</Text>
 
                     {/* <Image resizeMode="cover" source={ThumbsDown} style={styles.imagee} /> 
                     <Text style={{height: 'auto'}}>7500</Text>                     */}
@@ -93,13 +94,13 @@ const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =
 
                 <View style={[styles.rows, styles.bottomPart, globalStyles.verticalTopNoSpace]}>
                     <Image resizeMode="cover" source={Comment} style={styles.imagee} /> 
-                    <Text style={{height: 'auto'}}>عرض جميع 20 تعليق</Text>               
+                    <Text style={{height: 'auto'}}>عرض جميع {item.item.comments_count} تعليق</Text>               
                 </View>
 
 
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
         </View>
     )
 }
@@ -112,7 +113,7 @@ const ItemTemplate2 = ({item, handleClickEvent, continueWithCourse, ...props}) =
         setVisible(false)
     }
     
-    function continueWithCoursee(){
+    function continueWithCoursee(item){
         setVisible(false);
         continueWithCourse();
     }
@@ -121,7 +122,7 @@ const ItemTemplate2 = ({item, handleClickEvent, continueWithCourse, ...props}) =
     return(
 
 <View style={[globalStyles.cardShadowStyle1, globalStyles.verticalBottomSpacer20]}>
-        <View style={[styles.card]} onPress={()=> handleClickEvent ? handleClickEvent(item) : {}}>
+        <TouchableOpacity style={[styles.card]} onPress={()=> continueWithCoursee ? continueWithCoursee(item) : {}}>
             <View style={[styles.columns]}>
                 <View style={[styles.rows, styles.topPart]}>
                 <ImagePopUpModal visible={visible} imageUrl={item.item.image} closeBtnHandler={() => {closeImageModel()}} continueWithCourse={continueWithCoursee}/>
@@ -138,7 +139,7 @@ const ItemTemplate2 = ({item, handleClickEvent, continueWithCourse, ...props}) =
                     </View>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
         </View>
     )
 }
