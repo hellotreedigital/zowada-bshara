@@ -3194,6 +3194,11 @@ expo-updates@~0.11.3:
     resolve-from "^5.0.0"
     uuid "^3.4.0"
 
+expo-video-thumbnails@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/expo-video-thumbnails/-/expo-video-thumbnails-6.2.0.tgz#ebf33500b6b32a9efdaf498a08dd0d9ac2add049"
+  integrity sha512-iW49Atk3fijqxFY7PLfmOL2QhWsD/A7Sh+4X8YtNGG0T2Bd16fMEvl5BdvBZdAz+A67VidGkI4hxNWTDWw/bVw==
+
 expo-web-browser@~10.1.0:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-10.1.0.tgz#fd91695c44e0f3006da3089f230573c1cb3b026a"

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {
     ImageBackground,
     StyleSheet,
@@ -16,12 +16,12 @@ import ThumbsUp from "../../../../assets/ThumbsUp.png";
 import ThumbsDown from "../../../../assets/ThumbsDown.png";
 import Comment from "../../../../assets/Comment.png";
 import {ImagePopUpModal} from "../../../../components/Modals/ImagePopUpModal"
-
+import * as VideoThumbnails from 'expo-video-thumbnails';
 
 
 export const CourseUnitTemplate = ({ item, handleClickEvent, continueWithCourse, ...props }) => {
     
-if(item.item.image !== null && item.item.image !== undefined || true){
+if(item.item.absolute_video_url !== null && item.item.absolute_video_url !== undefined){
     return (
         <ItemTemplate1 item={item} handleClickEvent={handleClickEvent} continueWithCourse={continueWithCourse} props={props}/>
         
@@ -38,7 +38,25 @@ if(item.item.image !== null && item.item.image !== undefined || true){
 const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =>{
 
     let[visible, setVisible] = useState(false);
-    
+    const [image, setImage] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const { uri } = await VideoThumbnails.getThumbnailAsync(
+                    item.item.absolute_video_url,
+                  {
+                    time: 1000,
+                  }
+                );
+                setImage(uri);
+              } catch (e) {
+                console.warn(e);
+              }
+        })();
+      }, []);
+
+
     function closeImageModel(){
         setVisible(false)
     }
@@ -47,7 +65,6 @@ const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =
         setVisible(false);
         continueWithCourse(item);
     }
-
 
     return(
 
@@ -64,7 +81,7 @@ const ItemTemplate1 = ({item, handleClickEvent, continueWithCourse, ...props}) =
                             { width: SCREEN_WIDTH * 0.25, height: SCREEN_WIDTH * 0.25 },
                         ]}
                         resizeMode="cover"
-                        source={{ uri: item.item.image }}
+                        source={{ uri: image }}
                     />
                         </TouchableOpacity>
                     
