@@ -6,17 +6,17 @@ function MyOrdersSVG(props) {
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
-      width={props.size ? SCREEN_HEIGHT * 0.035 : SCREEN_HEIGHT * 0.073}
-      height={props.size ? SCREEN_HEIGHT * 0.035 : SCREEN_HEIGHT * 0.073}
-      viewBox={props.size ? `-2 0 ${SCREEN_HEIGHT * 0.07} ${SCREEN_HEIGHT * 0.07}` : "0 0 60 60"}
+      width={props.size ? props.size/2 : SCREEN_HEIGHT * 0.073}
+      height={props.size ? props.size/2 : SCREEN_HEIGHT * 0.073}
+      viewBox={props.size ? `${props.size/2} ${props.size/2} ${props.size} ${props.size}` : "0 0 60 60"}
       {...props}
     >
       <Rect
-        data-name="Rectangle 1400"
-        width={props.size ? SCREEN_HEIGHT * 0.07 : 60}
-        height={props.size ? SCREEN_HEIGHT * 0.07 : 60}
+        data-name="Rectangle 1200"
+        width={props.size ? props.size : 60}
+        height={props.size ? props.size : 60}
         rx={30}
-        fill={props.background ? 'transparent' : "#104251"}
+        fill={props.background ? props.background : "#104251"}
       />
       <G data-name="Group 489" fill={props.fill ? props.fill : "#fff"}>
         <Path

@@ -1,12 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {ScrollView, View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList} from 'react-native';
 import {globalStyles} from '../../../globals/globaStyles';
 import {cartStyles as styles} from './CartStyles';
 import {CustomPageHeader} from '../../../components/CustomPageHeader/CustomPageHeader';
 import {colors} from '../../../globals/colors';
-import {CartItem} from './CartItem';
 import { CartItemImageBox } from './CartItemImageBox';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../globals/globals";
 import {CartCheckoutPop} from './CartCheckoutPop';
 import { getCart, deleteFromCart } from '../../../api/ELearning/ELearning';
 
@@ -56,9 +54,8 @@ export const CartScreen = ({navigation}) => {
     
     function deleteCartItem(item){
         (async () => {
-            const a = await deleteFromCart(item.id);
+            await deleteFromCart(item.id);
             let cartList = await getCart();
-            //console.log(cartList)
 
             setMyCart(cartList.data);
         })()

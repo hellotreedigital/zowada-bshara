@@ -9,6 +9,7 @@ import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import Avatar from "../Avatar/Avatar";
 import Typography from "../Typography/Typography";
+import { globalStyles } from "../../globals/globaStyles";
 
 export const ProfileWithNameBox = ({ item }) => {
     return (
@@ -50,6 +51,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexWrap: 'wrap',
         width: SCREEN_HEIGHT * 0.11,
-        height:'auto'
+        height:'auto',
+        color: colors.dark_blue
     }
 });

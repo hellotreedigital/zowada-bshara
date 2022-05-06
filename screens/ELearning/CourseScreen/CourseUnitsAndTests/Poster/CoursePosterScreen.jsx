@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, FlatList, ImageBackground, Image } from "react-native";
-import { globalStyles } from "../../../../globals/globaStyles";
-import { CourseUnitsAndTestsStyles as styles } from "./CourseUnitsAndTestsStyles";
-import { CustomPageHeaderWithProgress } from "../../../../components/CustomPageHeader/CustomPageHeaderWithProgress";
-import { colors } from "../../../../globals/colors";
-import { SecondaryButton } from "../../../../buttons/SecondaryButton";
-import ThumbsUp from "../../../../assets/ThumbsUp.png";
-import Comment from "../../../../assets/Comment.png";
-import { SCREEN_HEIGHT } from "../../../../globals/globals";
+import { ScrollView, View, Text, FlatList, ImageBackground, Image, useWindowDimensions, TouchableOpacity } from "react-native";
+import { globalStyles } from "../../../../../globals/globaStyles";
+import { CourseUnitsAndTestsStyles as styles } from "../CourseUnitsAndTestsStyles";
+import { CustomPageHeaderWithProgress } from "../../../../../components/CustomPageHeader/CustomPageHeaderWithProgress";
+import { colors } from "../../../../../globals/colors";
+import { SecondaryButton } from "../../../../../buttons/SecondaryButton";
+import ThumbsUp from "../../../../../assets/ThumbsUp.png";
+import Comment from "../../../../../assets/Comment.png";
+import { SCREEN_HEIGHT } from "../../../../../globals/globals";
+import { getStickerComments, likeUnlikeSticker} from '../../../../../api/ELearning/ELearning';
 
 const questionsAndAnswers = [
   {
@@ -35,11 +36,36 @@ const longText = `صفحة ما سيلهي القارئ عن التركيز عل
 هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحرف)هنا يوجد ف)هنا يوجد `;
 
 export const CoursePosterScreen = ({ navigation, route }) => {
-  let [allQuestionsAndAnswers, setAllQuestionsAndAnswers] = useState([]);
+  const [loadingResults, setLoadingResults] = useState(false);
+  let [courseRefresh, setcourseRefresh] = useState(false);
+  let [commentsCount, setCommentsCount] = useState(null);
+  const { width } = useWindowDimensions();
+  const { data, courseId, lessonId } = route.params;
+  let [sticker, setSticker] = useState();
 
   useEffect(() => {
-    setAllQuestionsAndAnswers(questionsAndAnswers);
-  }, []);
+    const focusListener = navigation.addListener('focus', () => {
+      setcourseRefresh(prev => !prev);
+    });
+    return () => {focusListener?.remove()};
+  }, [navigation])
+
+
+  useEffect(() => {
+    (async () => {
+      setLoadingResults(true);
+
+      let stComments = await getStickerComments(
+        courseId,
+        lessonId,
+        data.i.id
+      );
+      setCommentsCount(stComments.data.comments.data.length);
+      setSticker(data.i)
+      setLoadingResults(false);
+    })();
+  }, [courseRefresh]);
+
 
   function goToResultCertificate(){
 
@@ -52,6 +78,23 @@ export const CoursePosterScreen = ({ navigation, route }) => {
     navigation.push('courseCertificateScreen',{
         data: screenData
     })
+  }
+
+  async function likeSticker(){
+    const like = await likeUnlikeSticker(courseId,
+      lessonId,
+      sticker.id);
+    let s = Object.assign({}, sticker);
+    s.liked_by_count = like.data.likes_count;
+    setSticker(s);
+  }
+
+  function goToStickerCommentsScreen(){
+    navigation.push('posterCommentsScreen', {data:{
+      courseId: courseId,
+      lessonId: lessonId,
+      stickerId: sticker.id
+    }})
   }
 
   return (
@@ -88,18 +131,18 @@ export const CoursePosterScreen = ({ navigation, route }) => {
                 </View>
 
                 <View style={[styles.columns, {padding: 5}]}>
-                <View style={[styles.rows, styles.bottomPart]}>
+                <TouchableOpacity style={[styles.rows, styles.bottomPart]} onPress={() => likeSticker()}>
                     <Image resizeMode="cover" source={ThumbsUp} style={styles.imagee} /> 
-                    <Text style={{height: 'auto', textAlignVertical:"center"}}>135000</Text>
+                    <Text style={{height: 'auto', textAlignVertical:"center"}}>{sticker?.liked_by_count}</Text>
 
                     {/* <Image resizeMode="cover" source={ThumbsDown} style={styles.imagee} /> 
                     <Text style={{height: 'auto'}}>7500</Text>                     */}
-                </View>
+                </TouchableOpacity>
 
-                <View style={[styles.rows, styles.bottomPart]}>
+                <TouchableOpacity style={[styles.rows, styles.bottomPart]} onPress={() => {goToStickerCommentsScreen()}}>
                     <Image resizeMode="cover" source={Comment} style={styles.imagee} /> 
-                    <Text style={{height: 'auto'}}>عرض جميع 20 تعليق</Text>               
-                </View>
+                    <Text style={{height: 'auto'}}>عرض جميع {commentsCount} تعليق</Text>               
+                </TouchableOpacity>
 
 
                 </View>

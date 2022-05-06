@@ -56,7 +56,7 @@ export const FilterScreen = ({ navigation, route }) => {
 
       <View style={[styles.mainPageContainer, styles.bottomPadding]}>
 
-      <View style={styles.searchBox}>
+      {false && <View style={styles.searchBox}>
                     <SearchBox
                         filterEnabled={false}
                         onPress={() => setModalVisible(true)}
@@ -64,12 +64,12 @@ export const FilterScreen = ({ navigation, route }) => {
                         searchString={searchString}
                         setSearchString={setSearchString}
                     />
-        </View>
+        </View>}
         
 
       <TouchableOpacity
           style={[]}
-          onPress={() => setAZSelected((prev) => !prev )}
+          onPress={() => {setAZSelected((prev) => !prev ); setMostExpensiveSelected(false); setCheapestSelected(false);}}
         >
       <View style={[styles.spacing, styles.headTitle, ]}>
         <Typography
@@ -86,7 +86,7 @@ export const FilterScreen = ({ navigation, route }) => {
 
         <TouchableOpacity
           style={[]}
-          onPress={() => {setMostExpensiveSelected((prev) => !prev ); setCheapestSelected(false)}}
+          onPress={() => {setMostExpensiveSelected((prev) => !prev ); setCheapestSelected(false); setAZSelected(false);}}
         >
       <View style={[styles.spacing, styles.headTitle, ]}>
         <Typography
@@ -103,7 +103,7 @@ export const FilterScreen = ({ navigation, route }) => {
 
         <TouchableOpacity
           style={[]}
-          onPress={() => {setCheapestSelected((prev) => !prev ); setMostExpensiveSelected(false)}}
+          onPress={() => {setCheapestSelected((prev) => !prev ); setMostExpensiveSelected(false); setAZSelected(false);}}
         >
       <View style={[styles.spacing, styles.headTitle, ]}>
         <Typography

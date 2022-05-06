@@ -30,14 +30,14 @@ export const PageHeadImageContainer = ({imageUrl, info}) => {
             <View style={styles.carouselItem}>
                 <View style={styles.imageContainer}>
                     <ImageBackground
-                        source={{ uri: imageUrl}}
+                        source={{ uri: imageUrl ? imageUrl : ''}}
                         resizeMode="cover"
                         style={{ width: "100%", height: "100%", position: "relative" }}
                     />
                 </View>
                 <View style={styles.infoContainer}>
-                    <Text style={styles.infoText}>{info? info.title : ''}</Text>
-                    <Text style={styles.infoText}>{info? info?.teacher.full_name : ''}</Text>
+                    <Text style={[styles.infoText]}>{info? info.title : ''}</Text>
+                    <Text style={[styles.infoText]}>{info? info?.teacher.full_name : ''}</Text>
                 </View>
             </View>
             <View
@@ -100,6 +100,16 @@ const styles = StyleSheet.create({
         marginVertical:7,
         color:'white',
         fontSize: 20,
-        textAlign:'left'
-    }
+        textAlign:'left',
+        fontWeight:'bold'
+    },
+    overlay:{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor:'#d2d2d2',
+        opacity: 0.5
+       }
 });

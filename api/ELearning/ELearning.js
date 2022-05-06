@@ -78,13 +78,12 @@ export async function getHomeData() {
     export async function addToCart(id) {
         let url = `/me${rootUrl}/${id}/cart`;
       
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async function (resolve) {
           API.get(url)
             .then((res) => {
               resolve(res);
             })
             .catch((err) => {
-              //console.log("API ERROR: adding item to cart failed", err.response.data);
               resolve(err.response.data);
             });
         });
@@ -155,42 +154,22 @@ export async function getHomeData() {
             });
         });
     }
-
-    // Stickers
-
-    export async function likeUnlikeSticker(courseId, lessonId, articleId, action) {
-      let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/articles/${articleId}/${action}`;
+      
     
-      return new Promise(async function (resolve, reject) {
-        API.get(url)
-          .then((res) => {
-            resolve(res);
-          })
-          .catch((err) => {
-            console.log("API ERROR: rlike/unlike failed", err.response.data);
-            reject(err);
-          });
-      });
-  }
-    
-  export async function commentSticker(courseId, lessonId, articleId, formdata) {
-      let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/articles/${articleId}/comment`;
-    
-      return new Promise(async function (resolve, reject) {
-        API.post(url, formdata, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-          .then((res) => {
-            resolve(res);
-          })
-          .catch((err) => {
-            console.log("API ERROR: commenting failed", err.response.data);
-            reject(err);
-          });
-      });
-  }
+    export async function getLessonExam(courseId, lessonId) {
+        let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/exam`;
+      
+        return new Promise(async function (resolve, reject) {
+          API.get(url)
+            .then((res) => {
+              resolve(res);
+            })
+            .catch((err) => {
+              console.log("API ERROR: getting lesson data failed", err.response.data);
+              reject(err);
+            });
+        });
+    }
     
   // Videos
 
@@ -208,10 +187,39 @@ export async function getHomeData() {
         });
     });
 }
+  
+export async function getVideoComments(courseId, lessonId, videoId) {
+    let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/videos/${videoId}/comment`;
+  
+    return new Promise(async function (resolve, reject) {
+      API.get(url)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          console.log("API ERROR: rlike/unlike failed", err.response.data);
+          reject(err);
+        });
+    });
+}
+
+export async function setVideoWatched(courseId, lessonId, videoId) {
+    let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/videos/${videoId}/watched`;
+    return new Promise(async function (resolve, reject) {
+      API.get(url)
+        .then((res) => {
+    console.log(res)
+    resolve(res);
+        })
+        .catch((err) => {
+          console.log("API ERROR: rlike/unlike failed", err.response.data);
+          reject(err);
+        });
+    });
+}
 
   export async function commentVideo(courseId, lessonId, videoId, formdata) {
       let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/videos/${videoId}/comment`;
-    
       return new Promise(async function (resolve, reject) {
         API.post(url, formdata, {
           headers: {
@@ -228,6 +236,26 @@ export async function getHomeData() {
       });
   }
   
+  // Exam
+
+  export async function answerExam(courseId, lessonId, formdata) {
+    let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/exam`;
+    return new Promise(async function (resolve, reject) {
+      API.post(url, formdata, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          console.log("API ERROR: commenting failed", err.response.data);
+          reject(err);
+        });
+    });
+}
+
   // Case Study
   
   
@@ -265,9 +293,120 @@ export async function getHomeData() {
         });
     }
 
+    // Articles
 
+    export async function getArticle(courseId, lessonId, articleId) {
+      let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/articles/${articleId}`;
+    
+      return new Promise(async function (resolve, reject) {
+        API.get(url)
+          .then((res) => {
+            resolve(res);
+          })
+          .catch((err) => {
+            console.log("API ERROR: getting case study failed", err.response.data);
+            reject(err);
+          });
+      });
+  }
+    
+  
+  export async function getArticleComments(courseId, lessonId, articleId) {
+      let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/articles/${articleId}/comment`;
+      return new Promise(async function (resolve, reject) {
+        API.get(url)
+          .then((res) => {
+            resolve(res);
+          })
+          .catch((err) => {
+            console.log("API ERROR: getting case study failed", err.response.data);
+            reject(err);
+          });
+      });
+  }
 
+  export async function likeUnlikeArticle(courseId, lessonId, articleId) {
+    let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/articles/${articleId}/like`;
+  
+    return new Promise(async function (resolve, reject) {
+      API.get(url)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          console.log("API ERROR: rlike/unlike failed", err.response.data);
+          reject(err);
+        });
+    });
+}
 
+export async function commentArticle(courseId, lessonId, articleId, formdata) {
+  let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/articles/${articleId}/comment`;
+  return new Promise(async function (resolve, reject) {
+    API.post(url, formdata, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        console.log("API ERROR: commenting failed", err.response.data);
+        reject(err);
+      });
+  });
+}
+
+// Stickers
+
+export async function getStickerComments(courseId, lessonId, stickerId) {
+  let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/stickers/${stickerId}/comment`;
+  return new Promise(async function (resolve, reject) {
+    API.get(url)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        console.log("API ERROR: getting case study failed", err.response.data);
+        reject(err);
+      });
+  });
+}
+
+export async function likeUnlikeSticker(courseId, lessonId, stickerId) {
+let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/stickers/${stickerId}/like`;
+
+return new Promise(async function (resolve, reject) {
+  API.get(url)
+    .then((res) => {
+      resolve(res);
+    })
+    .catch((err) => {
+      console.log("API ERROR: rlike/unlike failed", err.response.data);
+      reject(err);
+    });
+});
+}
+
+export async function commentSticker(courseId, lessonId, stickerId, formdata) {
+let url = `/me${rootUrl}/${courseId}/lessons/${lessonId}/stickers/${stickerId}/comment`;
+console.log(url);
+return new Promise(async function (resolve, reject) {
+API.post(url, formdata, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+})
+  .then((res) => {
+    resolve(res);
+  })
+  .catch((err) => {
+    console.log("API ERROR: commenting failed", err.response.data);
+    reject(err);
+  });
+});
+}
 
 
 
@@ -278,7 +417,6 @@ export async function getHomeData() {
 
 
   export async function post(url, formdata) {
-    //let url = `/me`;
   
     return new Promise(async function (resolve, reject) {
       API.post(url, formdata, {

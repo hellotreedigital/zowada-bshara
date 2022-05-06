@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { CourseUnitsAndTestsStyles as styles } from "../CourseUnitsAndTestsStyles";
 import { globalStyles } from "../../../../../globals/globaStyles";
-import { render } from "react-dom"; 
 
 export const TestQuestionTemplate = ({ ind, question, onAnswerSelected }) => {
 
@@ -29,7 +28,7 @@ export const TestQuestionTemplate = ({ ind, question, onAnswerSelected }) => {
               </Text>
             </View>
             <Text style={[globalStyles.textDarkBlue,styles.columns, styles.testQuestionCol2, styles.testText]}>
-                {question.questionText}
+                {question.question}
             </Text>
           </View>
           <View style={[styles.columns, styles.testQuestionCol1]}></View>
@@ -52,13 +51,13 @@ const AnswerItem = ({aind, qind, answer, onAnswerSelected}) =>{
             <Text
                 style={[
                   globalStyles.icon,
-                  globalStyles.backgrounWhite,
                   globalStyles.iconBorder,
+                  answer.isSelected && globalStyles.backgrounLightGrey
                 ]}
               >
                 {aind + 1}
               </Text>
-              <Text style={[styles.answerText, styles.testText]}>{answer.answerText}</Text>
+              <Text style={[styles.answerText, styles.testText]}>{answer.answer}</Text>
         </TouchableOpacity>
     )
 }

@@ -1,31 +1,35 @@
 import React, {useRef} from "react";
 import {
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
-  ActivityIndicator,
   ImageBackground
 } from "react-native";
 import Modal from "react-native-modal";
 import { PrimaryButton } from "../../buttons/PrimaryButton";
-import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import CloseSVG from "../../SVGR/Globals/CloseSVG";
-import Typography from "../Typography/Typography";
 import {globalStyles} from "../../globals/globaStyles";
-import Video from 'react-native-video';
+import { Video } from 'expo-av';
+import { setVideoWatched } from '../../api/ELearning/ELearning';
 
 
-export const ImagePopUpModal = ({visible, imageUrl, ...props}) =>{
-    const reference = useRef();
+export const ImagePopUpModal = ({visible, imageUrl, courseId, video, ...props}) =>{
+    const videoRef = useRef();
+    
     function continueWithCourse(){
-        props.continueWithCourse();
+        props.continueWithCoursee();
     }
 
-    function onBuffer(){}
+    function checkIfFInished(status){
+        if(status.didJustFinish) { 
+            setVideoWatched(courseId, video.lesson_id, video.id);
+         }
+    }
 
-    function videoError(){}
+    function onBuffer(){ /* TODO document why this function 'onBuffer' is empty */ }
+
+    function videoError(){ /* TODO document why this function 'videoError' is empty */ }
     
     return(
         <Modal isVisible={visible} animationIn="fadeIn" animationOut="fadeOut" style={styles.modal}>
@@ -37,17 +41,30 @@ export const ImagePopUpModal = ({visible, imageUrl, ...props}) =>{
                         <CloseSVG stroke={props.closeBtnColor ? props.closeBtnColor : "#ffffff"} />
                     </TouchableOpacity>
 
-                    {false ? 
+                    <Video
+                        ref={videoRef}
+                        style={[
+                            styles.image,                            
+                            {width: SCREEN_WIDTH, height: SCREEN_HEIGHT * 0.25 },
+                        ]}
+                        source={{
+                        uri: imageUrl,
+                        }}
+                        useNativeControls
+                        resizeMode="contain"
+                        onPlaybackStatusUpdate={status => checkIfFInished(status)}
+                    />
+
+                    {false
+                     ? 
                     
-                    <Video source={{uri: imageUrl}}   // Can be a URL or a local file.
-                        ref={(ref) => {
-                            reference
-                        }}                                      // Store reference
+                    <Video 
+                        source={{uri: imageUrl}}   // Can be a URL or a local file.                                  // Store reference
                         onBuffer={onBuffer}                // Callback when remote video is buffering
                         onError={videoError}               // Callback when video cannot be loaded
                         style={[
-                            styles.image,
-                            { width: SCREEN_WIDTH, height: SCREEN_HEIGHT * 0.25 },
+                            styles.image,                            
+                            {backgroundColor:'red', width: SCREEN_WIDTH, height: SCREEN_HEIGHT * 0.25 },
                         ]} />
 
                     :<ImageBackground

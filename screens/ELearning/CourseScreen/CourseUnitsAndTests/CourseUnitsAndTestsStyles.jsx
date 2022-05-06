@@ -161,9 +161,8 @@ export const CourseUnitsAndTestsStyles = StyleSheet.create({
         display:'flex',
         flexDirection:"column",
         paddingHorizontal: 0,
-        marginHorizontal: 0,
-        justifyContent: 'center',
-        marginHorizontal: 5
+        marginHorizontal: 5,
+        justifyContent: 'center'
     },
     testQuestionCol1:{
       width:'10%'
@@ -206,10 +205,9 @@ export const CourseUnitsAndTestsStyles = StyleSheet.create({
     caseStudyInput: {
       width: SCREEN_WIDTH*0.75,
       textAlign: I18nManager.isRTL ? "right" : "left",
-      backgroundColor: "rgba(255,255,255,0.3)",
       borderRadius: 10,
       padding: 15,
-      color: "white",
+      color: colors.blue,
       fontFamily: "HelveticaLight",
       backgroundColor:colors.light_grey,
       textAlignVertical: "top"
@@ -270,6 +268,46 @@ export const CourseUnitsAndTestsStyles = StyleSheet.create({
     noPaddingNoMargin:{
       padding: 0,
       margin: 0
+    },
+    commentVideoFormContainer: {
+      width: SCREEN_WIDTH,
+      display:'flex',
+      flexDirection:'row',
+    },
+    commentInput: {
+      width: SCREEN_WIDTH*0.78,
+      textAlign: I18nManager.isRTL ? "right" : "left",
+      borderRadius: 10,
+      padding: 5,
+      color: colors.blue,
+      fontFamily: "HelveticaLight",
+      backgroundColor:colors.light_grey,
+      textAlignVertical: "top",
+    },
+    submitCommentIcon:{
+      width: SCREEN_HEIGHT * 0.037,
+      height: SCREEN_HEIGHT * 0.037,
+      borderRadius: SCREEN_HEIGHT * 0.037,
+      backgroundColor: colors.blue,
+      alignItems: "center",
+      justifyContent: "center",
+      marginLeft: SCREEN_WIDTH * 0.0315,
+      margin:0,
+      padding:0
+    },
+    lessonFAQ:{
+      display:'flex',
+      flexDirection:'row-reverse',
+      width:'100%',
+    },
+    lessonFAQIcon:{
+      width: SCREEN_HEIGHT * 0.06,
+      height: SCREEN_HEIGHT * 0.06,
+      borderRadius: SCREEN_HEIGHT * 0.06,
+      backgroundColor: colors.blue,
+      alignItems: "center",
+      justifyContent: "center",
+      margin:0,
+      padding:0
     }
-
 })

@@ -38,6 +38,15 @@ const eLearnineStyles = StyleSheet.create({
         justifyContent: "center",
         marginLeft: SCREEN_WIDTH * 0.0315,
     },
+    ELearningTopBar:{
+        display:'flex',
+        flexDirection:'row'
+    },
+    columns:{
+        display:'flex',
+        flexDirection:'column',
+        justifyContent:'center'
+    },
     clickableTitles: {
         height: SCREEN_HEIGHT * 0.05,
         backgroundColor: "white",

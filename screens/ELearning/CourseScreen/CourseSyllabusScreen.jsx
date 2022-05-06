@@ -61,7 +61,7 @@ const SyllabusItem = ({ content, isFirst, isLast, ind, navigation, registered })
               />
       <View style={[styles.rows]}>
         <View style={[styles.columns]}>
-          <Text style={[globalStyles.icon, globalStyles.backgrounWhite, globalStyles.iconBorder]}>{ind + 1}</Text>
+          <Text style={[globalStyles.icon, globalStyles.iconBorder]}>{ind + 1}</Text>
         </View>
         <View style={styles.columns}>
           <Text style={[globalStyles.textBlue, globalStyles.leftText]}>{content.title}</Text>

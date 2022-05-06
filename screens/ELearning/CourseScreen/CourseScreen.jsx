@@ -28,7 +28,7 @@ export const CourseScreen = ({ navigation, route }) => {
 
     return(
       <View style={[globalStyles.body]}>
-        <CustomPageHeader  navigation={navigation} isAbsolute={true} showShare={false} showNotification={false} color={colors.white} spaceHorizontally={true}/>
+        <CustomPageHeader  navigation={navigation} isAbsolute={true} showShare={false} showNotification={false} color={colors.white} spaceHorizontally={true} strokeW={4}/>
         <PageHeadImageContainer imageUrl={topImageUrl}  info={courseInfo?.course}/>
         <Tab.Navigator
       initialRouteName="Feed"
@@ -39,7 +39,7 @@ export const CourseScreen = ({ navigation, route }) => {
         style: {
           backgroundColor: colors.light_grey,
           borderBottomColor: colors.light_blue,
-          borderBottomWidth: 2,
+          borderBottomWidth: 1,
           shadowColor: "transparent",
         },
         labelStyle: {
@@ -47,8 +47,8 @@ export const CourseScreen = ({ navigation, route }) => {
         },
         indicatorStyle: {
           borderBottomColor: colors.blue,
-          borderBottomWidth: 8,
-          bottom: -5
+          borderBottomWidth: 4,
+          bottom: -2.5
         },
       }}>
       <Tab.Screen

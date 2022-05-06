@@ -18,7 +18,7 @@ function ArrowSVG(props) {
           stroke={props.fill ? props.fill : "#fff"}
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth={2}
+          strokeWidth={props.strokeW ? props.strokeW :2}
           transform="rotate(180 3.88 7.054)"
         />
       </G>

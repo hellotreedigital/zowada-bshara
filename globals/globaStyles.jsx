@@ -35,11 +35,20 @@ export const globalStyles = StyleSheet.create({
         paddingTop:0,
         marginTop:0
     },
+    horizontalLeftSpace5:{
+        marginLeft: 5
+    },
+    horizontalRightSpace5:{
+        marginRight: 5
+    },
     textBlue:{
         color: colors.blue
     },
     textDarkBlue:{
         color: colors.dark_blue
+    },
+    textRed:{
+        color: 'red'
     },
     backgrounBlue:{
         backgroundColor: colors.blue,
@@ -62,13 +71,14 @@ export const globalStyles = StyleSheet.create({
     icon: {
         width: SCREEN_HEIGHT * 0.037,
         height: SCREEN_HEIGHT * 0.037,
-        borderRadius: SCREEN_HEIGHT * 0.037,
+        borderRadius: SCREEN_HEIGHT * 0.037/2,
         color: colors.blue,
         textAlign: "center",
         flexDirection: 'column',
         alignItems: "center",
         justifyContent: "center",
-        textAlignVertical:'center'
+        textAlignVertical:'center',
+        overflow:'hidden'
     },
     iconBorder:{
         borderWidth: 1,
@@ -113,5 +123,11 @@ export const globalStyles = StyleSheet.create({
     },
     leftText:{
         textAlign:'left'
+    },indicator: {
+        position: "absolute",
+        top: "45%",
+        width: SCREEN_WIDTH,
+    },disabledVideo:{
+        opacity: 0.3
     }
 })

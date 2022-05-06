@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, FlatList } from "react-native";
+import React from "react";
+import { ScrollView, View, Text } from "react-native";
 import { globalStyles } from "../../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "./CourseUnitsAndTestsStyles";
 import { CustomPageHeader } from "../../../../components/CustomPageHeader/CustomPageHeader";
@@ -8,11 +8,11 @@ import { SecondaryButton } from "../../../../buttons/SecondaryButton";
 
 export const TestIntroScreen = ({ navigation, route }) => {
 
-  const { data } = route.params;
+  const { data, courseId } = route.params;
 
 
   function goToTest() {
-    navigation.push(data.continueTo);
+    navigation.push(data.continueTo, {data: data.item, courseId: courseId});
   }
 
   return (

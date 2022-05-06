@@ -8,11 +8,13 @@ import {
 } from "react-native";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
+import { CourseUnitTemplate } from "../../screens/ELearning/CourseScreen/CourseUnitsAndTests/CourseUnitTemplate";
 import Typography from "../Typography/Typography";
 
 export const ImageBoxForList = ({ item, handleClickEvent, ...props }) => {
+    
     return (
-        <TouchableOpacity style={[props.isArticle ? styles.articleCard : styles.card]} onPress={()=> handleClickEvent ? handleClickEvent(item.item) : {}}>
+        <TouchableOpacity style={[props.isArticle ? styles.articleCard : styles.card, props.height && {height: props.height}]} onPress={()=> handleClickEvent ? handleClickEvent(item.item) : {}}>
             <View>
                 <ImageBackground
                     style={[props.isArticle ? styles.articleImage : styles.image]}
@@ -20,15 +22,10 @@ export const ImageBoxForList = ({ item, handleClickEvent, ...props }) => {
                     source={{ uri: item.item.formatted_image }}
                 />
             </View>
-            {!props.isArticle ? <View style={styles.info}>
+            {!props.isArticle ? <View style={[styles.info]}>
                 <View style={styles.infoRight}>
-                    <Typography
-                        color={colors.dark_blue}
-                        size={14}
-                        content={item.item.title}
-                    />
+                    <Text style={styles.courseTitle}>{item.item.title}</Text>
                 </View>
-                <View style={styles.infoLeft}></View>
             </View>: null}
         </TouchableOpacity>
     );
@@ -63,10 +60,16 @@ const styles = StyleSheet.create({
     },
     infoRight: {
         flexDirection: "row",
-        marginBottom: 10,
         marginHorizontal: 5,
+    },
+    extraMargin:{
+        marginBottom: 10
     },
     locationText: {
         marginHorizontal: 12,
     },
+    courseTitle:{
+        fontSize:SCREEN_HEIGHT * 14 /810,
+        fontFamily: 'HelveticaRegular',
+    }
 });

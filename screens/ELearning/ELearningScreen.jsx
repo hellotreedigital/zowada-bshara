@@ -1,17 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
-import { ScrollView, View, Text, TouchableOpacity, ActivityIndicator, I18nManager, FlatList, SafeAreaView } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, I18nManager, FlatList, SafeAreaView } from "react-native";
 import { eLearnineStyles as styles } from './ELearningStyles';
 import AppContext from "../../appContext/AppContext";
-import { HomeCarousel } from "../../components/Carousel/HomeCarousel";
 import { PageHeadImageContainer } from "../../components/PageHeadImageContainer/PageHeadImageContainer";
 import { colors } from "../../globals/colors";
 import NotificationSVG from "../../SVGR/Home/Notification";
 import Typography from "../../components/Typography/Typography";
 import { SearchBoxWOFilter } from "../../components/SearchBox/SearchBox";
-import { AccordationList } from "../../components/AccordationList/AccordationList";
-import { ExpertCard } from "../../components/ExpertsCard/ExpertCard";
-import { FilterModal } from "../../components/Modals/FilterModal";
-import { expertSearch } from "../../api/Expert/Expert";
 import ArrowSVG from "../../SVGR/Globals/Arrow";
 import { ImageBoxForList } from "../../components/Boxes/ImageBoxForList";
 import { ProfileWithNameBox } from "../../components/Boxes/ProfileWithNameBox";
@@ -22,6 +17,7 @@ import {
     SCREEN_WIDTH
 } from "../../globals/globals";
 import { getHomeData } from '../../api/ELearning/ELearning';
+import { globalStyles } from "../../globals/globaStyles";
 
 export const ELearningScreen = ({ navigation }) => {
 
@@ -126,13 +122,16 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
         let courseScreenData = {
             allowSearch: true,
             allowFilter: true,
-            dataUrl: "",
             id: course.id,
             title: course.title
         }
         navigation.push("courseScreen", {
             data: courseScreenData
         })
+    }
+
+    function searchHandler(){
+        navigation.push("eLearningSearchScreen", {data:{search:searchString}})
     }
 
     return (
@@ -155,24 +154,27 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                     <View style={[styles.left, styles.headTitle]}>
                         <TouchableOpacity
                             onPress={() => navigation.pop()}
-                            style={styles.spacing}
+                            style={[styles.spacing, styles.ELearningTopBar]}
                         >
-                            <ArrowSVG
-                                style={{
-                                    transform: [
-                                        { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
-                                    ],
-                                }}
-                            />
+                            <View style={[styles.columns]}>
+                                <ArrowSVG
+                                    style={{
+                                        transform: [
+                                            { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
+                                        ]
+                                    }}
+                                />
+                            </View>
+                            <View style={[styles.columns, globalStyles.horizontalLeftSpace5]}>
+                                <Typography
+                                    content={"التعليم الإلكتروني"}
+                                    color={colors.white}
+                                    size={22}
+                                    bold={true}
+                                    lh={26}
+                                />
+                            </View>
                         </TouchableOpacity>
-                        <Typography
-                            content={"التعليم الإلكتروني"}
-                            color={colors.white}
-                            size={22}
-                            bold={true}
-                            lh={26}
-                            align="left"
-                        />
                     </View>
                     <View style={styles.right}>
                         <TouchableOpacity style={styles.icon} onPress={()=> {navigation.push('cartScreen')}}>

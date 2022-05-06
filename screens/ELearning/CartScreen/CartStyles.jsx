@@ -23,7 +23,14 @@ export const cartStyles = StyleSheet.create({
         minHeight: SCREEN_HEIGHT * 0.25,
         paddingVertical: 10,
         paddingHorizontal: 10,
-        elevation:10
+        elevation:10,
+        shadowColor: '#444',
+        shadowOffset: {
+          width: 0,
+          height: 0,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 2
     },
     status: {
         zIndex: 10000,

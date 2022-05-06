@@ -1,18 +1,48 @@
 import React from "react";
 import {
+	ImageBackground,
 	StyleSheet,
+	Text,
 	View,
 } from "react-native";
+import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
-import {FeedbackPersonCard} from './FeedbackPersonCard'
+import Typography from "../Typography/Typography";
+import { globalStyles } from '../../globals/globaStyles'
 
-export const FeedbackCard = ({ data, size }) => {
+export const VideoFeedbackCard = ({ data, size }) => {
+    
 	return (
-        <View style={styles.containerShadow}>
-            <View style={styles.container}>
-                <FeedbackPersonCard data={data} size={size}/>
+        <View>
+			<View style={styles.top}>
+				<View style={styles.userinfo}>
+					<View style={styles.image}>
+						<ImageBackground
+							source={{ uri: data?.item.user?.image_absolute_url || data?.item.user?.image }}
+							style={size === 'small' ? styles.dp : styles.dpLarger}
+						/>
+					</View>
+				</View>
+				<View style={styles.userinfo}>
+					<View>
+						<Typography
+							content={data?.item.user?.full_name}
+							size={14}
+							bold={true}
+							color={colors.dark_blue}
+							align="left"
+						/>
+					</View>
+				</View>
+
+
+			</View>
+                {data?.item.comment && <View style={[styles.verticalBottomSpacer20, globalStyles.leftText]}>
+                    <Text style={[globalStyles.leftText]}>
+                        {data?.item.comment}
+                    </Text>
+                </View>}
             </View>
-        </View>
 	);
 };
 
@@ -43,6 +73,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: SCREEN_WIDTH * 0.04
   },
   dp: {
+    width: SCREEN_HEIGHT * 0.067,
+    height: SCREEN_HEIGHT * 0.067,
+    borderRadius: (SCREEN_HEIGHT * 0.09) / 2,
+    overflow: "hidden",
+    marginRight: SCREEN_WIDTH * 0.04,
+  },
+  dpLarger: {
     width: SCREEN_HEIGHT * 0.09,
     height: SCREEN_HEIGHT * 0.09,
     borderRadius: (SCREEN_HEIGHT * 0.09) / 2,
@@ -54,11 +91,14 @@ const styles = StyleSheet.create({
   },
   userinfo: {
     flexDirection: "column",
+    justifyContent: 'center'
   },
   experience: {
     flexDirection: "row",
     position: "relative",
     top: -SCREEN_HEIGHT * 0.01,
+    marginVertical: 0,
+    paddingVertical: 0
   },
   location: {
     top: -SCREEN_HEIGHT * 0.017,
@@ -100,5 +140,14 @@ const styles = StyleSheet.create({
   },
   image: {
     position: "relative",
+  },
+  ratingContainer:{
+      backgroundColor:'#E8AF2E'
+  },
+  verticalBottomSpacer10:{
+      marginBottom: 10
+  },
+  verticalTopSpacer20:{
+      marginTop: 20
   },
 });

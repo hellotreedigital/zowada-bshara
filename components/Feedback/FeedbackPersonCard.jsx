@@ -1,19 +1,17 @@
 import React from "react";
 import {
 	ImageBackground,
-	Platform,
 	StyleSheet,
 	Text,
-	TouchableOpacity,
 	View,
 } from "react-native";
-import { PrimaryButton } from "../../buttons/PrimaryButton";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import Typography from "../Typography/Typography";
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { AirbnbRating } from 'react-native-ratings';
+import { globalStyles } from "../../globals/globaStyles";
 
-export const FeedbackPersonCard = ({ data, onPress, size }) => {
+export const FeedbackPersonCard = ({ data, size}) => {
 	return (
         <View>
 			<View style={styles.top}>
@@ -35,36 +33,36 @@ export const FeedbackPersonCard = ({ data, onPress, size }) => {
 							align="left"
 						/>
 					</View>
-					{data?.experience_domain.title && <View style={styles.experience}>
+					{data?.experienceDomain && <View style={styles.experience}>
 						<View>
 							<Typography
 								size={12}
 								roman={true}
 								color={colors.dark_blue}
-								content={data?.experience_domain.title}
+								content={data?.experienceDomain}
 								align="left"
 							/>
 						</View>
 					</View>}
 
-                    <View style={styles.experience}>
+                    {data?.rating ? <View style={styles.experience}>
 
                     <AirbnbRating
                             showRating={false}
                             count={5}
-                            defaultRating={1}
+                            defaultRating={data?.rating ? data.rating : 0}
                             size={12}
                             starImage={require("../../assets/emptyStar.png")}
                             isDisabled={true}
                             />
-                    </View>
+                    </View> : null}
 				</View>
 
 
 			</View>
-                {data?.comment && <View style={[styles.verticalTopSpacer20, styles.verticalBottomSpacer20]}>
-                    <Text>
-                        {data?.comment}
+                {data?.text && <View style={[styles.verticalTopSpacer20, styles.verticalBottomSpacer20]}>
+                    <Text style={[globalStyles.leftText, globalStyles.textDarkBlue]}>
+                        {data.text}
                     </Text>
                 </View>}
             </View>

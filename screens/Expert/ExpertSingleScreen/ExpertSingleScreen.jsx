@@ -59,7 +59,7 @@ export const ExpertSingleScreen = ({ navigation, route }) => {
 								size={14}
 								color={"#CFD9DC"}
 								roman={true}
-								content={data.experience_domain.title}
+								content={data?.experience_domain?.title}
 								align="left"
 							/>
 						</View>

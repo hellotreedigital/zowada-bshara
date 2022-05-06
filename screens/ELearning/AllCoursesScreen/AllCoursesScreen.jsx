@@ -58,7 +58,7 @@ export const AllCoursesScreen = ({navigation}) => {
       <View style={globalStyles.verticalTopSpacer20}>
         <CustomPageHeader
           navigation={navigation} title="جميع الدورات" showShare={false} showNotification={false} color={colors.blue}
-          spaceHorizontally={true}
+          spaceHorizontally={true} showCart={true}
         />
       </View>
     );

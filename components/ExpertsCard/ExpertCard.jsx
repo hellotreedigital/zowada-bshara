@@ -43,7 +43,7 @@ export const ExpertCard = ({ data, onPress }) => {
 								size={12}
 								roman={true}
 								color={colors.dark_blue}
-								content={data.experience_domain.title}
+								content={data?.experience_domain?.title}
 								align="left"
 							/>
 						</View>

@@ -1,26 +1,16 @@
-import { LinearGradient } from "expo-linear-gradient";
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
-  ImageBackground,
   SafeAreaView,
-  StyleSheet,
-  Text,
   View,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
-  ScrollView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  I18nManager,
+  ScrollView
 } from "react-native";
-import Typography from "../../../components/Typography/Typography";
 import {globalStyles} from '../../../globals/globaStyles';
 import {cartStyles as styles} from './CartStyles';
 import {CustomPageHeader} from '../../../components/CustomPageHeader/CustomPageHeader';
 import {colors} from '../../../globals/colors';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../globals/globals";
+import { SCREEN_HEIGHT } from "../../../globals/globals";
 import { Formik } from "formik";
 import { CheckoutForm } from '../../../components/RegisterForm/CheckoutForm'
 import { SecondaryButton } from "../../../buttons/SecondaryButton";
@@ -47,7 +37,6 @@ export const CheckoutScreen = ({navigation}) => {
       });
 
       const modalHandler = () => {
-            //setCheckoutModalVisible(false);
             navigation.pop(4);
       };
 
@@ -58,39 +47,10 @@ export const CheckoutScreen = ({navigation}) => {
 
       function buyCourse(){
         (async () => {
-          const a = await buyCourses();
+          await buyCourses();
           setCheckoutModalVisible(true);
       })()
       }
-
-
-      const handleExpertLogin = (values) => {
-        var formdata = new FormData();
-        formdata.append("full_name", values.fullName);
-        formdata.append("email", values.email);
-        formdata.append("phone_number", values.mobile);
-        // expertSignUp(formdata)
-        //   .then((res) => {})
-        //   .catch((err) => {
-        //     setErrorObject({
-        //       errorVisible: true,
-        //       emailError:
-        //         err.response.data.errors.email && err.response.data.errors.email[0],
-        //       fullNameError:
-        //         err.response.data.errors.full_name &&
-        //         err.response.data.errors.full_name[0],
-        //       mobileError:
-        //         err.response.data.errors.phone_number &&
-        //         err.response.data.errors.phone_number[0],
-        //       experienceError:
-        //         err.response.data.errors.experience_domain_id &&
-        //         err.response.data.errors.experience_domain_id[0],
-        //       experienceTypeError:
-        //         err.response.data.errors.experience_type_id &&
-        //         err.response.data.errors.experience_type_id[0],
-        //     });
-        //   });
-      };
 
 
     return(

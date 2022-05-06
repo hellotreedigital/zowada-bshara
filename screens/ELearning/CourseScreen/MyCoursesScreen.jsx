@@ -130,6 +130,7 @@ const ListHeaderComponent = ({ navigation }) => {
                                     ]
                                 }}
                                 fill={colors.blue}
+                                strokeW={3}
                             />
                         </TouchableOpacity>
                         <Typography

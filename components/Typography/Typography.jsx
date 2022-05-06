@@ -1,5 +1,5 @@
 import React from "react";
-import { I18nManager, StyleSheet, Text, View } from "react-native";
+import { I18nManager, Text, View } from "react-native";
 import { SCREEN_HEIGHT } from "../../globals/globals";
 
 const Typography = (props) => {

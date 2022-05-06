@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, FlatList } from "react-native";
+import { ScrollView, View, Text } from "react-native";
 import { globalStyles } from "../../../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "../CourseUnitsAndTestsStyles";
 import { CustomPageHeaderWithProgress } from "../../../../../components/CustomPageHeader/CustomPageHeaderWithProgress";
@@ -32,24 +32,24 @@ const longText = `صفحة ما سيلهي القارئ عن التركيز عل
 صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، 
 هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحرف)هنا يوجد ف)هنا يوجد `;
 
-export const TestResultsScreen = ({ navigation }) => {
+export const TestResultsScreen = ({ navigation, route }) => {
   let [allQuestionsAndAnswers, setAllQuestionsAndAnswers] = useState([]);
+  const { data } = route.params;
 
   useEffect(() => {
     setAllQuestionsAndAnswers(questionsAndAnswers);
   }, []);
 
-  function goToTestIntro(){
+  function goToTestIntro() {
+    const screenData = {
+      backButtonTitle: "دراسة الحالة",
+      contentText: longText,
+      continueTo: "caseStudyScreen",
+    };
 
-    const screenData ={
-        backButtonTitle:"دراسة الحالة",
-        contentText: longText,
-        continueTo:"caseStudyScreen"
-      }
-
-    navigation.push('testIntroScreen',{
-        data: screenData
-    })
+    navigation.push("testIntroScreen", {
+      data: screenData,
+    });
   }
 
   return (
@@ -70,11 +70,43 @@ export const TestResultsScreen = ({ navigation }) => {
 
       <View style={[styles.mainPageContainer, styles.bottomPadding]}>
         <View style={[styles.resultContainer]}>
-            <Text>
-                <Text style={[styles.score, globalStyles.textBlue]}>34</Text>
-                <Text style={[styles.score, globalStyles.textDarkBlue]}>/</Text>
-                <Text style={[styles.totalValue, globalStyles.textDarkBlue]}>34</Text>
+          <Text>
+            <Text
+              style={[
+                styles.score,
+                data.correctAnswers >= data.passing_answers_number
+                  ? globalStyles.textBlue
+                  : globalStyles.textRed,
+              ]}
+            >
+              {data.correctAnswers}
             </Text>
+            <Text style={[styles.score, globalStyles.textDarkBlue]}>/</Text>
+            <Text style={[styles.totalValue, globalStyles.textDarkBlue]}>
+              {data.numberOfQuestions}
+            </Text>
+          </Text>
+        </View>
+        <View>
+          <Text
+            style={[
+              data.correctAnswers >= data.passing_answers_number
+                ? globalStyles.textBlue
+                : globalStyles.textRed,
+              { textAlign: "center", fontWeight:'bold' },
+            ]}
+          >
+            {data.correctAnswers >= data.passing_answers_number
+              ? "ناجح"
+              : "راسب"}
+          </Text>
+          {data.correctAnswers <= data.passing_answers_number ?<Text
+            style={[
+              { textAlign: "center", fontWeight:'bold' },
+            ]}
+          >
+            يرجى إعادة الاختبار
+          </Text> : null }
         </View>
         {allQuestionsAndAnswers.map((question, index) => (
           <QuestionAnswerContainer
@@ -87,7 +119,7 @@ export const TestResultsScreen = ({ navigation }) => {
           <SecondaryButton
             content="استمر"
             fullWidth={true}
-            onPress={() => goToTestIntro()}
+            onPress={() => navigation.pop(3)}
           />
         </View>
       </View>
@@ -95,7 +127,7 @@ export const TestResultsScreen = ({ navigation }) => {
   );
 };
 
-const QuestionAnswerContainer = ({ ind, question }) => {
+const QuestionAnswerContainer = ({ question }) => {
   return (
     <View style={[globalStyles.cardShadow, globalStyles.verticalTopSpacer20]}>
       <View style={[globalStyles.whiteCard]}>

@@ -15,7 +15,7 @@ export const courseStyles = StyleSheet.create({
         flexDirection:"row"
     },
     extraMargin: {
-        marginHorizontal: 20
+        marginHorizontal: 15
     },
     about: {
         width: "100%",
@@ -64,11 +64,13 @@ export const courseStyles = StyleSheet.create({
         flexDirection:"column",
         justifyContent:'center',
         paddingHorizontal: 0,
-        marginHorizontal: 0,
         marginHorizontal: 5
     },
     imagee:{
         width:'57%',
         height:'57%'
+    },
+    verticalPadding5:{
+        paddingVertical: 5
     }
 });

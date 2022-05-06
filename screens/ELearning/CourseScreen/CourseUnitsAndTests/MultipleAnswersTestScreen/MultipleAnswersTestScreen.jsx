@@ -6,65 +6,24 @@ import { CustomPageHeaderWithProgress } from "../../../../../components/CustomPa
 import { colors } from "../../../../../globals/colors";
 import { SecondaryButton } from "../../../../../buttons/SecondaryButton";
 import {TestQuestionTemplate} from './TestQuestionTemplate'
+import { answerExam } from "../../../../../api/ELearning/ELearning";
 
-const questions=[
-    {
-        questionText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع
-        الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم
-        إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-        answers:[
-            {
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            }
-        ]
-    },{
-        questionText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع
-        الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم
-        إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-        answers:[
-            {
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            }
-        ]
-    },{
-        questionText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع
-        الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم
-        إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-        answers:[
-            {
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            }
-        ]
-    }
-]
 
-export const MultipleAnswersTestScreen = ({ navigation }) => {
+
+export const MultipleAnswersTestScreen = ({ navigation, route }) => {
 
     let [allQuestions, setAllQuestions] = useState([]);
 
+    const { data, courseId } = route.params;
+
     useEffect(() => {
-      setAllQuestions(questions);
+        let questions = data.questions;
+        questions.forEach(q =>{
+            q.answers.forEach(a =>{
+                a.isSelected = false
+            })
+        })
+        setAllQuestions(questions);
     }, [])
     
     
@@ -76,7 +35,31 @@ export const MultipleAnswersTestScreen = ({ navigation }) => {
         allQ[qi].answers[ai].isSelected = true;
 
         setAllQuestions(allQ);
-        console.log('a')
+    }
+
+    async function getExamResults(){
+        let allQ = [...allQuestions];
+        let answerss={};
+        let correctAnswers = 0
+
+        allQ.forEach((q) =>{
+            q.answers.forEach((a) => {
+                if(a.isSelected){
+                    answerss[a.exam_question_id] = a.id.toString();
+                    if(q.correct_answer_id === a.id) correctAnswers++
+                }
+            })
+        })
+
+        let screenData = {
+            correctAnswers: correctAnswers,
+            passing_answers_number: data.passing_answers_number,
+            numberOfQuestions: allQ.length
+        }
+        console.log(data)
+        await answerExam(courseId, data.lesson_id, {answers:answerss});
+
+        navigation.push('testResultsScreen', {data: screenData});
     }
 
   return (
@@ -93,7 +76,7 @@ export const MultipleAnswersTestScreen = ({ navigation }) => {
       {allQuestions.map((question, index) =>(
             <TestQuestionTemplate key={index} ind={index} question={question} onAnswerSelected={onAnswerSelected}/>
         ))}
-      <View style={[globalStyles.verticalTopSpacer20]}><SecondaryButton content="استمر" fullWidth={true} onPress={()=> navigation.push('testResultsScreen')}/></View>
+      <View style={[globalStyles.verticalTopSpacer20]}><SecondaryButton content="استمر" fullWidth={true} onPress={()=> {getExamResults()}}/></View>
       </View>
 
     </ScrollView>

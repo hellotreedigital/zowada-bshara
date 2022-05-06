@@ -60,6 +60,7 @@ const MessageModal = ({ visible, message, ...props }) => {
                       content={props.title}
                       color={props.textColor ? props.textColor :"#E54C2E"}
                       size={props.textSize ? props.textSize : 20}
+                      align='center'
                       bold={true}
                     />
                   </View>

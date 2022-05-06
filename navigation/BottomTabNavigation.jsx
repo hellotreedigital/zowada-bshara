@@ -43,7 +43,9 @@ import { ELearningScreen } from "../screens/ELearning/ELearningScreen";
 import { CategoriesScreen } from "../screens/ELearning/CategoriesScreen/CategoriesScreen";
 import { TutorsScreen } from "../screens/ELearning/TutorsScreen/TutorsScreen";
 import { FilterScreen } from "../screens/ELearning/FilterScreen/FilterScreen";
+import { ELearningSearchScreen } from "../screens/ELearning/FilterScreen/ELearningSearchScreen";
 import { CourseScreen } from "../screens/ELearning/CourseScreen/CourseScreen";
+import { CourseCommentsScreen } from "../screens/ELearning/CourseScreen/CourseCommentsScreen";
 import { CartScreen } from "../screens/ELearning/CartScreen/CartScreen";
 import { CheckoutScreen } from "../screens/ELearning/CartScreen/CheckoutScreen";
 import { MyCoursesScreen } from "../screens/ELearning/CourseScreen/MyCoursesScreen";
@@ -53,10 +55,13 @@ import { MultipleAnswersTestScreen } from "../screens/ELearning/CourseScreen/Cou
 import { TestResultsScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/MultipleAnswersTestScreen/TestResultsScreen";
 import { CaseStudyScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CaseStudyScreen/CaseStudyScreen";
 import { CaseStudyAnswersScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CaseStudyScreen/CaseStudyAnswersScreen";
-import { CourseArticleScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CourseArticleScreen";
-import { CoursePosterScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CoursePosterScreen";
+import { CourseArticleScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/Article/CourseArticleScreen";
+import { ArticleCommentsScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/Article/ArticleCommentsScreen";
+import { CoursePosterScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/Poster/CoursePosterScreen";
+import { PosterCommentsScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/Poster/PosterCommentsScreen";
 import { CourseCertificateScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CourseCertificateScreen";
 import { AllCoursesScreen } from "../screens/ELearning/AllCoursesScreen/AllCoursesScreen";
+import { VideoCommentsScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/Video/VideoCommentsScreen";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -219,7 +224,9 @@ function ELearniNgavigator() {
       <ELearningStack.Screen name="categoriesScreen" component={CategoriesScreen} />
       <ELearningStack.Screen name="tutorsScreen" component={TutorsScreen} />
       <ELearningStack.Screen name="filterScreen" component={FilterScreen} />
+      <ELearningStack.Screen name="eLearningSearchScreen" component={ELearningSearchScreen} />
       <ELearningStack.Screen name="courseScreen" component={CourseScreen} />
+      <ELearningStack.Screen name="courseCommentsScreen" component={CourseCommentsScreen} />
       <ELearningStack.Screen name="cartScreen" component={CartScreen} />
       <ELearningStack.Screen name="checkoutScreen" component={CheckoutScreen} />
       <ELearningStack.Screen name="myCoursesScreen" component={MyCoursesScreen} />
@@ -230,9 +237,12 @@ function ELearniNgavigator() {
       <ELearningStack.Screen name="caseStudyScreen" component={CaseStudyScreen} />
       <ELearningStack.Screen name="caseStudyAnswersScreen" component={CaseStudyAnswersScreen} />
       <ELearningStack.Screen name="courseArticleScreen" component={CourseArticleScreen} />
+      <ELearningStack.Screen name="articleCommentsScreen" component={ArticleCommentsScreen} />
       <ELearningStack.Screen name="coursePosterScreen" component={CoursePosterScreen} />
+      <ELearningStack.Screen name="posterCommentsScreen" component={PosterCommentsScreen} />
       <ELearningStack.Screen name="courseCertificateScreen" component={CourseCertificateScreen} />
       <ELearningStack.Screen name="allCoursesScreen" component={AllCoursesScreen} />
+      <ELearningStack.Screen name="videoCommentsScreen" component={VideoCommentsScreen} />
     </ELearningStack.Navigator>
   )
 }

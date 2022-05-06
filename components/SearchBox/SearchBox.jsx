@@ -87,6 +87,7 @@ export const SearchBoxWOFilter = ({
   searchString,
   setSearchString,
   onSearchPress,
+  searchColor
 }) => {
   return (
     <>
@@ -115,11 +116,11 @@ export const SearchBoxWOFilter = ({
               style={[styles.icon, { right: 0 }]}
               disabled={searchString == null ? true : false}
             >
-              <SearchSVG />
+              <SearchSVG color={searchColor}/>
             </TouchableOpacity>
           </View>
           <TextInput
-            style={styles.SearchBox}
+            style={[styles.SearchBox, width && { width: width }]}
             value={searchString}
             placeholderTextColor={colors.dark_blue}
             placeholderStyle={styles.textboxfieldd}
