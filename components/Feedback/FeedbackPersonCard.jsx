@@ -60,11 +60,11 @@ export const FeedbackPersonCard = ({ data, size}) => {
 
 
 			</View>
-                {data?.text && <View style={[styles.verticalTopSpacer20, styles.verticalBottomSpacer20]}>
+                {data?.text ? <View style={[styles.verticalTopSpacer20, styles.verticalBottomSpacer20]}>
                     <Text style={[globalStyles.leftText, globalStyles.textDarkBlue]}>
-                        {data.text}
+                      {data.text}
                     </Text>
-                </View>}
+                </View> : null}
             </View>
 	);
 };

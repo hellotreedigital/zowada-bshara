@@ -22,8 +22,6 @@ const DATA =
 };
 
 export const PageHeadImageContainer = ({imageUrl, info}) => {
-    const [activeSlide, setActiveSlide] = useState(0);
-    const carousel = useRef();
     
     return (
         <View>
@@ -34,6 +32,7 @@ export const PageHeadImageContainer = ({imageUrl, info}) => {
                         resizeMode="cover"
                         style={{ width: "100%", height: "100%", position: "relative" }}
                     />
+                    <View style={styles.overlay}/>
                 </View>
                 <View style={styles.infoContainer}>
                     <Text style={[styles.infoText]}>{info? info.title : ''}</Text>

@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, TouchableOpacity, Image, I18nManager, } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  I18nManager,
+} from "react-native";
 import { courseStyles as styles } from "./CourseStyles";
 import image from "../../../assets/correctMark.png";
 import ArrowSVG from "../../../SVGR/Globals/Arrow";
-import {globalStyles} from '../../../globals/globaStyles';
+import { globalStyles } from "../../../globals/globaStyles";
 import MessageModal from "../../../components/Modals/MessageModal";
 import { colors } from "../../../globals/colors";
 
-export const CourseSyllabusScreen = ({ navigation, courseInfo, registered }) => {
-
+export const CourseSyllabusScreen = ({
+  navigation,
+  courseInfo,
+  registered,
+}) => {
   return (
     <ScrollView style={styles.paragraph} showsVerticalScrollIndicator={false}>
       <View style={globalStyles.verticalTopSpacer20}>
@@ -28,20 +38,25 @@ export const CourseSyllabusScreen = ({ navigation, courseInfo, registered }) => 
   );
 };
 
-const SyllabusItem = ({ content, isFirst, isLast, ind, navigation, registered }) => {
-
+const SyllabusItem = ({
+  content,
+  isFirst,
+  isLast,
+  ind,
+  navigation,
+  registered,
+}) => {
   let [modalVisible, setModalVisible] = useState(false);
 
-  function goToLesson(){
-    if(registered === 1) {
+  function goToLesson() {
+    if (registered === 1) {
       let lessonData = {
         lessonId: content.id,
-        courseId: content.course_id
-      }
-      navigation.push('courseUnitsDetailsScreen', {data: lessonData})
-    }
-    else setModalVisible(true)
-    }
+        courseId: content.course_id,
+      };
+      navigation.push("courseUnitsDetailsScreen", { data: lessonData });
+    } else setModalVisible(true);
+  }
 
   return (
     <TouchableOpacity
@@ -50,39 +65,55 @@ const SyllabusItem = ({ content, isFirst, isLast, ind, navigation, registered })
         isFirst && styles.firstItemBorder,
         isLast && styles.lastItemBorder,
       ]}
-      onPress={() => {goToLesson() }}
+      onPress={() => {
+        goToLesson();
+      }}
     >
       <MessageModal
-                visible={modalVisible}
-                message={"You are not registered for this course yet"}
-                close={() => {
-                  setModalVisible(false);
-                }}
-              />
+        visible={modalVisible}
+        message={"You are not registered for this course yet"}
+        close={() => {
+          setModalVisible(false);
+        }}
+      />
       <View style={[styles.rows]}>
         <View style={[styles.columns]}>
-          <Text style={[globalStyles.icon, globalStyles.iconBorder]}>{ind + 1}</Text>
+          <Text style={[globalStyles.icon, globalStyles.iconBorder]}>
+            {ind + 1}
+          </Text>
         </View>
         <View style={styles.columns}>
-          <Text style={[globalStyles.textBlue, globalStyles.leftText]}>{content.title}</Text>
+          <Text style={[globalStyles.textBlue, globalStyles.leftText]}>
+            {content.title}
+          </Text>
           <Text style={[globalStyles.leftText]}>{content.subtitle}</Text>
         </View>
       </View>
 
       <View style={[styles.columns]}>
-      {content.isPassed && registered ? <View style={[globalStyles.icon, globalStyles.backgrounWhite, styles.columns]}>
-          <Image resizeMode="cover" source={image} style={styles.imagee} /> 
-        </View> : null}
-        {registered ? 
-        <View style={globalStyles.icon}>
+        {content.isPassed && registered ? (
+          <View style={globalStyles.iconShadow}>
+            <View
+              style={[
+                globalStyles.icon,
+                globalStyles.backgrounWhite,
+                styles.columns,
+              ]}
+            >
+              <Image resizeMode="cover" source={image} style={styles.imagee} />
+            </View>
+          </View>
+        ) : null}
+        {registered ? (
+          <View style={globalStyles.icon}>
             <ArrowSVG
-            style={{
-                transform: [
-                    { rotateY: I18nManager.isRTL ? "180deg" : "0deg" },
-                ]
-            }}
-            fill={colors.blue}
-        /></View> : null}
+              style={{
+                transform: [{ rotateY: I18nManager.isRTL ? "180deg" : "0deg" }],
+              }}
+              fill={colors.blue}
+            />
+          </View>
+        ) : null}
       </View>
     </TouchableOpacity>
   );

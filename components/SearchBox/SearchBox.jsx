@@ -12,6 +12,8 @@ import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import FilterSVG from "../../SVGR/Globals/Filter";
 import SearchSVG from "../../SVGR/Globals/SearchSVG";
+
+
 export const SearchBox = ({
   filterEnabled,
   placeholder,
@@ -135,6 +137,7 @@ export const SearchBoxWOFilter = ({
   );
 };
 
+
 const styles = StyleSheet.create({
   SearchBox: {
     color: colors.dark_blue,
@@ -168,4 +171,9 @@ const styles = StyleSheet.create({
     alignSelf: I18nManager.isRTL ? "flex-end" : "flex-start",
   },
   row: {},
+  imagee:{
+    width:20,
+    height:20,
+    margin: 5
+},
 });

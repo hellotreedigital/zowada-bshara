@@ -185,17 +185,30 @@ const ListHeaderComponent = ({ navigation, data, filterCourses, searchCategoryBy
                         </TouchableOpacity>
                     </View>
                     <View style={styles.right}>
-                    <TouchableOpacity style={styles.icon} onPress={()=> {navigation.push('cartScreen')}}>
+                        <View style={globalStyles.iconMargin}>
+                        <View style={[globalStyles.smallIconShadow]}>
+                    <TouchableOpacity style={[styles.icon]} onPress={()=> {navigation.push('cartScreen')}}>
                             <MyOrdersSVG  size={30} background='#fff' fill='#e54c2e'/>
                         </TouchableOpacity>
-                        {data.allowFilter && <TouchableOpacity style={styles.icon} onPress={() => navigation.push("filterScreen", {onGoBack: (filters) => {
+                        </View></View>
+                        {data.allowFilter && 
+                        <View style={globalStyles.iconMargin}>
+                        <View style={[globalStyles.smallIconShadow]}>
+                        <TouchableOpacity style={styles.icon} onPress={() => navigation.push("filterScreen", {onGoBack: (filters) => {
                             filterCategory(filters)
                         }})}>
                             <FilterSVG />
-                        </TouchableOpacity>}
-                        {data.allowSearch && <TouchableOpacity style={styles.icon} onPress={() => navigation.push("eLearningSearchScreen", {data:{id:data.id}})}>
+                        </TouchableOpacity>
+                        </View></View>
+                        }
+                        {data.allowSearch && 
+                        <View style={globalStyles.iconMargin}>
+                        <View style={[globalStyles.smallIconShadow]}>
+                        <TouchableOpacity style={styles.icon} onPress={() => navigation.push("eLearningSearchScreen", {data:{id:data.id}})}>
                             <SearchSVG />
-                        </TouchableOpacity>}
+                        </TouchableOpacity>
+                        </View></View>
+                        }
                     </View>
                 </View>
             </View>

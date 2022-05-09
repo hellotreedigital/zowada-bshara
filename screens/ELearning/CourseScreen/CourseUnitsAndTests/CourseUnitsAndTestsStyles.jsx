@@ -248,17 +248,23 @@ export const CourseUnitsAndTestsStyles = StyleSheet.create({
     certificateImagesContainer:{
       position:'relative',
       display:'flex',
-      width:SCREEN_WIDTH*0.5,
-      height:SCREEN_HEIGHT* 0.75,
+      width:SCREEN_WIDTH,
+      justifyContent:'center',
+      height:SCREEN_HEIGHT*0.4
     },
     posterImageContainer:{
       width:'auto',
-      position:'absolute'
+      position:'relative',
+      display:'flex',
+      justifyContent:'center',
+      height:SCREEN_HEIGHT*0.4
     }, 
     posterImage:{
         width:"100%",
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
+        alignSelf: 'center',
+        height:SCREEN_HEIGHT*0.4
     },
     posterContainer:{
       padding: 0,
@@ -279,10 +285,16 @@ export const CourseUnitsAndTestsStyles = StyleSheet.create({
       textAlign: I18nManager.isRTL ? "right" : "left",
       borderRadius: 10,
       padding: 5,
+      paddingLeft: 45,
       color: colors.blue,
       fontFamily: "HelveticaLight",
       backgroundColor:colors.light_grey,
       textAlignVertical: "top",
+    },
+    submitCommentIconContainer:{
+      display:'flex',
+      flexDirection:'column',
+      justifyContent:'center'
     },
     submitCommentIcon:{
       width: SCREEN_HEIGHT * 0.037,
@@ -309,5 +321,14 @@ export const CourseUnitsAndTestsStyles = StyleSheet.create({
       justifyContent: "center",
       margin:0,
       padding:0
+    },
+    commentMessageIcon:{
+      height: 40,
+      width: 40,
+      zIndex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      position: "absolute",
+      alignSelf: I18nManager.isRTL ? "flex-end" : "flex-start",
     }
 })

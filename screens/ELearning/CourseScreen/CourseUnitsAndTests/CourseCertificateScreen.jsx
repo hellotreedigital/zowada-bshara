@@ -97,11 +97,14 @@ export const CourseCertificateScreen = ({ navigation }) => {
         <View style={[styles.certificateImagesContainer]}>
           <View style={[styles.posterImageContainer]}>
             <Image
-              style={[styles.posterImage, { width: SCREEN_WIDTH * 0.4 }]}
+              style={[styles.posterImage, { width: SCREEN_WIDTH * 0.6 }]}
               resizeMode="contain"
               source={Certificate}
             />
           </View>
+        </View>
+        <View>
+          <Text>تهانينا لقد حصلت على شارة جديدة </Text>
         </View>
       </View>
     </ScrollView>

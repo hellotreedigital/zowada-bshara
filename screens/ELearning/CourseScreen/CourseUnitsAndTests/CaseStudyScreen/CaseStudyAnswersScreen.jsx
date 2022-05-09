@@ -1,54 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, FlatList } from "react-native";
+import { ScrollView, View, Text, FlatList, 
+  useWindowDimensions
+ } from "react-native";
 import { globalStyles } from "../../../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "../CourseUnitsAndTestsStyles";
 import { CustomPageHeaderWithProgress } from "../../../../../components/CustomPageHeader/CustomPageHeaderWithProgress";
 import { colors } from "../../../../../globals/colors";
 import { SecondaryButton } from "../../../../../buttons/SecondaryButton";
+import RenderHtml from "react-native-render-html";
 
-const questionsAndAnswers = [
-  {
-    questionText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-
-    answerText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-  },
-  {
-    questionText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-
-    answerText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-  },
-  {
-    questionText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-
-    answerText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-  },
-];
-
-const longText = `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، 
-هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحر
+export const CaseStudyAnswersScreen = ({ navigation, route }) => {
+  const { data } = route.params
 
 
-صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، 
-هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحرف)هنا يوجد ف)هنا يوجد `;
-
-export const CaseStudyAnswersScreen = ({ navigation }) => {
-  let [allQuestionsAndAnswers, setAllQuestionsAndAnswers] = useState([]);
-
-  useEffect(() => {
-    setAllQuestionsAndAnswers(questionsAndAnswers);
-  }, []);
-
-  function goToArticle(){
-
-    const screenData ={
-        backButtonTitle:"العنوان هنا",
-        contentText: longText,
-        continueTo:"courseCompletionScreen"
-      }
-
-    navigation.push('courseArticleScreen',{
-        data: screenData
-    })
+  function continueWithCourse(){
+    console.log(data)
+    if(data.isLast){
+      navigation.push('courseCertificateScreen');
+    }
+    else navigation.pop(2)
   }
 
   return (
@@ -68,18 +38,14 @@ export const CaseStudyAnswersScreen = ({ navigation }) => {
       />
 
       <View style={[styles.mainPageContainer, styles.bottomPadding]}>
-        {allQuestionsAndAnswers.map((question, index) => (
           <QuestionAnswerContainer
-            key={index}
-            ind={index}
-            question={question}
+            case_study={data?.caseStudy}
           />
-        ))}
         <View style={[globalStyles.verticalTopSpacer20]}>
           <SecondaryButton
             content="استمر"
             fullWidth={true}
-            onPress={() => goToArticle()}
+            onPress={() => continueWithCourse()}
           />
         </View>
       </View>
@@ -87,23 +53,28 @@ export const CaseStudyAnswersScreen = ({ navigation }) => {
   );
 };
 
-const QuestionAnswerContainer = ({ ind, question }) => {
+const QuestionAnswerContainer = ({ case_study }) => {
+  const { width } = useWindowDimensions();
   return (
     <View style={[globalStyles.verticalTopSpacer20]}>
       <View style={[]}>
-        <Text style={[globalStyles.textBlue, styles.columns]}>
-          {question.questionText}
-        </Text>
-        <Text
-          style={[
-            globalStyles.textDarkBlue,
-            styles.columns,
-            globalStyles.verticalTopSpacer20,
-            globalStyles.verticalBottomSpacer20
-          ]}
-        >
-          {question.questionText}
-        </Text>
+        {case_study?.subject ? (
+                    <Text
+                      style={[globalStyles.textBlue, styles.columns, globalStyles.leftText]}
+                    >{case_study?.subject}</Text>
+                  ) : null}
+        {case_study?.correct_answer ? (
+                    <RenderHtml
+                      contentWidth={width}
+                      style={[
+                        globalStyles.textDarkBlue,
+                        styles.columns,
+                        globalStyles.verticalTopSpacer20,
+                        globalStyles.verticalBottomSpacer20
+                      ]}
+                      source={{ html: case_study?.correct_answer }}
+                    />
+                  ) : null}
       </View>
     </View>
   );

@@ -35,8 +35,7 @@ const eLearnineStyles = StyleSheet.create({
         borderRadius: SCREEN_HEIGHT * 0.037,
         backgroundColor: "white",
         alignItems: "center",
-        justifyContent: "center",
-        marginLeft: SCREEN_WIDTH * 0.0315,
+        justifyContent: "center"
     },
     ELearningTopBar:{
         display:'flex',

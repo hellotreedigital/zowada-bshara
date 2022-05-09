@@ -52,6 +52,13 @@ export const TestResultsScreen = ({ navigation, route }) => {
     });
   }
 
+  function continueWithLesson(){
+    if(data.isLast){
+      navigation.push('courseCertificateScreen');
+    }
+    else navigation.pop(3)
+  }
+
   return (
     <ScrollView
       style={[
@@ -119,7 +126,7 @@ export const TestResultsScreen = ({ navigation, route }) => {
           <SecondaryButton
             content="استمر"
             fullWidth={true}
-            onPress={() => navigation.pop(3)}
+            onPress={() => continueWithLesson()}
           />
         </View>
       </View>

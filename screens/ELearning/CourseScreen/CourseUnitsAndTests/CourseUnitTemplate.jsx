@@ -31,7 +31,10 @@ export const CourseUnitTemplate = ({
   ) {
 
     function proceedWithCourse (){
-      refreshLesson()
+      if(item.item.isLast){
+        navigation.push('courseCertificateScreen');
+      }
+      else refreshLesson()
     }
 
     return (
@@ -262,7 +265,7 @@ const ItemTemplate2 = ({
       style={[
         globalStyles.cardShadowStyle1,
         globalStyles.verticalBottomSpacer20,
-        (false && item.item.disabled) && globalStyles.disabledVideo
+        (item.item.disabled) && globalStyles.disabledVideo
       ]}
     >
       <TouchableOpacity

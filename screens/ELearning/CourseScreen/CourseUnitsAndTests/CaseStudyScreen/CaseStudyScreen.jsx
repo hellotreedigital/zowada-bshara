@@ -1,86 +1,77 @@
-import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, FlatList, SafeAreaView, KeyboardAvoidingView,
-  Platform, TextInput} from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  ScrollView,
+  View,
+  Text,
+  FlatList,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+  TextInput,
+  useWindowDimensions
+} from "react-native";
 import { globalStyles } from "../../../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "../CourseUnitsAndTestsStyles";
 import { CustomPageHeaderWithProgress } from "../../../../../components/CustomPageHeader/CustomPageHeaderWithProgress";
 import { colors } from "../../../../../globals/colors";
 import { SecondaryButton } from "../../../../../buttons/SecondaryButton";
-import { Formik } from "formik";
-import {CaseStudyForm} from '../../../../../components/RegisterForm/CaseStudyForm'
+import { Formik, useFormik } from "formik";
+import { CaseStudyForm } from "../../../../../components/RegisterForm/CaseStudyForm";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../../globals/globals";
+import {
+  getCaseStudy,
+  answerCaseStudy,
+} from "../../../../../api/ELearning/ELearning";
+import RenderHtml from "react-native-render-html";
 
-const questions=[
-    {
-        questionText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع
-        الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم
-        إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-        answers:[
-            {
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            }
-        ]
-    },{
-        questionText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع
-        الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم
-        إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-        answers:[
-            {
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            }
-        ]
-    },{
-        questionText: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع
-        الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم
-        إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى`,
-        answers:[
-            {
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            },{
-                answerText: 'إجابه',
-                isSelected: false
-            }
-        ]
-    }
-]
+export const CaseStudyScreen = ({ navigation, route }) => {
+  const { data } = route.params;
+  let [caseStudy, setcaseStudy] = useState([]);
+  const [loadingResults, setLoadingResults] = useState(false);
+  const { width } = useWindowDimensions();
 
-export const CaseStudyScreen = ({ navigation }) => {
+  const formikRef = useRef();
 
-    let [allQuestions, setAllQuestions] = useState([]);
-    const [errorObject, setErrorObject] = useState({
-      errorVisible: false,
-      answerError: 'خطأ'
+  const [errorObject, setErrorObject] = useState({
+    errorVisible: false,
+    answerError: "خطأ",
+  });
+
+  useEffect(() => {
+    (async () => {
+      setLoadingResults(true);
+      let caseStudyData = await getCaseStudy(
+        data.courseId,
+        data.lessonId,
+        data.case_studyId
+      );
+      setcaseStudy(caseStudyData.data.case_study);
+      if (caseStudyData?.data?.answer?.answer) {
+        if(formikRef.current){
+          formikRef.current.setFieldValue('answer', caseStudyData.data.answer.answer);
+        }
+      }
+      setLoadingResults(false);
+    })();
+  }, []);
+
+  async function onSubmitCaseStudyPressed(answer) {
+    setLoadingResults(true);
+    await answerCaseStudy(data.courseId, data.lessonId, data.case_studyId, {
+      answer: answer,
     });
-
-    useEffect(() => {
-      setAllQuestions(questions);
-    }, []);
-
-    const handleExpertLogin = (values) => {
-      var formdata = new FormData();
-      formdata.append("answer", values.answer);
-    };
+    navigation.push('caseStudyAnswersScreen', {data: {caseStudy: caseStudy, isLast: data.isLast}})
+    setLoadingResults(false);
+  }
 
   return (
-    <ScrollView style={[globalStyles.body, globalStyles.backgrounLightGrey, styles.bottomPadding]}>
+    <ScrollView
+      style={[
+        globalStyles.body,
+        globalStyles.backgrounLightGrey
+      ]}
+      contentContainerStyle={{flexGrow:1}}
+    >
       <CustomPageHeaderWithProgress
         navigation={navigation}
         title="اختبار"
@@ -88,88 +79,96 @@ export const CaseStudyScreen = ({ navigation }) => {
         showNotification={false}
         color={colors.blue}
         showProgress={true}
+        progress={caseStudy?.answer !== null ? 1 : 0.5}
       />
-
-      <View style={[styles.mainPageContainer, styles.bottomPadding]}>
-          <View style={[globalStyles.verticalTopSpacer20]}><Text style={[globalStyles.textCenter, globalStyles.textBlue]}>اسم الموضوع</Text></View>
-
-          <View
-      style={[
-        globalStyles.cardShadow,
-        globalStyles.verticalTopSpacer20,
-        styles.testText,
-      ]}
-    >
-      <View style={[globalStyles.whiteCard]}>
-        <View style={styles.textTextContainer}>
-          <View style={styles.rows}>
-            <Text style={[globalStyles.textDarkBlue,styles.columns, styles.testText]}>
-            صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى
-            </Text>
-          </View>
-
-          <View style={styles.rows}>
-            <Text style={[globalStyles.textDarkBlue,styles.columns, styles.testText, globalStyles.verticalTopSpacer20]}>
-            صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى
-            </Text>
-          </View>
-
-          <Formik
+      <Formik
+      innerRef={formikRef}
         initialValues={{
-          answer: ""
+          answer: "",
         }}
       >
-        {({ handleChange, values }) => (
-            <SafeAreaView style={globalStyles.verticalTopSpacer20}>
-              <ScrollView
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                style={globalStyles.verticalTopSpacer20}
-              >
-                <View style={styles.loader}>
-                </View>
-                <KeyboardAvoidingView
-                  keyboardVerticalOffset={-120}
-                  behavior={Platform.OS === "ios" ? "position" : "padding"}
-                >
-                  <View style={styles.content}>
-                    <View style={styles.form}>
-                    <TextInput
-                      style={[styles.caseStudyInput]}
-                      placeholder={'dcn'}
-                      keyboardType="default"
-                      placeholderTextColor={colors.blue}
-                      selectionColor={colors.dark_blue}
-                      secureTextEntry={false}
-                      value={values.answer}
-                      onChangeText={handleChange}
-                      placeholderStyle={styles.textboxfieldd}
-                      multiline={true}
-                      numberOfLines={6}
+        {({ handleChange, values, resetForm, setFieldValue }) => (
+
+          <View style={[styles.mainPageContainer,
+            globalStyles.verticalBottomSpacer20, {flexGrow:1, justifyContent:'space-between'}]}>
+            <View style={[globalStyles.verticalTopSpacer20]}>
+            <View>
+              <Text style={[globalStyles.textCenter, globalStyles.textBlue]}>
+                {caseStudy.title}
+              </Text>
+            </View>
+
+            <View
+              style={[
+                globalStyles.cardShadow,
+                globalStyles.verticalTopSpacer20,
+                styles.testText,
+              ]}
+            >
+              <View style={[globalStyles.whiteCard]}>
+                <View style={styles.textTextContainer}>
+                  <View style={styles.rows}>
+                  {caseStudy.subject ? (
+                    <RenderHtml
+                      contentWidth={width}
+                      style={globalStyles.textDarkBlue}
+                      source={{ html: caseStudy?.subject }}
                     />
-                    </View>
+                  ) : null}
                   </View>
-                  <>
-                    <View style={styles.button}>
-                      <View style={styles.submit}>
-                      </View>
-                    </View>
-                  </>
-                </KeyboardAvoidingView>
-              </ScrollView>
-            </SafeAreaView>
+
+                  <SafeAreaView style={globalStyles.verticalTopSpacer20}>
+                    <ScrollView
+                      showsHorizontalScrollIndicator={false}
+                      showsVerticalScrollIndicator={false}
+                      style={globalStyles.verticalTopSpacer20}
+                    >
+                      <View style={styles.loader}></View>
+                      <KeyboardAvoidingView
+                        keyboardVerticalOffset={-120}
+                        behavior={
+                          Platform.OS === "ios" ? "position" : "padding"
+                        }
+                      >
+                        <View style={styles.content}>
+                          <View style={styles.form}>
+                            <TextInput
+                              style={[styles.caseStudyInput]}
+                              placeholder={caseStudy?.answer?.answer ? caseStudy.answer.answer : "أجب عن السؤال هنا"}
+                              keyboardType="default"
+                              placeholderTextColor={colors.blue}
+                              selectionColor={colors.dark_blue}
+                              secureTextEntry={false}
+                              value={values.answer}
+                              onChangeText={handleChange("answer")}
+                              placeholderStyle={styles.textboxfieldd}
+                              multiline={true}
+                              numberOfLines={6}
+                            />
+                          </View>
+                        </View>
+                      </KeyboardAvoidingView>
+                    </ScrollView>
+                  </SafeAreaView>
+                </View>
+              </View>
+            </View>
+            </View>
+
+            <View style={[globalStyles.verticalTopSpacer20,
+        globalStyles.verticalBottomSpacer20]}>
+              <SecondaryButton
+                content="استمر"
+                fullWidth={true}
+                onPress={() => {
+                  onSubmitCaseStudyPressed(values.answer);
+                  resetForm();
+                }}
+              />
+            </View>
+          </View>
         )}
       </Formik>
-
-
-        </View>
-      </View>
-    </View>
-
-
-      <View style={[globalStyles.verticalTopSpacer20]}><SecondaryButton content="استمر" fullWidth={true} onPress={()=> navigation.push('caseStudyAnswersScreen')}/></View>
-      </View>
-
     </ScrollView>
   );
 };

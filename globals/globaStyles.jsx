@@ -80,6 +80,38 @@ export const globalStyles = StyleSheet.create({
         textAlignVertical:'center',
         overflow:'hidden'
     },
+    iconShadow:{
+        width: SCREEN_HEIGHT * 0.037,
+        height: SCREEN_HEIGHT * 0.037,
+        borderRadius: SCREEN_HEIGHT * 0.037/2,
+        padding: 1,
+        paddingBottom: -1,
+        backgroundColor: 'transparent',
+        shadowColor: '#444',
+        shadowOffset: {
+          width: 6,
+          height: 3,
+        },
+        shadowOpacity: 0.05,
+        shadowRadius: SCREEN_HEIGHT * 0.037/2,
+        elevation: 3,
+    },
+    smallIconShadow:{
+        borderRadius: SCREEN_HEIGHT * 0.037/2,
+        padding: 1,
+        paddingBottom: -1,
+        backgroundColor: 'transparent',
+        shadowColor: '#999',
+        shadowOffset: {
+          width: 6,
+          height: 3,
+        },
+        shadowOpacity: 0.05,
+        elevation: 3,
+    },
+    iconMargin:{
+        marginLeft: SCREEN_WIDTH * 0.0315,
+    },
     iconBorder:{
         borderWidth: 1,
         borderColor: colors.blue
@@ -125,8 +157,9 @@ export const globalStyles = StyleSheet.create({
         textAlign:'left'
     },indicator: {
         position: "absolute",
-        top: "45%",
+        top: "50%",
         width: SCREEN_WIDTH,
+        zIndex: 999999
     },disabledVideo:{
         opacity: 0.3
     }

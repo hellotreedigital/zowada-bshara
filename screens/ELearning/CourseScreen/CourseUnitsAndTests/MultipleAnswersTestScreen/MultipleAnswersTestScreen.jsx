@@ -54,9 +54,10 @@ export const MultipleAnswersTestScreen = ({ navigation, route }) => {
         let screenData = {
             correctAnswers: correctAnswers,
             passing_answers_number: data.passing_answers_number,
-            numberOfQuestions: allQ.length
+            numberOfQuestions: allQ.length,
+            allQuestions: allQuestions,
+            isLast: data.isLast
         }
-        console.log(data)
         await answerExam(courseId, data.lesson_id, {answers:answerss});
 
         navigation.push('testResultsScreen', {data: screenData});

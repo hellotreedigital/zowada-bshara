@@ -57,6 +57,7 @@ export default function App() {
   });
   const [authState, setAuthState] = useState({});
   const [userName, setUserName] = useState(null);
+  const [user, setUser] = useState(null);
   const [profilePic, setProfilePic] = useState(null);
   const [verificationTypes, setVerificationTypes] = useState({
     phone: null,
@@ -217,6 +218,8 @@ export default function App() {
       .then((res) => {
         setProfilePic(server + res.data.user.image);
         setUserName(res.data.user.full_name);
+        setUser(res.data.user)
+        console.log(res.data.user, 'fdfsddrtyu')
       })
       .catch((err) => {
         console.log(err);
@@ -292,7 +295,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       {appIsReady && languageLoaded && (
-        <AuthContext.Provider value={{ profilePic, setProfilePic }}>
+        <AuthContext.Provider value={{ profilePic, setProfilePic, user, setUser }}>
           <AppContext.Provider
             value={{
               setIsExpert,

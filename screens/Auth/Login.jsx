@@ -56,7 +56,7 @@ export const Login = ({ navigation, setToken }) => {
     userName,
   } = useContext(AppContext);
 
-  const { setAuthState } = useContext(AuthContext);
+  const { setAuthState, user, setUser } = useContext(AuthContext);
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -182,10 +182,14 @@ export const Login = ({ navigation, setToken }) => {
     signInUser(formdata)
       .then((res) => {
         console.log("User logged in ");
+
         storeToken(res.data.token);
         setToken(res.data.token);
-        AsyncStorage.setItem("@token", JSON.stringify(res.data.token));
-        // setAuthState(res.data.user);
+        AsyncStorage.setItem("@token", JSON.stringify(res.data.token));        
+        alert(11)
+        console.log(res.data.user, 'fedcvgfrdcgfdcvbgrdgrdgfdgfdg')
+        setUser(res.data.user);
+        alert(22)
         console.log("USER DATA :", res.data.user);
         setUserName(res.data.user.full_name);
         setErrorObject({

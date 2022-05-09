@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
+  Image
 } from "react-native";
 import { globalStyles } from "../../../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "../CourseUnitsAndTestsStyles";
@@ -16,8 +17,9 @@ import { colors } from "../../../../../globals/colors";
 import { Formik } from "formik";
 import {
   getArticleComments,
-  commentArticle
+  commentArticle,
 } from "../../../../../api/ELearning/ELearning";
+import Comment from "../../../../../assets/Comment.png";
 
 import { VideoFeedbackCard } from "../../../../../components/Feedback/VideoFeedbackCard";
 
@@ -111,28 +113,39 @@ export const ArticleCommentsScreen = ({ navigation, route }) => {
           >
             {({ handleChange, values, resetForm }) => (
               <View style={styles.commentVideoFormContainer}>
-                <View style={styles.commentVideoForm}>
-                  <TextInput
-                    style={[styles.commentInput]}
-                    placeholder={"أضف تعليقك هنا"}
-                    keyboardType="default"
-                    placeholderTextColor={colors.blue}
-                    selectionColor={colors.dark_blue}
-                    secureTextEntry={false}
-                    value={values.comment}
-                    onChangeText={handleChange("comment")}
-                    placeholderStyle={styles.textboxfieldd}
-                  />
+                <View style={[styles.commentVideoForm]}>
+                  <View>
+                    <TextInput
+                      style={[styles.commentInput]}
+                      placeholder={"أضف تعليقك هنا"}
+                      keyboardType="default"
+                      placeholderTextColor="#dedede"
+                      selectionColor={colors.dark_blue}
+                      secureTextEntry={false}
+                      value={values.comment}
+                      onChangeText={handleChange("comment")}
+                      placeholderStyle={styles.textboxfieldd}
+                    />
+                    <View style={[styles.commentMessageIcon, { left: 0 }]}>
+                      <Image
+                        resizeMode="cover"
+                        source={Comment}
+                        style={styles.imagee}
+                      />
+                    </View>
+                  </View>
                 </View>
-                <TouchableOpacity
-                  style={styles.submitCommentIcon}
-                  onPress={() => {
-                    onCommentArticlePressed(values.comment);
-                    resetForm();
-                  }}
-                >
-                  <ShareSVG color="#fff" />
-                </TouchableOpacity>
+                <View style={[styles.submitCommentIconContainer]}>
+                  <TouchableOpacity
+                    style={styles.submitCommentIcon}
+                    onPress={() => {
+                      onCommentArticlePressed(values.comment);
+                      resetForm();
+                    }}
+                  >
+                    <ShareSVG color="#fff" />
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
           </Formik>
