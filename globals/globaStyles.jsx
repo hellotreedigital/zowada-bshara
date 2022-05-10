@@ -65,9 +65,6 @@ export const globalStyles = StyleSheet.create({
     backgrounLightGrey:{
         backgroundColor:colors.light_grey
     },
-    textCenter:{
-        textAlign:'center'
-    },
     icon: {
         width: SCREEN_HEIGHT * 0.037,
         height: SCREEN_HEIGHT * 0.037,
@@ -155,7 +152,16 @@ export const globalStyles = StyleSheet.create({
     },
     leftText:{
         textAlign:'left'
-    },indicator: {
+    },textCenter:{
+        textAlign:'center'
+    },
+    textMedium:{
+        fontSize: 18
+    },
+    textBold:{
+        fontWeight: 'bold'
+    },
+    indicator: {
         position: "absolute",
         top: "50%",
         width: SCREEN_WIDTH,

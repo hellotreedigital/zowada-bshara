@@ -330,5 +330,10 @@ export const CourseUnitsAndTestsStyles = StyleSheet.create({
       justifyContent: "center",
       position: "absolute",
       alignSelf: I18nManager.isRTL ? "flex-end" : "flex-start",
+    },
+
+    //leson certificate
+    lessonCertificateTextContainer:{
+      width:'100%'
     }
 })

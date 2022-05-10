@@ -90,6 +90,7 @@ export const PosterCommentsScreen = ({ navigation, route }) => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         ItemSeparatorComponent={() => <ItemDivider />}
+        ListEmptyComponent={<EmptyListComponent />}
       />
       <KeyboardAvoidingView
         keyboardVerticalOffset={30}
@@ -182,3 +183,12 @@ const ItemDivider = () => {
     />
   );
 };
+
+
+export const EmptyListComponent = () =>{
+  return(
+    <View>
+      <Text style={[globalStyles.textDarkBlue, globalStyles.leftText, {fontSize:18, fontWeight:'bold'}]}>No Comments</Text>
+    </View>
+  )
+}
