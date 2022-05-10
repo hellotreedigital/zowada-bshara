@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import {
   SafeAreaView,
   ActivityIndicator,
@@ -16,11 +16,11 @@ import { CourseUnitTemplate } from "./CourseUnitTemplate";
 import {
   getSingleLesson,
   getLessonExam,
-  getCaseStudy
+  getCaseStudy,
 } from "../../../../api/ELearning/ELearning";
 import AppContext from "../../../../appContext/AppContext";
 import AuthContext from "../../../../appContext/AuthContext";
-
+import FAQModal from "../../../../components/Modals/FAQModal";
 
 const longText = `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، 
     هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحر
@@ -34,24 +34,17 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
   let [lessonData, setLessonData] = useState({});
   const [loadingResults, setLoadingResults] = useState(false);
   let [lessonDataArray, setLessonDataArray] = useState([]);
+  let [faqs, setFaqs] = useState([]);
+  let [showFAQ, setShowFAQ] = useState(false);
 
-  const {userName, email} = useContext(
-    AppContext
-  );
-  
-  const {user} = useContext(
-    AuthContext
-  );
+  const { userName, email } = useContext(AppContext);
+  const isFocused = useIsFocused();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    const focusListener = navigation.addListener("focus", () => {
-      setcourseRefresh((prev) => !prev);
-    });
-    return () => {
-      focusListener?.remove();
-    };
-  }, [navigation]);
-
+      if (isFocused) setcourseRefresh((prev) => !prev);
+      console.log(isFocused)
+  }, [isFocused]);
 
   useEffect(() => {
     (async () => {
@@ -62,74 +55,80 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
         route.params.data.lessonId
       );
       let examdata = examdataraw.data.exam;
-      const hasExam = examdata !== null
+      const hasExam = examdata !== null;
       if (hasExam) {
         examdata["type"] = 1;
         examdata["infoText"] = "تقدم للإختبار";
+      }else{
+        examdata = []
       }
 
       let lessondata = await getSingleLesson(
         route.params.data.courseId,
         route.params.data.lessonId
       );
-      let lessonVideos = lessondata.data.lesson.videos;
-      const hasVideos = lessonVideos.length > 0;
-      let lessonCaseStudies = lessondata.data.lesson.case_studies;
-      const hasCaseStudies = lessonCaseStudies.length > 0;
+      if (lessondata.data.faqs)
+        setFaqs(lessondata.data.faqs);
 
-      let lessonStickers = lessondata.data.lesson.stickers;
-      let lessonArticles = lessondata.data.lesson.articles;
+      if (lessondata.data.lesson) {
+        let lessonVideos = lessondata.data.lesson.videos;
+        const hasVideos = lessonVideos.length > 0;
+        let lessonCaseStudies = lessondata.data.lesson.case_studies;
+        const hasCaseStudies = lessonCaseStudies.length > 0;
+        let lessonStickers = lessondata.data.lesson.stickers;
+        let lessonArticles = lessondata.data.lesson.articles;
 
-      let lastStatus = false;
+        let lastStatus = false;
 
-      if(hasVideos){
-        lessonVideos.forEach(vid =>{
-          vid['disabled'] = lastStatus;
-          lastStatus = !vid.watched;
-        })
-      }
-
-      if(hasExam){
-        examdata["disabled"] = lastStatus;
-        lastStatus = !examdata.is_passed;
-      }
-
-      if(hasCaseStudies){
-
-        for (let cs of lessonCaseStudies){
-          cs.type = 2;
-          cs.infoText = "دراسة الحالة";
-          cs['disabled'] = lastStatus;
-
-          let caseStudyData = await getCaseStudy(
-            route.params.data.courseId,
-            route.params.data.lessonId,
-            cs.id
-          );
-          lastStatus = !!(caseStudyData?.data?.answer?.answer)
+        if (hasVideos) {
+          lessonVideos.forEach((vid) => {
+            vid["disabled"] = lastStatus;
+            lastStatus = !vid.watched;
+          });
         }
 
-        lessonCaseStudies[lessonCaseStudies.length - 1]['isLast'] = true;
-      }else if(hasExam) examdata['isLast'] = true;
-      else if(hasVideos) lessonVideos[lessonVideos.length - 1]['isLast'] = true;
+        if (hasExam) {
+          examdata["disabled"] = lastStatus;
+          lastStatus = !examdata.is_passed;
+        }
 
-      lessondata.data.lesson.articles.forEach((article) => {
-        article.type = 3;
-        article.infoText = "مقالة";
-      });
-      lessondata.data.lesson.stickers.forEach((sticker) => {
-        sticker.type = 4;
-        sticker.infoText = "ملصق";
-      });
+        if (hasCaseStudies) {
+          for (let cs of lessonCaseStudies) {
+            cs.type = 2;
+            cs.infoText = "دراسة الحالة";
+            cs["disabled"] = lastStatus;
 
-      let lessondataArray = lessonVideos.concat(
-        hasExam ? examdata : [],
-        lessonCaseStudies,
-        lessonArticles,
-        lessonStickers
-      );
-      setLessonData(lessondata.data.lesson);
-      setLessonDataArray(lessondataArray);
+            let caseStudyData = await getCaseStudy(
+              route.params.data.courseId,
+              route.params.data.lessonId,
+              cs.id
+            );
+            lastStatus = !!caseStudyData?.data?.answer?.answer;
+          }
+
+          lessonCaseStudies[lessonCaseStudies.length - 1]["isLast"] = true;
+        } else if (hasExam) examdata["isLast"] = true;
+        else if (hasVideos)
+          lessonVideos[lessonVideos.length - 1]["isLast"] = true;
+
+        lessonArticles.forEach((article) => {
+          article.type = 3;
+          article.infoText = "مقالة";
+        });
+        lessonStickers.forEach((sticker) => {
+          sticker.type = 4;
+          sticker.infoText = "ملصق";
+        });
+
+        let lessondataArray = lessonVideos.concat(
+          examdata,
+          lessonCaseStudies,
+          lessonArticles,
+          lessonStickers
+        );
+        setLessonData(lessondata.data.lesson);
+        setLessonDataArray(lessondataArray);
+      }
       setLoadingResults(false);
     })();
   }, [courseRefresh]);
@@ -146,7 +145,7 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
           contentText: longText,
           continueTo: "multipleAnswersTestScreen",
           item: i,
-          isLast: !!(i.isLast)
+          isLast: !!i.isLast,
         };
         navigation.push("testIntroScreen", {
           data: screenData,
@@ -158,7 +157,7 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
           courseId: route.params.data.courseId,
           lessonId: route.params.data.lessonId,
           case_studyId: i.id,
-          isLast: !!(i.isLast)
+          isLast: !!i.isLast,
         };
         navigation.push("caseStudyScreen", { data: caseStudyScreenData });
         break;
@@ -182,8 +181,19 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
     }
   }
 
+  function showFAQModal() {
+    setShowFAQ(true);
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <FAQModal
+        visible={showFAQ}
+        FAQ={faqs}
+        close={() => {
+          setShowFAQ(false);
+        }}
+      />
       <View style={globalStyles.indicator}>
         <ActivityIndicator
           animating={loadingResults}
@@ -215,7 +225,7 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
             loadingResults={loadingResults}
           />
         }
-        ListFooterComponent={<ListFooter />}
+        ListFooterComponent={<ListFooter showFAQModal={showFAQModal} />}
       />
     </SafeAreaView>
   );
@@ -235,10 +245,15 @@ const ListHeader = ({ navigation, lessonData, loadingResults }) => {
   );
 };
 
-const ListFooter = () => {
+const ListFooter = ({ showFAQModal }) => {
   return (
     <View style={[styles.lessonFAQ, globalStyles.verticalBottomSpacer20]}>
-      <TouchableOpacity style={styles.lessonFAQIcon}>
+      <TouchableOpacity
+        style={styles.lessonFAQIcon}
+        onPress={() => {
+          showFAQModal();
+        }}
+      >
         <Text style={[{ color: "#fff", fontWeight: "bold", fontSize: 22 }]}>
           ?
         </Text>

@@ -14,7 +14,7 @@ function ArrowDownSVG(props) {
         data-name="Path 966"
         d="M1.414 1.414l4.934 4.935 4.936-4.935"
         fill="none"
-        stroke="#e8af2e"
+        stroke={props.fill ? props.fill : "#e8af2e"}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}

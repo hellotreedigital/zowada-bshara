@@ -177,15 +177,23 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.right}>
-                        <TouchableOpacity style={styles.icon} onPress={()=> {navigation.push('cartScreen')}}>
+                        <View>
+                        <TouchableOpacity style={[styles.icon, globalStyles.iconMargin]} onPress={()=> {navigation.push('cartScreen')}}>
                             <MyOrdersSVG  size={30} background='#fff' fill='#e54c2e'/>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.icon}>
+                        </View>
+                        <View>
+
+                        <TouchableOpacity style={[styles.icon, globalStyles.iconMargin]}>
                             <ShareSVG />
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.icon}>
+                        </View>
+                        <View>
+                        <TouchableOpacity style={[styles.icon, globalStyles.iconMargin]}>
                             <NotificationSVG />
                         </TouchableOpacity>
+
+                        </View>
                     </View>
                 </View>
                 <View style={styles.searchBox}>

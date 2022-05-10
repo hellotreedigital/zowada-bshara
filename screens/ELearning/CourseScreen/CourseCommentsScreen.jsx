@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, View, Text, FlatList, SafeAreaView, TextInput, KeyboardAvoidingView,
-  Platform, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from "react-native";
+  Platform, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
 import { globalStyles } from "../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "./CourseUnitsAndTests/CourseUnitsAndTestsStyles";
 import { CustomPageHeader } from "../../../components/CustomPageHeader/CustomPageHeader";
@@ -9,6 +9,7 @@ import { colors } from "../../../globals/colors";
 import { Formik } from "formik";
 import { getSingleLesson } from "../../../api/ELearning/ELearning";
 import { SCREEN_HEIGHT } from "../../../globals/globals";
+import Comment from "../../../assets/Comment.png";
 
 export const CourseCommentsScreen = ({ navigation }) => {
     
@@ -39,6 +40,7 @@ export const CourseCommentsScreen = ({ navigation }) => {
       keyExtractor={(item) => `${item.id}`}
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
+      ListEmptyComponent={<EmptyListComponent />}
     />
       <KeyboardAvoidingView
         keyboardVerticalOffset={30}
@@ -57,24 +59,41 @@ export const CourseCommentsScreen = ({ navigation }) => {
         }}
       >
         {({ handleChange, values }) => (
-                  <View style={styles.commentVideoFormContainer}>
-                    <View style={styles.commentVideoForm}>
-                    <TextInput
-                      style={[styles.commentInput]}
-                      placeholder={'أضف تعليقك هنا'}
-                      keyboardType="default"
-                      placeholderTextColor={colors.blue}
-                      selectionColor={colors.dark_blue}
-                      secureTextEntry={false}
-                      value={values.comment}
-                      onChangeText={handleChange("comment")}
-                      placeholderStyle={styles.textboxfieldd}
-                    />
+                  <View style={[styles.commentVideoFormContainer]}>
+                  <View style={styles.commentVideoForm}>
+                    <View>
+                      <TextInput
+                        style={[styles.commentInput]}
+                        placeholder={"أضف تعليقك هنا"}
+                        keyboardType="default"
+                        placeholderTextColor="#dedede"
+                        selectionColor={colors.dark_blue}
+                        secureTextEntry={false}
+                        value={values.comment}
+                        onChangeText={handleChange("comment")}
+                        placeholderStyle={styles.textboxfieldd}
+                      />
+                      <View style={[styles.commentMessageIcon, { left: 0 }]}>
+                        <Image
+                          resizeMode="cover"
+                          source={Comment}
+                          style={styles.imagee}
+                        />
+                      </View>
                     </View>
-                      <TouchableOpacity style={styles.submitCommentIcon}>
-                            <ShareSVG color='#fff'/>
-                        </TouchableOpacity>
                   </View>
+                  <View style={[styles.submitCommentIconContainer]}>
+                    <TouchableOpacity
+                      style={[styles.submitCommentIcon]}
+                      onPress={() => {
+                        onCommentVideoPressed(values.comment);
+                        resetForm();
+                      }}
+                    >
+                      <ShareSVG color="#fff" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
         )}
       </Formik>
         </View>
@@ -97,3 +116,11 @@ const ListHeader = ({ navigation }) => {
     </View>
   );
 };
+
+export const EmptyListComponent = () =>{
+  return(
+    <View>
+      <Text style={[globalStyles.textDarkBlue, globalStyles.leftText, {fontSize:18, fontWeight:'bold'}]}>No Comments</Text>
+    </View>
+  )
+}

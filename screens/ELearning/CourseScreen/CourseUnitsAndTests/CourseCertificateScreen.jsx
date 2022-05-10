@@ -17,7 +17,7 @@ import Comment from "../../../../assets/Comment.png";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../globals/globals";
 import badge from "../../../../assets/Group498.png";
 import badge1 from "../../../../assets/Group4186.png";
-import Certificate from "../../../../assets/Certificate.png";
+import Certificate from "../../../../assets/LessonCertificate.png";
 
 const questionsAndAnswers = [
   {
@@ -82,10 +82,8 @@ export const CourseCertificateScreen = ({ navigation }) => {
       <View
         style={[
           styles.mainPageContainer,
-          styles.bottomPadding,
           {
             width: "100%",
-            justifyContent: "center",
             position: "relative",
             marginHorizontal: 0,
             display: "flex",
@@ -102,11 +100,14 @@ export const CourseCertificateScreen = ({ navigation }) => {
               source={Certificate}
             />
           </View>
-        </View>
-        <View>
-          <Text>تهانينا لقد حصلت على شارة جديدة </Text>
-        </View>
       </View>
+        </View>
+        <View style={[styles.lessonCertificateTextContainer]}>
+          <Text style={[globalStyles.leftText, globalStyles.textBlue, globalStyles.textCenter, globalStyles.textMedium, globalStyles.textBold]}>تهانينا لقد حصلت على شارة جديدة </Text>
+        </View>
+        <View style={[styles.lessonCertificateTextContainer]}>
+          <Text style={[globalStyles.leftText, globalStyles.textDarkBlue, globalStyles.textCenter, globalStyles.textMedium, globalStyles.textBold]}>بإمكانك مشاركة النتيجة على </Text>
+        </View>
     </ScrollView>
   );
 };

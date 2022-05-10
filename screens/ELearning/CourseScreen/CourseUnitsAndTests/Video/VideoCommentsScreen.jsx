@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   View,
@@ -79,6 +79,8 @@ export const VideoCommentsScreen = ({ navigation, route }) => {
         showNotification={false}
         color={colors.blue}
         spaceHorizontally={true}
+        isAbsolute={false} 
+        showCart={false}        
       />
       <FlatList
         style={[styles.mainPageContainer, { flexGrow: 1 }]}
@@ -90,6 +92,7 @@ export const VideoCommentsScreen = ({ navigation, route }) => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         ItemSeparatorComponent={() => <ItemDivider />}
+        ListEmptyComponent={<EmptyListComponent />}
       />
       <KeyboardAvoidingView
         keyboardVerticalOffset={30}
@@ -102,21 +105,20 @@ export const VideoCommentsScreen = ({ navigation, route }) => {
         ]}
       >
         <View
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
           style={[globalStyles.verticalTopSpacer20, { flexGrow: 1 }]}
         >
           <Formik
             initialValues={{
               comment: "",
             }}
+            onSubmit={() => {}}
           >
             {({ handleChange, values, resetForm }) => (
               <View style={[styles.commentVideoFormContainer]}>
-                <View style={styles.commentVideoForm}>
+                <View>
                   <View>
                     <TextInput
-                      style={[styles.commentInput]}
+                      style={[styles.commentInput, styles.textboxfieldd]}
                       placeholder={"أضف تعليقك هنا"}
                       keyboardType="default"
                       placeholderTextColor="#dedede"
@@ -124,7 +126,6 @@ export const VideoCommentsScreen = ({ navigation, route }) => {
                       secureTextEntry={false}
                       value={values.comment}
                       onChangeText={handleChange("comment")}
-                      placeholderStyle={styles.textboxfieldd}
                     />
                     <View style={[styles.commentMessageIcon, { left: 0 }]}>
                       <Image
@@ -163,8 +164,10 @@ const ListHeader = ({ navigation }) => {
         title={"تعليقات"}
         showShare={false}
         showNotification={false}
-        color={colors.blue}
-      />
+        color={colors.blue} 
+        spaceHorizontally={false} 
+        isAbsolute={false} 
+        showCart={false}/>
     </View>
   );
 };
@@ -182,3 +185,11 @@ const ItemDivider = () => {
     />
   );
 };
+
+export const EmptyListComponent = () =>{
+  return(
+    <View>
+      <Text style={[globalStyles.textDarkBlue, globalStyles.leftText, {fontSize:18, fontWeight:'bold'}]}>No Comments</Text>
+    </View>
+  )
+}
