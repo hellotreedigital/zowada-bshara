@@ -8,6 +8,9 @@ import {
 import { colors } from "../../../globals/colors";
 
 export const cartStyles = StyleSheet.create({
+    cartBodyBottomSpacing:{
+      paddingBottom:SCREEN_HEIGHT * 0.25
+    },
     mainPageContainer:{
         position:'relative',
         marginHorizontal: 20

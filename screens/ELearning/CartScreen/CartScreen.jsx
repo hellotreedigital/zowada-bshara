@@ -64,7 +64,7 @@ export const CartScreen = ({navigation}) => {
 
     
     return(
-        <View style={[globalStyles.body, globalStyles.backgrounWhite]}>
+        <View style={[globalStyles.body, styles.cartBodyBottomSpacing, globalStyles.backgrounWhite]}>
             <CustomPageHeader navigation={navigation} title="عربة التسوق" showShare={false} showNotification={false} color={colors.blue} spaceHorizontally={true}/>
 
             <View style={[styles.mainPageContainer]}>
