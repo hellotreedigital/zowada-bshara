@@ -140,7 +140,7 @@ export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
             <TouchableOpacity
               style={styles.aboutRight}
               onPress={() => {
-                navigation.push("courseCommentsScreen");
+                navigation.push("courseCommentsScreen", {data:{courseId: courseInfo.id, registered: registered}});
               }}
             >
               <Typography

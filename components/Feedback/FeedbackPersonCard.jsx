@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
 	ImageBackground,
 	StyleSheet,
@@ -12,6 +12,8 @@ import { AirbnbRating } from 'react-native-ratings';
 import { globalStyles } from "../../globals/globaStyles";
 
 export const FeedbackPersonCard = ({ data, size}) => {
+
+  
 	return (
         <View>
 			<View style={styles.top}>

@@ -70,6 +70,40 @@ export async function getHomeData() {
       });
   }
   
+  export async function getSingleCourseComments(id) {
+      let url = `/me${rootUrl}/${id}/comments`;
+      return new Promise(async function (resolve, reject) {
+        API.get(url)
+          .then((res) => {
+            resolve(res);
+          })
+          .catch((err) => {
+            console.log("API ERROR: getting course comments failed", err.response.data);
+            reject(err);
+          });
+      });
+  }
+
+
+  export async function commentCourse(courseId, formdata) {
+      let url = `/me${rootUrl}/${courseId}/rating`;
+      return new Promise(async function (resolve, reject) {
+        API.post(url, formdata, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+          .then((res) => {
+            resolve(res);
+          })
+          .catch((err) => {
+            console.log("API ERROR: commenting failed", err.response.data);
+            reject(err);
+          });
+      });
+  }
+  
+
   
   
   
@@ -243,14 +277,15 @@ export async function setVideoWatched(courseId, lessonId, videoId) {
     return new Promise(async function (resolve, reject) {
       API.post(url, formdata, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json"
         },
       })
         .then((res) => {
+          console.log(res)
           resolve(res);
         })
         .catch((err) => {
-          console.log("API ERROR: commenting failed", err.response.data);
+          console.log("API ERROR: answering failed", err.response.data);
           reject(err);
         });
     });

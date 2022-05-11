@@ -38,6 +38,7 @@ export default function App() {
   const [notification, setNotification] = useState(false);
   const [appLanguage, setAppLanguage] = useState(null);
   const [token, setToken] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [onBoarding, setOnBoarding] = useState([]);
   const [isOnBoardingVisible, setIsOnBoardingVisible] = React.useState(true);
   const [languageLoaded, setLanguageLoaded] = useState(false);
@@ -131,6 +132,11 @@ export default function App() {
     const value = await AsyncStorage.getItem("@token");
     if (value === null) return;
     setToken(value);
+  };
+  const checkForUserId = async () => {
+    const value = await AsyncStorage.getItem("@userId");
+    if (value === null) return;
+    setUserId(value);
   };
   const onBoardingStatus = async () => {
     const value = await AsyncStorage.getItem("@onboardingStatus");
@@ -234,6 +240,7 @@ export default function App() {
     async function prepare() {
       try {
         await checkForToken();
+        await checkForUserId();
         getExpertsHandler();
         getBestExpertsHandler();
         userDataHandler();
@@ -256,6 +263,7 @@ export default function App() {
         // experience. Please remove this if you copy and paste the code!
         await onBoardingStatus();
         await checkForToken();
+        await checkForUserId();
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (e) {
         console.warn(e);
@@ -304,6 +312,8 @@ export default function App() {
               expoPushToken,
               setToken,
               token,
+              setUserId,
+              userId,
               setIsOnBoardingVisible,
               fixedTitles,
               appLanguage,

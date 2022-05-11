@@ -43,7 +43,6 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
 
   useEffect(() => {
       if (isFocused) setcourseRefresh((prev) => !prev);
-      console.log(isFocused)
   }, [isFocused]);
 
   useEffect(() => {

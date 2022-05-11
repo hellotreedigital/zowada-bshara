@@ -21,9 +21,10 @@ export const ImagePopUpModal = ({visible, imageUrl, courseId, video, ...props}) 
         props.continueWithCoursee();
     }
 
-    function checkIfFInished(status){
+    async function checkIfFInished(status){
         if(status.didJustFinish) { 
-            setVideoWatched(courseId, video.lesson_id, video.id);
+            await setVideoWatched(courseId, video.lesson_id, video.id);
+            console.log('watched')
          }
     }
 

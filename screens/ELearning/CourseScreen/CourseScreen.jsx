@@ -8,6 +8,7 @@ import { PageHeadImageContainer } from "../../../components/PageHeadImageContain
 import {globalStyles} from '../../../globals/globaStyles';
 import { getSingleCourse } from '../../../api/ELearning/ELearning';
 import {CustomPageHeader} from '../../../components/CustomPageHeader/CustomPageHeader';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -19,8 +20,22 @@ export const CourseScreen = ({ navigation, route }) => {
   useEffect(() => {
     (async () => {
         let singleCourseInfo = await getSingleCourse(route.params.data.id);
-        setCourseInfo(singleCourseInfo.data);
-        setTopImageUrl(`${singleCourseInfo.data.course.formatted_image}${singleCourseInfo.data.course.background_image}`)
+        let course = singleCourseInfo.data;
+        if(course){
+          const userId = await AsyncStorage.getItem("@userId");
+          let prevPassed = false;
+          course.course.lessons.forEach((lesson, index) => {
+            let userPassed = false;
+            lesson.passed_by.forEach(user => {
+              if(user.id.toString() === userId.toString()) userPassed = true
+            });
+            prevPassed = index > 0 ? course.course.lessons[index - 1].is_passed : true
+            lesson['is_passed'] = userPassed;
+            lesson['isPrev_passed'] = prevPassed;
+          });
+        }
+        setCourseInfo(course);
+        setTopImageUrl(`${course.course.formatted_image}${course.course.background_image}`)
     })()
   }, [])
 
@@ -29,7 +44,7 @@ export const CourseScreen = ({ navigation, route }) => {
     return(
       <View style={[globalStyles.body]}>
         <CustomPageHeader  navigation={navigation} isAbsolute={true} showShare={false} showNotification={false} color={colors.white} spaceHorizontally={true} strokeW={4}/>
-        <PageHeadImageContainer imageUrl={topImageUrl}  info={courseInfo?.course}/>
+        <PageHeadImageContainer imageUrl={topImageUrl}  info={courseInfo?.course} registered={courseInfo?.registered}/>
         <Tab.Navigator
       initialRouteName="Feed"
       

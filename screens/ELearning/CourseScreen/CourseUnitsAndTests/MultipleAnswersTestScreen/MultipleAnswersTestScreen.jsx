@@ -41,7 +41,6 @@ export const MultipleAnswersTestScreen = ({ navigation, route }) => {
         let allQ = [...allQuestions];
         let answerss={};
         let correctAnswers = 0
-
         allQ.forEach((q) =>{
             q.answers.forEach((a) => {
                 if(a.isSelected){
@@ -50,7 +49,6 @@ export const MultipleAnswersTestScreen = ({ navigation, route }) => {
                 }
             })
         })
-
         let screenData = {
             correctAnswers: correctAnswers,
             passing_answers_number: data.passing_answers_number,
@@ -58,8 +56,8 @@ export const MultipleAnswersTestScreen = ({ navigation, route }) => {
             allQuestions: allQuestions,
             isLast: data.isLast
         }
+        //if(correctAnswers >= data.passing_answers_number) 
         await answerExam(courseId, data.lesson_id, {answers:answerss});
-
         navigation.push('testResultsScreen', {data: screenData});
     }
 

@@ -181,9 +181,10 @@ const ItemTemplate1 = ({
                   style={[
                     { flex: 1, flexWrap: "wrap", height: "auto" },
                     globalStyles.leftText,
+                    globalStyles.textDarkBlue
                   ]}
                 >
-                  {video.subtitle}
+                  {video.description}
                 </Text>
               </View>
             </View>
@@ -246,6 +247,7 @@ const ItemTemplate2 = ({
   proceedWithCourse
 }) => {
   let [visible, setVisible] = useState(false);
+  
 
   function closeImageModel() {
     setVisible(false);
@@ -270,7 +272,7 @@ const ItemTemplate2 = ({
     >
       <TouchableOpacity
         style={[styles.card]}
-        disabled={false && item.item.disabled}
+        disabled={item.item.disabled}
         onPress={() => {onItemClicked(item.item)}}
       >
         <View style={[styles.columns]}>

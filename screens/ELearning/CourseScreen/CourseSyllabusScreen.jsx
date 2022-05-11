@@ -47,7 +47,7 @@ const SyllabusItem = ({
   registered,
 }) => {
   let [modalVisible, setModalVisible] = useState(false);
-
+  
   function goToLesson() {
     if (registered === 1) {
       let lessonData = {
@@ -65,6 +65,7 @@ const SyllabusItem = ({
         isFirst && styles.firstItemBorder,
         isLast && styles.lastItemBorder,
       ]}
+      disabled={!content.isPrev_passed}
       onPress={() => {
         goToLesson();
       }}
@@ -91,7 +92,7 @@ const SyllabusItem = ({
       </View>
 
       <View style={[styles.columns]}>
-        {content.isPassed && registered ? (
+        {content.is_passed && registered ? (
           <View style={globalStyles.iconShadow}>
             <View
               style={[
@@ -104,7 +105,7 @@ const SyllabusItem = ({
             </View>
           </View>
         ) : null}
-        {registered ? (
+        {registered && !content.is_passed ? (
           <View style={globalStyles.icon}>
             <ArrowSVG
               style={{

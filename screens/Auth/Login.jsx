@@ -185,11 +185,9 @@ export const Login = ({ navigation, setToken }) => {
 
         storeToken(res.data.token);
         setToken(res.data.token);
-        AsyncStorage.setItem("@token", JSON.stringify(res.data.token));        
-        alert(11)
-        console.log(res.data.user, 'fedcvgfrdcgfdcvbgrdgrdgfdgfdg')
+        AsyncStorage.setItem("@token", JSON.stringify(res.data.token));
+        AsyncStorage.setItem("@userId", JSON.stringify(res.data.user.id));
         setUser(res.data.user);
-        alert(22)
         console.log("USER DATA :", res.data.user);
         setUserName(res.data.user.full_name);
         setErrorObject({

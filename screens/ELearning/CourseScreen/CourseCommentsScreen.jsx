@@ -1,23 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, View, Text, FlatList, SafeAreaView, TextInput, KeyboardAvoidingView,
-  Platform, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
+  Platform, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Image, ActivityIndicator } from "react-native";
 import { globalStyles } from "../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "./CourseUnitsAndTests/CourseUnitsAndTestsStyles";
 import { CustomPageHeader } from "../../../components/CustomPageHeader/CustomPageHeader";
 import ShareSVG from "../../../SVGR/Home/Share";
 import { colors } from "../../../globals/colors";
 import { Formik } from "formik";
-import { getSingleLesson } from "../../../api/ELearning/ELearning";
-import { SCREEN_HEIGHT } from "../../../globals/globals";
 import Comment from "../../../assets/Comment.png";
+import { FeedbackCard } from "../../../components/Feedback/FeedbackCard";
+import {
+  getSingleCourseComments,
+  commentCourse,
+} from "../../../api/ELearning/ELearning";
 
-export const CourseCommentsScreen = ({ navigation }) => {
+
+export const CourseCommentsScreen = ({ navigation, route }) => {
     
-    let[comments, setComments] = useState([]);
-  useEffect(() => {
-    (async () => {
-    })();
-  }, []);
+  const { data } = route.params;
+    let [comments, setComments] = useState([]);
+    const [loadingResults, setLoadingResults] = useState(false);
+
+    useEffect(() => {
+      (async () => {
+        setLoadingResults(true);
+        let courseComments = await getSingleCourseComments(
+          data.courseId
+        );
+        setComments(courseComments.data.comments.data);
+        setLoadingResults(false);
+      })();
+    }, []);
+
+    async function onCommentCoursePressed(comment){
+      setLoadingResults(true);
+      await commentCourse(data.courseId, {
+        comment: comment,
+        rating: 5
+      });
+      let courseComments = await getSingleCourseComments(
+        data.courseId
+      );
+      setComments(courseComments.data.comments.data);
+      setLoadingResults(false);
+    }
 
   return (
     <View style={[globalStyles.verticalTopSpacer20, globalStyles.backgrounWhite, {flex:1, flexGrow:1}]}>
@@ -29,17 +55,39 @@ export const CourseCommentsScreen = ({ navigation }) => {
         color={colors.blue}
         spaceHorizontally={true}
       />
+
+
+    <View style={globalStyles.indicator}>
+        <ActivityIndicator
+          animating={loadingResults}
+          color={colors.dark_blue}
+          size="large"
+        />
+      </View>
+
+
         <FlatList
       style={[styles.mainPageContainer, {flexGrow:1}]}
       renderItem={(item) => {
         return (
-          <Text>avc</Text>
+          <FeedbackCard
+              data={{
+                text: item.item.comment,
+                rating: item.item.rating,
+                full_name: '',
+                image_absolute_url:
+                  '',
+              }}
+              onPress={() => {}}
+              size="small"
+            />
         );
       }}
       data={comments}
       keyExtractor={(item) => `${item.id}`}
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
+      ItemSeparatorComponent={() => <ItemDivider />}
       ListEmptyComponent={<EmptyListComponent />}
     />
       <KeyboardAvoidingView
@@ -53,12 +101,12 @@ export const CourseCommentsScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           style={[globalStyles.verticalTopSpacer20, {flexGrow:1}]}
         >
-    <Formik
+    {data.registered === 1 && <Formik
         initialValues={{
           comment: ""
         }}
       >
-        {({ handleChange, values }) => (
+        {({ handleChange, values, resetForm }) => (
                   <View style={[styles.commentVideoFormContainer]}>
                   <View style={styles.commentVideoForm}>
                     <View>
@@ -72,6 +120,7 @@ export const CourseCommentsScreen = ({ navigation }) => {
                         value={values.comment}
                         onChangeText={handleChange("comment")}
                         placeholderStyle={styles.textboxfieldd}
+                        editable={data.registered !== 1 ? false : true}
                       />
                       <View style={[styles.commentMessageIcon, { left: 0 }]}>
                         <Image
@@ -85,8 +134,9 @@ export const CourseCommentsScreen = ({ navigation }) => {
                   <View style={[styles.submitCommentIconContainer]}>
                     <TouchableOpacity
                       style={[styles.submitCommentIcon]}
+                      disabled={data.registered === 1 ? false : true }
                       onPress={() => {
-                        onCommentVideoPressed(values.comment);
+                        onCommentCoursePressed(values.comment);
                         resetForm();
                       }}
                     >
@@ -95,27 +145,13 @@ export const CourseCommentsScreen = ({ navigation }) => {
                   </View>
                 </View>
         )}
-      </Formik>
+      </Formik>}
         </View>
         </KeyboardAvoidingView>
     </View>
   );
 };
 
-const ListHeader = ({ navigation }) => {
-  
-  return (
-    <View style={globalStyles.verticalTopSpacer20}>
-      <CustomPageHeader
-        navigation={navigation}
-        title={'تعليقات'}
-        showShare={false}
-        showNotification={false}
-        color={colors.blue}
-      />
-    </View>
-  );
-};
 
 export const EmptyListComponent = () =>{
   return(
@@ -124,3 +160,14 @@ export const EmptyListComponent = () =>{
     </View>
   )
 }
+
+const ItemDivider = () => {
+  return (
+    <View
+      style={{
+        width: "100%",
+        marginVertical: 10,
+      }}
+    />
+  );
+};
