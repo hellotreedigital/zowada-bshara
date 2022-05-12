@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   ActivityIndicator,
   View,
@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
-  Image
+  Image,
 } from "react-native";
 import { globalStyles } from "../../../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "../CourseUnitsAndTestsStyles";
@@ -20,6 +20,7 @@ import {
   commentSticker,
 } from "../../../../../api/ELearning/ELearning";
 import Comment from "../../../../../assets/Comment.png";
+import AppContext from "../../../../../appContext/AppContext";
 
 import { VideoFeedbackCard } from "../../../../../components/Feedback/VideoFeedbackCard";
 
@@ -28,6 +29,7 @@ export const PosterCommentsScreen = ({ navigation, route }) => {
   const [loadingResults, setLoadingResults] = useState(false);
 
   const { data } = route.params;
+  const { fixedTitles } = useContext(AppContext);
 
   useEffect(() => {
     (async () => {
@@ -74,7 +76,7 @@ export const PosterCommentsScreen = ({ navigation, route }) => {
 
       <CustomPageHeader
         navigation={navigation}
-        title={"تعليقات"}
+        title={fixedTitles.menuTitle["comments"].title}
         showShare={false}
         showNotification={false}
         color={colors.blue}
@@ -118,7 +120,9 @@ export const PosterCommentsScreen = ({ navigation, route }) => {
                   <View>
                     <TextInput
                       style={[styles.commentInput]}
-                      placeholder={"أضف تعليقك هنا"}
+                      placeholder={
+                        fixedTitles.coursesTitles["add-your-comment-here"].title
+                      }
                       keyboardType="default"
                       placeholderTextColor="#dedede"
                       selectionColor={colors.dark_blue}
@@ -156,20 +160,6 @@ export const PosterCommentsScreen = ({ navigation, route }) => {
   );
 };
 
-const ListHeader = ({ navigation }) => {
-  return (
-    <View style={globalStyles.verticalTopSpacer20}>
-      <CustomPageHeader
-        navigation={navigation}
-        title={"تعليقات"}
-        showShare={false}
-        showNotification={false}
-        color={colors.blue}
-      />
-    </View>
-  );
-};
-
 const ItemDivider = () => {
   return (
     <View
@@ -184,11 +174,18 @@ const ItemDivider = () => {
   );
 };
 
-
-export const EmptyListComponent = () =>{
-  return(
+export const EmptyListComponent = () => {
+  return (
     <View>
-      <Text style={[globalStyles.textDarkBlue, globalStyles.leftText, {fontSize:18, fontWeight:'bold'}]}>No Comments</Text>
+      <Text
+        style={[
+          globalStyles.textDarkBlue,
+          globalStyles.leftText,
+          { fontSize: 18, fontWeight: "bold" },
+        ]}
+      >
+        {fixedTitles.coursesTitles["no-comments"].title}
+      </Text>
     </View>
-  )
-}
+  );
+};

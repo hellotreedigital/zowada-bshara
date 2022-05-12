@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
-  ScrollView,
   View,
-  Text,
   FlatList,
-  ImageBackground,
-  Image,
   StyleSheet,
   TouchableOpacity,
   I18nManager,
 } from "react-native";
 import { globalStyles } from "../../../globals/globaStyles";
-import { CustomPageHeader } from "../../../components/CustomPageHeader/CustomPageHeader";
 import { colors } from "../../../globals/colors";
-import { SecondaryButton } from "../../../buttons/SecondaryButton";
-import ThumbsUp from "../../../assets/ThumbsUp.png";
-import Comment from "../../../assets/Comment.png";
-import Typography from "../../../components/Typography/Typography";
 import { SearchBoxWOFilter } from "../../../components/SearchBox/SearchBox";
 import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
-  STATUS_BAR_HEIGHT,
 } from "../../../globals/globals";
 import ArrowSVG from "../../../SVGR/Globals/Arrow";
 import { getAllCourses } from '../../../api/ELearning/ELearning';
@@ -41,17 +31,6 @@ export const ELearningSearchScreen = ({ navigation, route }) => {
       searchHandler()
     }
   }, [])
-  
-
-  function goToResultCertificate() {
-    route.params.onGoBack({
-      searchString: searchString,
-      cheapestSelected: cheapestSelected,
-      mostExpensiveSelected: mostExpensiveSelected,
-      aZSelected: aZSelected,
-    });
-    navigation.pop();
-  }
 
   async function searchHandler() {
     (async () => {

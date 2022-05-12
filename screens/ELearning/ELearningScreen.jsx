@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator, I18nManager, FlatList, SafeAreaView } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, I18nManager, FlatList } from "react-native";
 import { eLearnineStyles as styles } from './ELearningStyles';
 import AppContext from "../../appContext/AppContext";
 import { PageHeadImageContainer } from "../../components/PageHeadImageContainer/PageHeadImageContainer";

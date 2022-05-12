@@ -80,6 +80,7 @@ const ItemTemplate1 = ({
   let [visible, setVisible] = useState(false);
   let [video, setVideo] = useState({});
   const [image, setImage] = useState(null);
+  const { fixedTitles } = useContext(AppContext);
 
   useEffect(() => {
     setVideo(item.item);
@@ -251,6 +252,7 @@ const ItemTemplate2 = ({
   proceedWithCourse
 }) => {
   let [visible, setVisible] = useState(false);
+  const { fixedTitles } = useContext(AppContext);
   
 
   function closeImageModel() {

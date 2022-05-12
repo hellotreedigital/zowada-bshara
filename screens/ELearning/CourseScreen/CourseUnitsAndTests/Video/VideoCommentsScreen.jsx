@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   View,
@@ -20,6 +20,7 @@ import {
   getVideoComments,
 } from "../../../../../api/ELearning/ELearning";
 import Comment from "../../../../../assets/Comment.png";
+import AppContext from "../../../../../appContext/AppContext";
 
 import { VideoFeedbackCard } from "../../../../../components/Feedback/VideoFeedbackCard";
 
@@ -28,6 +29,7 @@ export const VideoCommentsScreen = ({ navigation, route }) => {
   const [loadingResults, setLoadingResults] = useState(false);
 
   const { data } = route.params;
+  const { fixedTitles } = useContext(AppContext);
 
   useEffect(() => {
     (async () => {
@@ -74,13 +76,13 @@ export const VideoCommentsScreen = ({ navigation, route }) => {
 
       <CustomPageHeader
         navigation={navigation}
-        title={"تعليقات"}
+        title={fixedTitles.menuTitle["comments"].title}
         showShare={false}
         showNotification={false}
         color={colors.blue}
         spaceHorizontally={true}
-        isAbsolute={false} 
-        showCart={false}        
+        isAbsolute={false}
+        showCart={false}
       />
       <FlatList
         style={[styles.mainPageContainer, { flexGrow: 1 }]}
@@ -104,9 +106,7 @@ export const VideoCommentsScreen = ({ navigation, route }) => {
           {},
         ]}
       >
-        <View
-          style={[globalStyles.verticalTopSpacer20, { flexGrow: 1 }]}
-        >
+        <View style={[globalStyles.verticalTopSpacer20, { flexGrow: 1 }]}>
           <Formik
             initialValues={{
               comment: "",
@@ -119,7 +119,9 @@ export const VideoCommentsScreen = ({ navigation, route }) => {
                   <View>
                     <TextInput
                       style={[styles.commentInput, styles.textboxfieldd]}
-                      placeholder={"أضف تعليقك هنا"}
+                      placeholder={
+                        fixedTitles.coursesTitles["add-your-comment-here"].title
+                      }
                       keyboardType="default"
                       placeholderTextColor="#dedede"
                       selectionColor={colors.dark_blue}
@@ -156,22 +158,6 @@ export const VideoCommentsScreen = ({ navigation, route }) => {
   );
 };
 
-const ListHeader = ({ navigation }) => {
-  return (
-    <View style={globalStyles.verticalTopSpacer20}>
-      <CustomPageHeader
-        navigation={navigation}
-        title={"تعليقات"}
-        showShare={false}
-        showNotification={false}
-        color={colors.blue} 
-        spaceHorizontally={false} 
-        isAbsolute={false} 
-        showCart={false}/>
-    </View>
-  );
-};
-
 const ItemDivider = () => {
   return (
     <View
@@ -186,10 +172,18 @@ const ItemDivider = () => {
   );
 };
 
-export const EmptyListComponent = () =>{
-  return(
+export const EmptyListComponent = () => {
+  return (
     <View>
-      <Text style={[globalStyles.textDarkBlue, globalStyles.leftText, {fontSize:18, fontWeight:'bold'}]}>No Comments</Text>
+      <Text
+        style={[
+          globalStyles.textDarkBlue,
+          globalStyles.leftText,
+          { fontSize: 18, fontWeight: "bold" },
+        ]}
+      >
+        {fixedTitles.coursesTitles["no-comments"].title}
+      </Text>
     </View>
-  )
-}
+  );
+};

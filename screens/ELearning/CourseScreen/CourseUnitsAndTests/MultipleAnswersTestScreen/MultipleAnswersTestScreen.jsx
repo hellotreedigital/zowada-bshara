@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, FlatList } from "react-native";
+import React, { useContext, useState, useEffect } from "react";
+import { ScrollView, View } from "react-native";
 import { globalStyles } from "../../../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "../CourseUnitsAndTestsStyles";
 import { CustomPageHeaderWithProgress } from "../../../../../components/CustomPageHeader/CustomPageHeaderWithProgress";
