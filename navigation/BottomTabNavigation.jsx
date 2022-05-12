@@ -60,6 +60,7 @@ import { ArticleCommentsScreen } from "../screens/ELearning/CourseScreen/CourseU
 import { CoursePosterScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/Poster/CoursePosterScreen";
 import { PosterCommentsScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/Poster/PosterCommentsScreen";
 import { CourseCertificateScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CourseCertificateScreen";
+import { CourseCompletionCertificateScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/CourseCompletionCertificateScreen";
 import { AllCoursesScreen } from "../screens/ELearning/AllCoursesScreen/AllCoursesScreen";
 import { VideoCommentsScreen } from "../screens/ELearning/CourseScreen/CourseUnitsAndTests/Video/VideoCommentsScreen";
 
@@ -241,6 +242,7 @@ function ELearniNgavigator() {
       <ELearningStack.Screen name="coursePosterScreen" component={CoursePosterScreen} />
       <ELearningStack.Screen name="posterCommentsScreen" component={PosterCommentsScreen} />
       <ELearningStack.Screen name="courseCertificateScreen" component={CourseCertificateScreen} />
+      <ELearningStack.Screen name="courseCompletionCertificateScreen" component={CourseCompletionCertificateScreen} />
       <ELearningStack.Screen name="allCoursesScreen" component={AllCoursesScreen} />
       <ELearningStack.Screen name="videoCommentsScreen" component={VideoCommentsScreen} />
     </ELearningStack.Navigator>

@@ -14,9 +14,8 @@ export const CaseStudyAnswersScreen = ({ navigation, route }) => {
 
 
   function continueWithCourse(){
-    console.log(data)
     if(data.isLast){
-      navigation.push('courseCertificateScreen');
+      navigation.push('courseCertificateScreen', {data:{isLastLesson: data.isLastLesson, courseId: data.courseId}});
     }
     else navigation.pop(2)
   }

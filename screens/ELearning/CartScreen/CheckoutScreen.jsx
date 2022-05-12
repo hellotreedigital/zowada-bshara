@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   SafeAreaView,
   View,
@@ -16,13 +16,31 @@ import { CheckoutForm } from '../../../components/RegisterForm/CheckoutForm'
 import { SecondaryButton } from "../../../buttons/SecondaryButton";
 import MessageModal from "../../../components/Modals/MessageModal";
 import { buyCourses } from '../../../api/ELearning/ELearning';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export const CheckoutScreen = ({navigation}) => {
 
   const [checkoutModalVisible, setCheckoutModalVisible] = useState(false);
+  const [user, setUser] = useState(false);
+  const formikRef = useRef();
+
+  useEffect(() => {
+    (async () => {
+      let userr = await AsyncStorage.getItem("@user");
+      let parsed = JSON.parse(userr)
+      setUser(userr);
+      if(formikRef.current){
+        formikRef.current.setFieldValue('fullName', parsed.full_name);
+        formikRef.current.setFieldValue('email', parsed.email);
+        formikRef.current.setFieldValue('phoneNumber', parsed.phone_number);
+        formikRef.current.setFieldValue('creditCard', '5555555555555555');
+      }
+    })();
+  }, [formikRef]);
 
 
+//
 
     const [errorObject, setErrorObject] = useState({
         errorVisible: false,
@@ -59,17 +77,12 @@ export const CheckoutScreen = ({navigation}) => {
 
             <View style={[styles.mainPageContainer]}>
             <Formik
+            innerRef={formikRef}
         initialValues={{
-          fullName: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-          dob: "",
-          location: "",
-          mobile: "",
-          fees: "",
-          educationalBackground: "",
-          experienceYears: "",
+          fullName: user?.full_name,
+          email: user?.email,
+          phoneNumber: user?.phone_number,
+          creditCard: "5555555555555555"
         }}
       >
         {({ handleChange, values }) => (

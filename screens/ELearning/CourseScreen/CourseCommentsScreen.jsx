@@ -1,6 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, FlatList, SafeAreaView, TextInput, KeyboardAvoidingView,
-  Platform, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Image, ActivityIndicator } from "react-native";
+import React, { useContext, useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  SafeAreaView,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { globalStyles } from "../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "./CourseUnitsAndTests/CourseUnitsAndTestsStyles";
 import { CustomPageHeader } from "../../../components/CustomPageHeader/CustomPageHeader";
@@ -13,51 +23,53 @@ import {
   getSingleCourseComments,
   commentCourse,
 } from "../../../api/ELearning/ELearning";
-
+import AppContext from "../../../appContext/AppContext";
 
 export const CourseCommentsScreen = ({ navigation, route }) => {
-    
+  const { fixedTitles } = useContext(AppContext);
+
   const { data } = route.params;
-    let [comments, setComments] = useState([]);
-    const [loadingResults, setLoadingResults] = useState(false);
+  let [comments, setComments] = useState([]);
+  const [loadingResults, setLoadingResults] = useState(false);
 
-    useEffect(() => {
-      (async () => {
-        setLoadingResults(true);
-        let courseComments = await getSingleCourseComments(
-          data.courseId
-        );
-        setComments(courseComments.data.comments.data);
-        setLoadingResults(false);
-      })();
-    }, []);
-
-    async function onCommentCoursePressed(comment){
+  useEffect(() => {
+    (async () => {
       setLoadingResults(true);
-      await commentCourse(data.courseId, {
-        comment: comment,
-        rating: 5
-      });
-      let courseComments = await getSingleCourseComments(
-        data.courseId
-      );
+      let courseComments = await getSingleCourseComments(data.courseId);
       setComments(courseComments.data.comments.data);
       setLoadingResults(false);
-    }
+    })();
+  }, []);
+
+  async function onCommentCoursePressed(comment) {
+    setLoadingResults(true);
+    await commentCourse(data.courseId, {
+      comment: comment,
+      rating: 5,
+    });
+    let courseComments = await getSingleCourseComments(data.courseId);
+    setComments(courseComments.data.comments.data);
+    setLoadingResults(false);
+  }
 
   return (
-    <View style={[globalStyles.verticalTopSpacer20, globalStyles.backgrounWhite, {flex:1, flexGrow:1}]}>
-        <CustomPageHeader
+    <View
+      style={[
+        globalStyles.verticalTopSpacer20,
+        globalStyles.backgrounWhite,
+        { flex: 1, flexGrow: 1 },
+      ]}
+    >
+      <CustomPageHeader
         navigation={navigation}
-        title={'تعليقات'}
+        title={fixedTitles.coursesTitles["comments"].title}
         showShare={false}
         showNotification={false}
         color={colors.blue}
         spaceHorizontally={true}
       />
 
-
-    <View style={globalStyles.indicator}>
+      <View style={globalStyles.indicator}>
         <ActivityIndicator
           animating={loadingResults}
           color={colors.dark_blue}
@@ -65,54 +77,60 @@ export const CourseCommentsScreen = ({ navigation, route }) => {
         />
       </View>
 
-
-        <FlatList
-      style={[styles.mainPageContainer, {flexGrow:1}]}
-      renderItem={(item) => {
-        return (
-          <FeedbackCard
+      <FlatList
+        style={[styles.mainPageContainer, { flexGrow: 1 }]}
+        renderItem={(item) => {
+          return (
+            <FeedbackCard
               data={{
                 text: item.item.comment,
                 rating: item.item.rating,
-                full_name: '',
-                image_absolute_url:
-                  '',
+                full_name: "",
+                image_absolute_url: "",
               }}
               onPress={() => {}}
               size="small"
             />
-        );
-      }}
-      data={comments}
-      keyExtractor={(item) => `${item.id}`}
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-      ItemSeparatorComponent={() => <ItemDivider />}
-      ListEmptyComponent={<EmptyListComponent />}
-    />
+          );
+        }}
+        data={comments}
+        keyExtractor={(item) => `${item.id}`}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        ItemSeparatorComponent={() => <ItemDivider />}
+        ListEmptyComponent={<EmptyListComponent />}
+      />
       <KeyboardAvoidingView
         keyboardVerticalOffset={30}
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         enabled={Platform.OS === "ios" ? true : false}
-        style={[styles.mainPageContainer, globalStyles.verticalBottomSpacer10, {}]}
+        style={[
+          styles.mainPageContainer,
+          globalStyles.verticalBottomSpacer10,
+          {},
+        ]}
       >
         <View
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
-          style={[globalStyles.verticalTopSpacer20, {flexGrow:1}]}
+          style={[globalStyles.verticalTopSpacer20, { flexGrow: 1 }]}
         >
-    {data.registered === 1 && <Formik
-        initialValues={{
-          comment: ""
-        }}
-      >
-        {({ handleChange, values, resetForm }) => (
-                  <View style={[styles.commentVideoFormContainer]}>
+          {data.registered === 1 && (
+            <Formik
+              initialValues={{
+                comment: "",
+              }}
+            >
+              {({ handleChange, values, resetForm }) => (
+                <View style={[styles.commentVideoFormContainer]}>
                   <View style={styles.commentVideoForm}>
                     <View>
                       <TextInput
                         style={[styles.commentInput]}
-                        placeholder={"أضف تعليقك هنا"}
+                        placeholder={
+                          fixedTitles.coursesTitles["add-your-comment-here"]
+                            .title
+                        }
                         keyboardType="default"
                         placeholderTextColor="#dedede"
                         selectionColor={colors.dark_blue}
@@ -134,7 +152,7 @@ export const CourseCommentsScreen = ({ navigation, route }) => {
                   <View style={[styles.submitCommentIconContainer]}>
                     <TouchableOpacity
                       style={[styles.submitCommentIcon]}
-                      disabled={data.registered === 1 ? false : true }
+                      disabled={data.registered === 1 ? false : true}
                       onPress={() => {
                         onCommentCoursePressed(values.comment);
                         resetForm();
@@ -144,22 +162,31 @@ export const CourseCommentsScreen = ({ navigation, route }) => {
                     </TouchableOpacity>
                   </View>
                 </View>
-        )}
-      </Formik>}
+              )}
+            </Formik>
+          )}
         </View>
-        </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
     </View>
   );
 };
 
-
-export const EmptyListComponent = () =>{
-  return(
+export const EmptyListComponent = () => {
+  const { fixedTitles } = useContext(AppContext);
+  return (
     <View>
-      <Text style={[globalStyles.textDarkBlue, globalStyles.leftText, {fontSize:18, fontWeight:'bold'}]}>No Comments</Text>
+      <Text
+        style={[
+          globalStyles.textDarkBlue,
+          globalStyles.leftText,
+          { fontSize: 18, fontWeight: "bold" },
+        ]}
+      >
+        {fixedTitles.coursesTitles["no-comments"].title}
+      </Text>
     </View>
-  )
-}
+  );
+};
 
 const ItemDivider = () => {
   return (

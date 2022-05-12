@@ -54,7 +54,9 @@ export default function App() {
     experienceType: null,
     bottomBarText: null,
     settingsTitles: null,
-    courses_types: null
+    courses_types: null,
+    shopTitles:null,
+    coursesTitles: null
   });
   const [authState, setAuthState] = useState({});
   const [userName, setUserName] = useState(null);
@@ -148,6 +150,7 @@ export default function App() {
   const fixedTitlesHandler = () => {
     getFixedTitles()
       .then((res) => {
+        console.log(res.data.courses_titles)
         setFixedTitle({
           authTitles: res.data.auth_titles,
           menuTitle: res.data.menu_titles,
@@ -156,7 +159,9 @@ export default function App() {
           experienceType: res.data.experience_type,
           bottomBarText: res.data.bottom_menu,
           settingsTitles: res.data.setting_titles,
-          coursesTypes: res.data.courses_types
+          coursesTypes: res.data.courses_types,
+          shopTitles: res.data.shop_titles,
+          coursesTitles: res.data.courses_titles
         });
 
         setAppIsReady(true);

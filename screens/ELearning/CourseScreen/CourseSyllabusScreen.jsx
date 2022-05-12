@@ -53,6 +53,7 @@ const SyllabusItem = ({
       let lessonData = {
         lessonId: content.id,
         courseId: content.course_id,
+        isLastLesson: isLast
       };
       navigation.push("courseUnitsDetailsScreen", { data: lessonData });
     } else setModalVisible(true);

@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   ScrollView,
   View,
   Text,
-  FlatList,
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
@@ -15,21 +14,20 @@ import { CourseUnitsAndTestsStyles as styles } from "../CourseUnitsAndTestsStyle
 import { CustomPageHeaderWithProgress } from "../../../../../components/CustomPageHeader/CustomPageHeaderWithProgress";
 import { colors } from "../../../../../globals/colors";
 import { SecondaryButton } from "../../../../../buttons/SecondaryButton";
-import { Formik, useFormik } from "formik";
-import { CaseStudyForm } from "../../../../../components/RegisterForm/CaseStudyForm";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../../globals/globals";
+import { Formik } from "formik";
 import {
   getCaseStudy,
   answerCaseStudy,
 } from "../../../../../api/ELearning/ELearning";
 import RenderHtml from "react-native-render-html";
+import AppContext from "../../../../../appContext/AppContext";
 
 export const CaseStudyScreen = ({ navigation, route }) => {
   const { data } = route.params;
   let [caseStudy, setcaseStudy] = useState([]);
   const [loadingResults, setLoadingResults] = useState(false);
   const { width } = useWindowDimensions();
-
+  const { fixedTitles } = useContext(AppContext);
   const formikRef = useRef();
 
   const [errorObject, setErrorObject] = useState({
@@ -60,7 +58,7 @@ export const CaseStudyScreen = ({ navigation, route }) => {
     await answerCaseStudy(data.courseId, data.lessonId, data.case_studyId, {
       answer: answer,
     });
-    navigation.push('caseStudyAnswersScreen', {data: {caseStudy: caseStudy, isLast: data.isLast}})
+    navigation.push('caseStudyAnswersScreen', {data: {caseStudy: caseStudy, isLast: data.isLast, isLastLesson: data.isLastLesson, courseId: data.courseId}})
     setLoadingResults(false);
   }
 
@@ -134,7 +132,7 @@ export const CaseStudyScreen = ({ navigation, route }) => {
                           <View style={styles.form}>
                             <TextInput
                               style={[styles.caseStudyInput]}
-                              placeholder={caseStudy?.answer?.answer ? caseStudy.answer.answer : "أجب عن السؤال هنا"}
+                              placeholder={caseStudy?.answer?.answer ? caseStudy.answer.answer : fixedTitles.coursesTitles["answer-here"].title}
                               keyboardType="default"
                               placeholderTextColor={colors.blue}
                               selectionColor={colors.dark_blue}
@@ -158,7 +156,7 @@ export const CaseStudyScreen = ({ navigation, route }) => {
             <View style={[globalStyles.verticalTopSpacer20,
         globalStyles.verticalBottomSpacer20]}>
               <SecondaryButton
-                content="استمر"
+                content={fixedTitles.coursesTitles["continue"].title}
                 fullWidth={true}
                 onPress={() => {
                   onSubmitCaseStudyPressed(values.answer);

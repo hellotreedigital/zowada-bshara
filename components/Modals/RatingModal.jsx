@@ -1,6 +1,6 @@
-import React from "react";
-import { I18nManager, StyleSheet, Text, View } from "react-native";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import React, { useState } from "react";
+import { I18nManager, StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
+//import { TextInput } from "react-native-gesture-handler";
 import Modal from "react-native-modal";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
@@ -9,7 +9,23 @@ import Typography from "../Typography/Typography";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import { SearchBox } from "../SearchBox/SearchBox";
 
-export const RatingModal = ({ visible, list, ...props }) => {
+export const RatingModal = ({ visible, genColor, rateCourse, ...props }) => {
+
+  let [rating, setRating] = useState();
+  let [ratingComment, setRatingComment] = useState();
+
+  function ratingFinished(n){
+    setRating(n);
+  }
+
+  function ratingCommentChanged(v){
+    setRatingComment(v)
+  }
+
+  function rateCoursee(){
+    rateCourse({comment: ratingComment,
+      rating: rating})
+  }
   return (
     <Modal isVisible={visible} animationIn="fadeIn" animationOut="fadeOut">
       <View
@@ -21,13 +37,13 @@ export const RatingModal = ({ visible, list, ...props }) => {
         }}
       >
         <View style={[styles.center]}>
-          <TouchableOpacity onPress={() => props.close()}>
-            <CloseSVG />
+          <TouchableOpacity onPress={() => {props.close()}}>
+            <CloseSVG  stroke={genColor ? genColor : null}/>
           </TouchableOpacity>
           <View>
             <Typography
               content="أضف تقييم"
-              color={colors.dark_yellow}
+              color={genColor ? genColor : colors.dark_yellow}
               size={20}
               bold={true}
               align="center"
@@ -38,9 +54,11 @@ export const RatingModal = ({ visible, list, ...props }) => {
               type="custom"
               showRating={false}
               count={5}
+              selectedColor={genColor}
               defaultRating={0}
               size={20}
               starImage={require("../../assets/emptyStar.png")}
+              onFinishRating={ratingFinished}
             />
           </View>
           <View>
@@ -50,10 +68,11 @@ export const RatingModal = ({ visible, list, ...props }) => {
               placeholderTextColor={colors.dark_blue}
               placeholderStyle={styles.placeholderStyle}
               multiline={true}
+              onChangeText={ratingCommentChanged}
             />
           </View>
           <View style={styles.wrapper}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={()=>{rateCoursee()}}>
               <Typography
                 size={16}
                 content="إرسل"

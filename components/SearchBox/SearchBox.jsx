@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
 	StyleSheet,
 	Text,
@@ -12,6 +12,7 @@ import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import FilterSVG from "../../SVGR/Globals/Filter";
 import SearchSVG from "../../SVGR/Globals/SearchSVG";
+import AppContext from "../../appContext/AppContext";
 
 
 export const SearchBox = ({
@@ -25,6 +26,11 @@ export const SearchBox = ({
   setSearchString,
   onSearchPress,
 }) => {
+
+  const {
+    fixedTitles
+} = useContext(AppContext);
+
   return (
     <>
       {!filterEnabled ? (
@@ -42,7 +48,7 @@ export const SearchBox = ({
           onChangeText={(text) => {
             setSearchString(text);
           }}
-          placeholder={placeholder || "بحث"}
+          placeholder={placeholder || fixedTitles.shopTitles["search"].title}
         />
       ) : (
         <View style={styles.filteredInput}>
@@ -69,7 +75,7 @@ export const SearchBox = ({
             onChangeText={(text) => {
               setSearchString(text);
             }}
-            placeholder="بحث"
+            placeholder={fixedTitles.shopTitles["search"].title}
           />
         </View>
       )}
@@ -91,6 +97,11 @@ export const SearchBoxWOFilter = ({
   onSearchPress,
   searchColor
 }) => {
+
+  const {
+    fixedTitles
+} = useContext(AppContext);
+
   return (
     <>
       {!filterEnabled ? (
@@ -108,7 +119,7 @@ export const SearchBoxWOFilter = ({
           onChangeText={(text) => {
             setSearchString(text);
           }}
-          placeholder={placeholder || "بحث"}
+          placeholder={placeholder || fixedTitles.shopTitles["search"].title}
         />
       ) : (
         <View style={styles.filteredInput}>
@@ -129,7 +140,7 @@ export const SearchBoxWOFilter = ({
             onChangeText={(text) => {
               setSearchString(text);
             }}
-            placeholder="بحث"
+            placeholder={fixedTitles.shopTitles["search"].title}
           />
         </View>
       )}

@@ -12,6 +12,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import Typography from "../Typography/Typography";
 import { TextInputMask } from "react-native-masked-text";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { globalStyles } from "../../globals/globaStyles";
 
 export const RNTextInput = ({ ...props }) => {
   return (
@@ -69,7 +70,7 @@ export const RNCheckoutTextInput = ({ ...props }) => {
           >
             <Typography
               content={props.selectedStartDate || "date or time"}
-              color="#fff"
+              color={colors.dark_blue}
               size={14}
               roman={true}
             />
@@ -77,7 +78,7 @@ export const RNCheckoutTextInput = ({ ...props }) => {
         </View>
       ) : (
         <TextInput
-          style={[styles.container, styles.grayBG]}
+          style={[styles.container, styles.grayBG, globalStyles.textDarkBlue]}
           placeholder={props.placeholder}
           keyboardType={props.type}
           placeholderTextColor={colors.dark_blue}

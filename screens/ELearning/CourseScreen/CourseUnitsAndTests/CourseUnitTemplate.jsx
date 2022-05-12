@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -16,6 +16,7 @@ import Comment from "../../../../assets/Comment.png";
 import { ImagePopUpModal } from "../../../../components/Modals/ImagePopUpModal";
 import * as VideoThumbnails from "expo-video-thumbnails";
 import { likeUnlikeVideo } from '../../../../api/ELearning/ELearning'
+import AppContext from "../../../../appContext/AppContext";
 
 export const CourseUnitTemplate = ({
   item,
@@ -29,6 +30,9 @@ export const CourseUnitTemplate = ({
     item.item.file !== null &&
     item.item.file !== undefined
   ) {
+
+    const { fixedTitles } = useContext(AppContext);
+
 
     function proceedWithCourse (){
       if(item.item.isLast){
@@ -229,7 +233,7 @@ const ItemTemplate1 = ({
               />
               <View style={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
                 <Text style={{ height: 20, textAlignVertical: "center", padding:0}}>
-                  عرض جميع {video.comments_count} تعليق
+                {fixedTitles.coursesTitles["show-all-s"].title} {video.comments_count} {fixedTitles.coursesTitles["comment"].title}
                 </Text>
               </View>
             </TouchableOpacity>

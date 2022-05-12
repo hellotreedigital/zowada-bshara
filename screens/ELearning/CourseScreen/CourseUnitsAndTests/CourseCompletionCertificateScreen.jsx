@@ -3,36 +3,39 @@ import {
   ScrollView,
   View,
   Text,
-  FlatList,
-  ImageBackground,
   Image,
 } from "react-native";
 import { globalStyles } from "../../../../globals/globaStyles";
 import { CourseUnitsAndTestsStyles as styles } from "./CourseUnitsAndTestsStyles";
 import { CustomPageHeaderWithProgress } from "../../../../components/CustomPageHeader/CustomPageHeaderWithProgress";
 import { colors } from "../../../../globals/colors";
+import { SCREEN_WIDTH } from "../../../../globals/globals";
+import Certificate from "../../../../assets/Certificate.png";
 import { SecondaryButton } from "../../../../buttons/SecondaryButton";
-import ThumbsUp from "../../../../assets/ThumbsUp.png";
-import Comment from "../../../../assets/Comment.png";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../../globals/globals";
-import badge from "../../../../assets/Group498.png";
-import badge1 from "../../../../assets/Group4186.png";
-import Certificate from "../../../../assets/LessonCertificate.png";
+import { RatingModal } from "../../../../components/Modals/RatingModal";
+import {
+  commentCourse,
+} from "../../../../api/ELearning/ELearning";
 import AppContext from "../../../../appContext/AppContext";
 
-export const CourseCertificateScreen = ({ navigation, route }) => {
+export const CourseCompletionCertificateScreen = ({ navigation, route }) => {
 
-  const { data } = route.params;
+  const { data } = route.params
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loadingResults, setLoadingResults] = useState(false);
   const { fixedTitles } = useContext(AppContext);
 
-  function continueWithCourse() {
-    if(data.isLastLesson){
-      navigation.push("courseCompletionCertificateScreen", {data:{courseId: data.courseId}});
-    }else{
-      navigation.pop(4)
-    }
 
-    
+
+  const continueWithCourse = () => {
+    setModalVisible(true);
+  };
+
+  async function rateCourse(courseRating){
+    setLoadingResults(true);
+      await commentCourse(data.courseId, courseRating);
+      navigation.pop(6)
+      setLoadingResults(false);
   }
 
   return (
@@ -49,6 +52,13 @@ export const CourseCertificateScreen = ({ navigation, route }) => {
         showShare={false}
         showNotification={false}
         color={colors.blue}
+      />
+
+      <RatingModal
+        visible={modalVisible}
+        genColor={colors.dark_blue}
+        rateCourse={rateCourse}
+        close={() => {setModalVisible(false);}}
       />
 
       <View
@@ -75,18 +85,16 @@ export const CourseCertificateScreen = ({ navigation, route }) => {
       </View>
         </View>
         <View style={[styles.lessonCertificateTextContainer]}>
-          <Text style={[globalStyles.leftText, globalStyles.textBlue, globalStyles.textCenter, globalStyles.textMedium, globalStyles.textBold]}>{fixedTitles.coursesTitles["you-have-finished-the-course"].title}</Text>
-        </View>
-        <View style={[styles.lessonCertificateTextContainer]}>
-          <Text style={[globalStyles.leftText, globalStyles.textDarkBlue, globalStyles.textCenter, globalStyles.textMedium, globalStyles.textBold]}>{fixedTitles.coursesTitles["remaining-steps"].title}</Text>
+          <Text style={[globalStyles.leftText, globalStyles.textBlue, globalStyles.textCenter, globalStyles.textMedium, globalStyles.textBold]}>{fixedTitles.coursesTitles["earned-a-new-badge"].title}</Text>
         </View>
 
-        <View style={[globalStyles.verticalTopSpacer20, {display:'flex', flexDirection:'row', justifyContent:'center'}]}>
+        <View style={[globalStyles.verticalTopSpacer20, globalStyles.verticalBottomSpacer20, {display:'flex', flexDirection:'row', justifyContent:'center'}]}>
           <SecondaryButton
-            content={fixedTitles.coursesTitles["continue"].title}
+            content={fixedTitles.coursesTitles["rate-the-course"].title}
             onPress={() => continueWithCourse()}
           />
         </View>
+
     </ScrollView>
   );
 };

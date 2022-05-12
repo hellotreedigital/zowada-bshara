@@ -6,11 +6,13 @@ import {CustomPageHeader} from '../../../components/CustomPageHeader/CustomPageH
 import { ImageBoxForList } from "../../../components/Boxes/ImageBoxForList";
 import {colors} from '../../../globals/colors';
 import { getAllCourses } from '../../../api/ELearning/ELearning';
+import AppContext from "../../../appContext/AppContext";
 
     
 export const AllCoursesScreen = ({navigation}) => {
 
     let [allCourses, setAllCourses] = useState([]);
+    const { fixedTitles } = useContext(AppContext);
 
     useEffect(() => {
         (async () => {
@@ -57,7 +59,7 @@ export const AllCoursesScreen = ({navigation}) => {
     return (
       <View style={globalStyles.verticalTopSpacer20}>
         <CustomPageHeader
-          navigation={navigation} title="جميع الدورات" showShare={false} showNotification={false} color={colors.blue}
+          navigation={navigation} title={fixedTitles.coursesTitles["all-courses"].title} showShare={false} showNotification={false} color={colors.blue}
           spaceHorizontally={true} showCart={true}
         />
       </View>

@@ -14,7 +14,7 @@ export const MultipleAnswersTestScreen = ({ navigation, route }) => {
 
     let [allQuestions, setAllQuestions] = useState([]);
 
-    const { data, courseId } = route.params;
+    const { data, courseId, isLastLesson } = route.params;
 
     useEffect(() => {
         let questions = data.questions;
@@ -54,7 +54,8 @@ export const MultipleAnswersTestScreen = ({ navigation, route }) => {
             passing_answers_number: data.passing_answers_number,
             numberOfQuestions: allQ.length,
             allQuestions: allQuestions,
-            isLast: data.isLast
+            isLast: data.isLast,
+            isLastLesson: isLastLesson
         }
         //if(correctAnswers >= data.passing_answers_number) 
         await answerExam(courseId, data.lesson_id, {answers:answerss});

@@ -51,6 +51,7 @@ export const CheckoutForm = ({
         handleChange={handleChange("fullName")}
         error={errorObject.fullNameError}
         isError={errorObject.errorVisible}
+        textColor={colors.dark_blue}
       />
 
       <RNCheckoutTextInput
@@ -64,51 +65,22 @@ export const CheckoutForm = ({
         error={errorObject.emailError}
         isError={errorObject.errorVisible}
         numberOfLines={6}
+        textColor={colors.dark_blue}
       />
       <>
-        <ModalDropdown
-          options={Phone}
-          dropdownStyle={styles.dropdownStyles}
-          isFullWidth
-          showsVerticalScrollIndicator
-          style={[
-            styles.containerStyles,
-            { marginBottom: errorObject.errorVisible ? 0 : 15 },
-          ]}
-          textStyle={styles.label}
-          defaultValue={fixedTitles.authTitles["phone-number"].title}
-          onSelect={(item) => {
-            
-          }}
-          renderRowText={(item) => {
-            return (
-              <View>
-                <Typography
-                  size={12}
-                  content={item}
-                  align="right"
-                  color={colors.dark_blue}
-                />
-              </View>
-            );
-          }}
-          renderSeparator={() => <View />}
-          renderRowComponent={TouchableOpacity}
-          keyboardShouldPersistTaps="handled"
-          renderRightComponent={() => {
-            return <View style={styles.arrowContainer} />;
-          }}
-        />
-        {errorObject.errorVisible && (
-          <View style={{ marginBottom: 15 }}>
-            <Typography
-              size={12}
-              align="left"
-              color="red"
-              content={errorObject.experienceTypeError}
-            />
-          </View>
-        )}
+      <RNCheckoutTextInput
+        placeholder={'phoneNumber'}
+        spacing={true}
+        spacingVal={15}
+        type={"phone-pad"}
+        password={false}
+        value={values.phoneNumber}
+        handleChange={handleChange("phoneNumber")}
+        error={errorObject.emailError}
+        isError={errorObject.errorVisible}
+        numberOfLines={6}
+        textColor={colors.dark_blue}
+      />
       </>
       <View style={{ marginBottom: 15 }}>
             <Typography
@@ -119,47 +91,19 @@ export const CheckoutForm = ({
             />
           </View>
       <>
-        <ModalDropdown
-          options={CreditCards}
-          dropdownStyle={styles.dropdownStyles}
-          isFullWidth
-          showsVerticalScrollIndicator
-          style={[
-            styles.containerStyles,
-            { marginBottom: errorObject.errorVisible ? 0 : 15 },
-          ]}
-          textStyle={styles.label}
-          defaultValue={'بطاقة ائتمان'}
-          onSelect={(item) => {
-          }}
-          renderRowText={(item) => {
-            return (
-              <View>
-                <Typography
-                  size={12}
-                  content={item}
-                  align="left"
-                  color={colors.dark_blue}
-                />
-              </View>
-            );
-          }}
-          renderSeparator={() => <View />}
-          renderRowComponent={TouchableOpacity}
-          keyboardShouldPersistTaps="handled"
-          renderRightComponent={() => {
-            return <View style={styles.arrowContainer} />;
-          }}
-        />
-        {errorObject.errorVisible && (
-          <View style={{ marginBottom: 15 }}>
-            <Typography
-              content={errorObject.experienceError}
-              color="red"
-              align="left"
-            />
-          </View>
-        )}
+      <RNCheckoutTextInput
+        placeholder={'بطاقة ائتمان'}
+        spacing={true}
+        spacingVal={15}
+        type={"numeric"}
+        password={false}
+        value={values.creditCard}
+        handleChange={handleChange("creditCard")}
+        error={errorObject.emailError}
+        isError={errorObject.errorVisible}
+        numberOfLines={6}
+        textColor={colors.dark_blue}
+      />
       </>
     </View>
   );

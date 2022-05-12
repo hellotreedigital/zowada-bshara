@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { eLearnineStyles as styles } from '../ELearningStyles';
 import { FlatList, View, Text, TouchableOpacity, ActivityIndicator, I18nManager } from "react-native";
 import ArrowSVG from "../../../SVGR/Globals/Arrow";
@@ -10,53 +10,13 @@ import { ImageBoxForList } from "../../../components/Boxes/ImageBoxForList";
 import FilterSVG from "../../../SVGR/Globals/Filter";
 import {globalStyles} from '../../../globals/globaStyles';
 import { getMyCourses } from '../../../api/ELearning/ELearning';
-
-const courses = [
-    {
-        id: "0",
-        title: "اسم",
-        location: "موقع",
-        topRanked: true,
-        image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    },
-    {
-        id: "1",
-        title: "اسم",
-        location: "موقع",
-        topRanked: true,
-        image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    },
-    {
-        id: "2",
-        title: "اسم",
-        location: "موقع",
-        topRanked: true,
-        image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    }, {
-        id: "3",
-        title: "اسم",
-        location: "موقع",
-        topRanked: true,
-        image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    },
-    {
-        id: "4",
-        title: "اسم",
-        location: "موقع",
-        topRanked: true,
-        image:
-            "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    }
-];
+import AppContext from "../../../appContext/AppContext";
 
 export const MyCoursesScreen = ({ navigation }) => {
 
     const [loading, setLoading] = useState(false);
     let [myCourses, setMyCourses] = useState([]);
+    const { fixedTitles } = useContext(AppContext);
 
     useEffect(() => {
         (async () => {
@@ -134,7 +94,7 @@ const ListHeaderComponent = ({ navigation }) => {
                             />
                         </TouchableOpacity>
                         <Typography
-                            content={`دوراتي`}
+                            content={fixedTitles.coursesTitles["my-courses"].title}
                             color={colors.blue}
                             size={22}
                             bold={true}

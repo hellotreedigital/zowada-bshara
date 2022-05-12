@@ -13,14 +13,14 @@ import { globalStyles } from "../../globals/globaStyles";
 
 export const ProfileWithNameBox = ({ item }) => {
     return (
-        <TouchableOpacity style={[styles.card]}>
+        <View style={[styles.card]}>
             <View>
                 <Avatar loader={false} name={item.teacher.full_name} custom={true} profilePic={item.teacher.image_absolute_url} />
             </View>
             <View style={[styles.info, {flexDirection:'row'}]}>
-                <Text style={[styles.tutorName]}>{item.teacher.full_name}</Text>
+                <Text style={[styles.tutorName, globalStyles.textDarkBlue]}>{item.teacher.full_name}</Text>
             </View>
-        </TouchableOpacity>
+        </View>
     );
 };
 

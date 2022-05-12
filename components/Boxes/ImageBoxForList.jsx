@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
+import { globalStyles } from "../../globals/globaStyles";
 import { CourseUnitTemplate } from "../../screens/ELearning/CourseScreen/CourseUnitsAndTests/CourseUnitTemplate";
 import Typography from "../Typography/Typography";
 
@@ -24,7 +25,7 @@ export const ImageBoxForList = ({ item, handleClickEvent, ...props }) => {
             </View>
             {!props.isArticle ? <View style={[styles.info]}>
                 <View style={styles.infoRight}>
-                    <Text style={styles.courseTitle}>{item.item.title}</Text>
+                    <Text style={[styles.courseTitle, globalStyles.textDarkBlue]}>{item.item.title}</Text>
                 </View>
             </View>: null}
         </TouchableOpacity>

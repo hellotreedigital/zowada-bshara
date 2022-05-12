@@ -36,8 +36,9 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
   let [lessonDataArray, setLessonDataArray] = useState([]);
   let [faqs, setFaqs] = useState([]);
   let [showFAQ, setShowFAQ] = useState(false);
+  const { data } = route.params;
 
-  const { userName, email } = useContext(AppContext);
+  const { userName, email, fixedTitles } = useContext(AppContext);
   const isFocused = useIsFocused();
   const { user } = useContext(AuthContext);
 
@@ -50,21 +51,21 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
       setLoadingResults(true);
 
       let examdataraw = await getLessonExam(
-        route.params.data.courseId,
-        route.params.data.lessonId
+        data.courseId,
+        data.lessonId
       );
       let examdata = examdataraw.data.exam;
       const hasExam = examdata !== null;
       if (hasExam) {
         examdata["type"] = 1;
-        examdata["infoText"] = "تقدم للإختبار";
+        examdata["infoText"] = fixedTitles.coursesTitles["take-the-test"].title;
       }else{
         examdata = []
       }
 
       let lessondata = await getSingleLesson(
-        route.params.data.courseId,
-        route.params.data.lessonId
+        data.courseId,
+        data.lessonId
       );
       if (lessondata.data.faqs)
         setFaqs(lessondata.data.faqs);
@@ -94,12 +95,12 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
         if (hasCaseStudies) {
           for (let cs of lessonCaseStudies) {
             cs.type = 2;
-            cs.infoText = "دراسة الحالة";
+            cs.infoText = fixedTitles.coursesTitles["case-study"].title;
             cs["disabled"] = lastStatus;
 
             let caseStudyData = await getCaseStudy(
-              route.params.data.courseId,
-              route.params.data.lessonId,
+              data.courseId,
+              data.lessonId,
               cs.id
             );
             lastStatus = !!caseStudyData?.data?.answer?.answer;
@@ -112,11 +113,11 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
 
         lessonArticles.forEach((article) => {
           article.type = 3;
-          article.infoText = "مقالة";
+          article.infoText = fixedTitles.coursesTitles["article"].title;
         });
         lessonStickers.forEach((sticker) => {
           sticker.type = 4;
-          sticker.infoText = "ملصق";
+          sticker.infoText = fixedTitles.coursesTitles["sticker"].title;
         });
 
         let lessondataArray = lessonVideos.concat(
@@ -140,30 +141,32 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
     switch (i.type) {
       case 1:
         const screenData = {
-          backButtonTitle: "اختبار",
+          backButtonTitle: fixedTitles.coursesTitles["test"].title,
           contentText: longText,
           continueTo: "multipleAnswersTestScreen",
           item: i,
           isLast: !!i.isLast,
+          isLastLesson: data.isLastLesson
         };
         navigation.push("testIntroScreen", {
           data: screenData,
-          courseId: route.params.data.courseId,
+          courseId: data.courseId,
         });
         break;
       case 2:
         const caseStudyScreenData = {
-          courseId: route.params.data.courseId,
-          lessonId: route.params.data.lessonId,
+          courseId: data.courseId,
+          lessonId: data.lessonId,
           case_studyId: i.id,
           isLast: !!i.isLast,
+          isLastLesson: data.isLastLesson
         };
         navigation.push("caseStudyScreen", { data: caseStudyScreenData });
         break;
       case 3:
         const articleScreenData = {
-          courseId: route.params.data.courseId,
-          lessonId: route.params.data.lessonId,
+          courseId: data.courseId,
+          lessonId: data.lessonId,
           articleId: i.id,
         };
         navigation.push("courseArticleScreen", { data: articleScreenData });
@@ -171,8 +174,8 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
       case 4:
         navigation.push("coursePosterScreen", {
           data: { i },
-          courseId: route.params.data.courseId,
-          lessonId: route.params.data.lessonId,
+          courseId: data.courseId,
+          lessonId: data.lessonId,
         });
         break;
       default:
@@ -209,7 +212,8 @@ export const CourseUnitsDetailsScreen = ({ navigation, route }) => {
               navigation={navigation}
               refreshLesson={refreshLesson}
               handleClickEvent={handleClickEvent}
-              courseId={route.params.data.courseId}
+              courseId={data.courseId}
+              isLastLesson={data.isLastLesson}
             />
           );
         }}

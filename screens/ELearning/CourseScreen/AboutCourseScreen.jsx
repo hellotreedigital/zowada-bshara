@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   ScrollView,
   View,
@@ -18,19 +18,16 @@ import { SecondaryButton } from "../../../buttons/SecondaryButton";
 import MessageModal from "../../../components/Modals/MessageModal";
 import { addToCart } from "../../../api/ELearning/ELearning";
 import RenderHtml from "react-native-render-html";
-
-const commentorData = {
-  image:
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3744&q=80",
-  full_name: "اسم المعلم",
-  experience_domain: {},
-  comment: `صفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحرف)هنا يوجد`,
-};
+import AppContext from "../../../appContext/AppContext";
 
 export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
   let [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const { width } = useWindowDimensions();
+
+  const {
+    fixedTitles
+} = useContext(AppContext);
 
   function personPressed() {
     /* TODO document why this function 'personPressed' is empty */
@@ -53,7 +50,7 @@ export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
     <ScrollView style={styles.paragraph} showsVerticalScrollIndicator={false}>
       <MessageModal
         visible={modalVisible}
-        message={"Already in cart"}
+        message={fixedTitles.coursesTitles["already-in-cart"].title}
         close={() => {
           setModalVisible(false);
         }}
@@ -80,16 +77,16 @@ export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
         ) : null}
       </View>
       <View style={[styles.rowContainer, globalStyles.verticalTopSpacer10]}>
-        <Text>سعر الدورة:</Text>
+        <Text>{fixedTitles.coursesTitles["course-price"].title}:</Text>
         <Text style={[globalStyles.textBlue, styles.extraMargin]}>
-          {courseInfo?.price} LBP
+          {courseInfo?.price} {fixedTitles.coursesTitles["currency"].title}
         </Text>
       </View>
 
       <View style={[globalStyles.cardShadow, globalStyles.verticalTopSpacer20]}>
         <View style={[globalStyles.whiteCard, { paddingVertical: 10 }]}>
           <Text style={[globalStyles.textBlue, globalStyles.leftText]}>
-            ماذا ستتعلم
+          {fixedTitles.coursesTitles["what-will-you-learn"].title}
           </Text>
           <Text style={[globalStyles.textDarkBlue, globalStyles.leftText]}>
             {" "}
@@ -111,7 +108,7 @@ export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
             globalStyles.leftText,
           ]}
         >
-          المدرب
+          {fixedTitles.coursesTitles["teacher"].title}
         </Text>
         <FeedbackPersonCard
           data={{
@@ -134,7 +131,7 @@ export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
                 align="left"
                 color={colors.blue}
                 size={16}
-                content="التعليقات"
+                content={fixedTitles.coursesTitles["comments"].title}
               />
             </View>
             <TouchableOpacity
@@ -146,7 +143,7 @@ export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
               <Typography
                 color={colors.dark_blue}
                 size={14}
-                content="عرض المزيد"
+                content={fixedTitles.coursesTitles["show-all"].title}
                 align="left"
               />
             </TouchableOpacity>
@@ -170,7 +167,7 @@ export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
                 align="left"
                 color={colors.blue}
                 size={16}
-                content="No Comments"
+                content={fixedTitles.coursesTitles["no-comments"].title}
               />
             </View>
           )}
@@ -179,7 +176,7 @@ export const AboutCourseScreen = ({ navigation, courseInfo, registered }) => {
       {registered === 0 && (
         <View style={[globalStyles.verticalTopSpacer20]}>
           <SecondaryButton
-            content="تسجيل"
+            content={fixedTitles.coursesTitles["register"].title}
             fullWidth={true}
             onPress={() => {
               goToCart();

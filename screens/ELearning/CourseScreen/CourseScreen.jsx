@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {View} from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { colors } from "../../../globals/colors";
@@ -9,6 +9,7 @@ import {globalStyles} from '../../../globals/globaStyles';
 import { getSingleCourse } from '../../../api/ELearning/ELearning';
 import {CustomPageHeader} from '../../../components/CustomPageHeader/CustomPageHeader';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AppContext from "../../../appContext/AppContext";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -16,6 +17,10 @@ export const CourseScreen = ({ navigation, route }) => {
 
   let [courseInfo, setCourseInfo] = useState();
   const [topImageUrl, setTopImageUrl] = useState("");
+
+  const {
+    fixedTitles
+} = useContext(AppContext);
 
   useEffect(() => {
     (async () => {
@@ -70,7 +75,7 @@ export const CourseScreen = ({ navigation, route }) => {
         name="AboutCourseScreen"
         
         options={{
-          tabBarLabel: 'حول',
+          tabBarLabel: fixedTitles.coursesTitles["about"].title,
           // tabBarIcon: ({ color, size }) => (
           //   <MaterialCommunityIcons name="home" color={color} size={size} />
           // ),
@@ -82,7 +87,7 @@ export const CourseScreen = ({ navigation, route }) => {
       <Tab.Screen
         name="CourseSyllabusScreen"
         options={{
-          tabBarLabel: 'مواد',
+          tabBarLabel: fixedTitles.coursesTitles["lessons"].title,
           // tabBarIcon: ({ color, size }) => (
           //   <MaterialCommunityIcons name="settings" color={color} size={size} />
           // ),

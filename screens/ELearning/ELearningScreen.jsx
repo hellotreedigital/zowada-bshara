@@ -167,7 +167,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                             </View>
                             <View style={[styles.columns, globalStyles.horizontalLeftSpace5]}>
                                 <Typography
-                                    content={"التعليم الإلكتروني"}
+                                    content={fixedTitles.menuTitle["e-learning"].title}
                                     color={colors.white}
                                     size={22}
                                     bold={true}
@@ -214,7 +214,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                                 bold={true}
                                 color={colors.blue}
                                 size={16}
-                                content="الفئات"
+                                content={fixedTitles.coursesTitles["categories"].title}
                                 align="left"
                             />
                         </View>
@@ -242,7 +242,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                             bold={true}
                             color={colors.blue}
                             size={16}
-                            content="دورة مميزة"
+                            content={fixedTitles.coursesTitles["special-courses"].title}
                             align="left"
                         />
                     </View>
@@ -265,16 +265,15 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                 </View>
                 <View style={[styles.about, styles.spacing]}>
                     <View style={styles.aboutLeft}>
-                        <TouchableOpacity style={styles.clickableTitles}
-                            onPress={() => navigation.push("tutorsScreen")}>
+                        <View style={styles.clickableTitles}>
                             <Typography
                                 bold={true}
                                 color={colors.blue}
                                 size={16}
-                                content="أفضل المدربين"
+                                content={fixedTitles.coursesTitles["best-teachers"].title}
                                 align="left"
                             />
-                        </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
 
@@ -300,7 +299,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                             align="left"
                             color={colors.blue}
                             size={16}
-                            content="جميع الدورات"
+                            content={fixedTitles.coursesTitles["all-courses"].title}
                         />
                     </View>
                     <TouchableOpacity
@@ -310,7 +309,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
                         <Typography
                             color={colors.dark_blue}
                             size={14}
-                            content="اظهار الكل"
+                            content={fixedTitles.coursesTitles["show-all"].title}
                             align="left"
                         />
                     </TouchableOpacity>

@@ -12,7 +12,7 @@ export const TestIntroScreen = ({ navigation, route }) => {
 
 
   function goToTest() {
-    navigation.push(data.continueTo, {data: data.item, courseId: courseId});
+    navigation.push(data.continueTo, {data: data.item, courseId: courseId, isLastLesson: data.isLastLesson});
   }
 
   return (
