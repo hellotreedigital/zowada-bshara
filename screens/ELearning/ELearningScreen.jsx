@@ -146,7 +146,7 @@ const ListHeaderComponent = ({ navigation, homePageData }) => {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <View style={styles.carousel}>
-                        <PageHeadImageContainer imageUrl={topImageUrl}/>
+                        <PageHeadImageContainer imageUrl={fixedTitles.menuTitle["e-learning"].image}/>
                     </View>
                 </View>
                 <View style={[styles.status, styles.statusPosition]}>

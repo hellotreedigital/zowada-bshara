@@ -35,12 +35,6 @@ export const ImagePopUpModal = ({visible, imageUrl, courseId, video, ...props}) 
     return(
         <Modal isVisible={visible} animationIn="fadeIn" animationOut="fadeOut" style={styles.modal}>
             <View style={[globalStyles.body, styles.screenCover]}>
-                <TouchableOpacity
-                        onPress={() => props.closeBtnHandler()}
-                        style={styles.modalHeader}
-                    >
-                        <CloseSVG stroke={props.closeBtnColor ? props.closeBtnColor : "#ffffff"} />
-                    </TouchableOpacity>
 
                     <Video
                         ref={videoRef}

@@ -40,7 +40,7 @@ export const FilterScreen = ({ navigation, route }) => {
       ]}
     >
        <CustomPageHeader
-          navigation={navigation} title={fixedTitles.menuTitle["filter"].title} showShare={false} showNotification={false} color={colors.dark_blue} spaceHorizontally={true}
+          navigation={navigation} title={fixedTitles.coursesTitles["filter"].title} showShare={false} showNotification={false} color={colors.dark_blue} spaceHorizontally={true}
         />
 
       <View style={[styles.mainPageContainer, styles.bottomPadding]}>

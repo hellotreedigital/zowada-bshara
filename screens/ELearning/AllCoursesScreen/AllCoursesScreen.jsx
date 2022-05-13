@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useContext,useState, useEffect} from 'react';
 import {ScrollView, View, Text, FlatList} from 'react-native';
 import {globalStyles} from '../../../globals/globaStyles';
 import { eLearnineStyles as styles } from '../ELearningStyles';
@@ -56,6 +56,10 @@ export const AllCoursesScreen = ({navigation}) => {
 };
 
   const ListHeader = ({ navigation }) => {
+
+    const { fixedTitles } = useContext(AppContext);
+
+    
     return (
       <View style={globalStyles.verticalTopSpacer20}>
         <CustomPageHeader

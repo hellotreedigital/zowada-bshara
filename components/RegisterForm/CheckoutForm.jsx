@@ -103,6 +103,7 @@ export const CheckoutForm = ({
         isError={errorObject.errorVisible}
         numberOfLines={6}
         textColor={colors.dark_blue}
+        disabled={true}
       />
       </>
     </View>
