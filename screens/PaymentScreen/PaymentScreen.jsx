@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   I18nManager,
   SafeAreaView,
@@ -6,8 +6,8 @@ import {
   Text,
   TextInput,
   View,
+  TouchableOpacity,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Typography from "../../components/Typography/Typography";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
@@ -76,133 +76,23 @@ export const PaymentScreen = ({ navigation }) => {
   const [debitName, setDebitName] = useState("");
   const [debitCard, setDebitCard] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+
+  const closeModalHandler = () => {
+    setModalVisible(false);
+    navigation.navigate("expertScreen");
+  };
+  useEffect(() => {
+    setModalVisible(true);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.pop()}
-          style={styles.spacing}
-        >
-          <RedArrowSVG
-            style={{
-              transform: [{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" }],
-            }}
-            secondary={true}
-          />
-        </TouchableOpacity>
-        <View>
-          <Typography
-            content="بيانات الدفع"
-            color={colors.dark_blue}
-            size={20}
-            bold={true}
-            align="left"
-          />
-        </View>
-      </View>
-      <View>
-        <View style={styles.title}>
-          <Typography
-            content="طريقة الدفع"
-            align="left"
-            color={colors.focused}
-            size={16}
-            bold={true}
-          />
-        </View>
-      </View>
-      <View style={styles.form}>
-        <View>
-          <CustomTextBox editable={true} placeholder={"بطاقة ائتمان"} />
-        </View>
-        <View style={styles.box}>
-          <View style={styles.label}>
-            <Typography
-              content="الاسم على البطاقة"
-              color={colors.dark_blue}
-              align="left"
-            />
-          </View>
-          <View>
-            <CustomTextBox />
-          </View>
-        </View>
-        <View style={styles.box}>
-          <View style={styles.label}>
-            <Typography
-              content="رقم البطاقة"
-              color={colors.dark_blue}
-              align="left"
-            />
-          </View>
-          <View>
-            <CustomTextBox
-              mask={"credit-card"}
-              options={{
-                obfuscated: false,
-                issuer: "visa-or-mastercard",
-              }}
-              placeholder={"ex. 0000 0000 0000 0000"}
-              value={debitCard}
-              handleChange={(text) => setDebitCard(text)}
-            />
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.smallBox}>
-            <View style={styles.smalllabel}>
-              <Typography
-                content="تاريخ انتهاء الصلاحية"
-                color={colors.dark_blue}
-                align="left"
-              />
-            </View>
-            <View>
-              <CustomTextBox
-                mask={"datetime"}
-                options={{
-                  format: "MM/YY",
-                }}
-                small={true}
-                placeholder={"MM/YY"}
-                value={expiryDate}
-                handleChange={(text) => setExpiryDate(text)}
-              />
-            </View>
-          </View>
-          <View style={styles.smallBox}>
-            <View style={styles.smalllabel}>
-              <Typography content="CVV" color={colors.dark_blue} align="left" />
-            </View>
-            <View>
-              <CustomTextBox
-                small={true}
-                placeholder={"000"}
-                type={"money"}
-                options={{
-                  mask: "999",
-                }}
-                value={cvv}
-                handleChange={(text) => setCvv(text)}
-              />
-            </View>
-          </View>
-        </View>
-        <View style={styles.btn}>
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={styles.button}
-          >
-            <Typography
-              color={colors.white}
-              content={"ادفع الآن"}
-              align="center"
-              size={16}
-            />
-          </TouchableOpacity>
-        </View>
-        <CenteredModal visible={modalVisible} list={false} />
-      </View>
+      <CenteredModal
+        close={() => closeModalHandler()}
+        visible={modalVisible}
+        list={false}
+        loading={false}
+      />
     </SafeAreaView>
   );
 };

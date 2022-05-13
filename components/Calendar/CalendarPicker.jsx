@@ -1,69 +1,175 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+	I18nManager,
+	StyleSheet,
+	Text,
+	View,
+	TouchableWithoutFeedback,
+} from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import moment from "moment";
+import ArrowLeftSVG from "../../SVGR/Globals/ArrowLeft";
+import ArrowSVG from "../../SVGR/Globals/Arrow";
 export const CalendarModal = ({
-  selectedStartDate,
-  setSelectedStartDate,
-  setIsCalendar,
+	selectedStartDate,
+	setSelectedStartDate,
+	setIsCalendar,
 }) => {
-  const onDateChange = (date) => {
-    const formatted_date = moment.utc(date).format("YYYY-MM-DD");
-    setSelectedStartDate(formatted_date);
-    setTimeout(() => {
-      setIsCalendar(false);
-    }, 200);
-  };
+	const onDateChange = (date) => {
+		const formatted_date = moment.utc(date).format("YYYY-MM-DD");
+		setSelectedStartDate(formatted_date);
+		setTimeout(() => {
+			setIsCalendar(false);
+		}, 400);
+	};
+	const [weekdays, setWeekdays] = useState(["S", "M", "T", "W", "T", "F", "S"]);
 
-  return (
-    <View style={styles.dateContainer}>
-      <CalendarPicker
-        showDayStragglers={false}
-        startFromMonday={false}
-        allowRangeSelection={false}
-        todayBackgroundColor="transparent"
-        maxDate={new Date()}
-        onDateChange={(date, type) => onDateChange(date, type)}
-        monthTitleStyle={[styles.regularText, styles.monthTitle]}
-        yearTitleStyle={[styles.regularText, styles.monthTitle]}
-        previousTitleStyle={[styles.regularText, styles.prevText]}
-        nextTitleStyle={[styles.regularText, styles.prevText]}
-        width={SCREEN_WIDTH * 0.8}
-        selectMonthTitle="Select Month"
-        selectedDayTextColor="white"
-        selectYearTitle=""
-      />
-    </View>
-  );
+	const [months, setMonths] = useState([
+		"JANUARY",
+		"FEBRUARY",
+		"MARCH",
+		"APRIL",
+		"MAY",
+		"JUNE",
+		"JULY",
+		"AUGUST",
+		"SEPTEMBER",
+		"OCTOBER",
+		"NOVEMBER",
+		"DECEMBER",
+	]);
+	return (
+		<>
+			<View style={styles.calendar}>
+				<CalendarPicker
+					weekdays={weekdays}
+					months={months}
+					textStyle={{ color: colors.dark_blue, fontSize: 12 }}
+					// minDate={new Date()}
+					selectedStartDate={selectedStartDate}
+					showDayStragglers={false}
+					startFromMonday={false}
+					allowRangeSelection={false}
+					todayBackgroundColor="transparent"
+					todayTextStyle={{ color: colors.dark_blue }}
+					selectedDayColor={colors.dark_yellow}
+					onDateChange={(date) => {
+						onDateChange(date);
+					}}
+					width={SCREEN_WIDTH * 0.8}
+					selectMonthTitle="Select Month"
+					selectedDayTextColor="white"
+					selectYearTitle=""
+					dayLabelsWrapper={styles.dayHeader}
+					previousComponent={
+						I18nManager.isRTL ? (
+							<ArrowSVG
+								style={{
+									transform: [
+										{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
+									],
+								}}
+								fill={"#E8AF2E"}
+							/>
+						) : (
+							<ArrowSVG
+								style={{
+									transform: [
+										{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
+									],
+								}}
+								fill={"#E8AF2E"}
+							/>
+						)
+					}
+					nextComponent={
+						I18nManager.isRTL ? (
+							<ArrowLeftSVG
+								style={{
+									transform: [
+										{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
+									],
+								}}
+							/>
+						) : (
+							<ArrowLeftSVG
+								style={{
+									transform: [
+										{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
+									],
+								}}
+							/>
+						)
+					}
+					monthTitleStyle={[styles.boldText, styles.subtitle]}
+					yearTitleStyle={[styles.boldText, styles.yearTitle]}
+					customDayHeaderStyles={() => {
+						return {
+							style: styles.dayHeader,
+							textStyle: [styles.arrowText],
+						};
+					}}
+				/>
+			</View>
+		</>
+	);
 };
 
 const styles = StyleSheet.create({
-  dateContainer: {
-    flex: 1,
-    backgroundColor: "white",
-    marginTop: "5%",
-    width: SCREEN_WIDTH * 0.8,
-    height: "auto",
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: SCREEN_WIDTH * 0.05,
-    borderRadius: 25,
-    position: "absolute",
-    top: -80,
-  },
+	calendar: {
+		backgroundColor: colors.white,
+		width: SCREEN_WIDTH * 0.9,
+		alignSelf: "center",
+		borderRadius: 10,
+		paddingVertical: SCREEN_HEIGHT * 0.04,
+		marginBottom: 20,
+		position: "absolute",
+		top: -130,
+		zIndex: 10000,
+		elevation: 100,
+	},
+	dayHeader: {
+		borderWidth: 0,
+		borderColor: "white",
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	arrowText: {
+		padding: "5%",
+		color: colors.dark_blue,
+		textAlign: "center",
+		fontSize: 12,
+		fontFamily: "HelveticaRegular",
+		fontWeight: "600",
+	},
 
-  regularText: {
-    fontSize: 14,
-    fontFamily: "HelveticaRegular",
-  },
-  prevText: {
-    fontSize: 12,
-    color: colors.dark_blue,
-  },
-  monthTitle: {
-    fontSize: 12,
-    color: colors.dark_blue,
-  },
+	boldText: {
+		color: colors.dark_yellow,
+		fontWeight: "bold",
+		fontSize: 14,
+		fontFamily: "HelveticaBold",
+	},
+	yearTitle: {
+		// display: "none",
+		marginHorizontal: 8,
+	},
+	globalwidth: {
+		width: SCREEN_WIDTH * 0.9,
+		alignSelf: "center",
+		alignItems: "center",
+	},
+	regularText: {
+		fontSize: 14,
+		fontFamily: "HelveticaRegular",
+	},
+	prevText: {
+		fontSize: 12,
+		color: colors.dark_blue,
+	},
+	monthTitle: {
+		fontSize: 12,
+		color: colors.dark_blue,
+	},
 });

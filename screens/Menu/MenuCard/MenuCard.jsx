@@ -6,10 +6,14 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../globals/globals";
 
 export const MenuCard = ({ item, navigation }) => {
   const navigationHandler = (slug) => {
-    // console.log(slug);
     switch (slug) {
-      case 2:
-        navigation.navigate("ELearning");
+      case 0:
+        navigation.navigate("Expert");
+        break;
+      case 1:
+        navigation.navigate("Updates");
+        case 2:
+          navigation.navigate("ELearning");
         break;
       case 4:
         navigation.navigate("settings");
@@ -17,6 +21,14 @@ export const MenuCard = ({ item, navigation }) => {
       case 5:
         navigation.navigate("AboutScreen");
         break;
+      case 3:
+        navigation.navigate("EventStack");
+        break;
+      case 6:
+        navigation.navigate("ContactUsScreen");
+        break;
+      case 7:
+        navigation.navigate("Funding");
       default:
         break;
     }

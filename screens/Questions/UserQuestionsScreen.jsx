@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FlatList,
   I18nManager,
@@ -7,12 +7,17 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
+  Platform,
+  RefreshControl,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { getQuestionList } from "../../api/Profile/Profile";
+import AppContext from "../../appContext/AppContext";
 import Typography from "../../components/Typography/Typography";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import RedArrowSVG from "../../SVGR/Globals/RedArrow";
+import { useIsFocused } from "@react-navigation/native";
 
 export const RenderItem = ({ item, navigation }) => {
   return (
@@ -28,14 +33,18 @@ export const RenderItem = ({ item, navigation }) => {
         <View>
           <ImageBackground
             style={styles.image}
-            source={{ uri: item.image }}
+            source={{
+              uri:
+                item?.expert?.image_absolute_url ||
+                item?.user?.image_absolute_url,
+            }}
             resizeMode="cover"
           />
         </View>
         <View style={styles.col}>
           <View style={{ top: 10 }}>
             <Typography
-              content={item.name}
+              content={item?.expert?.full_name || item?.user?.full_name}
               align="left"
               color={colors.dark_blue}
               size={14}
@@ -44,9 +53,9 @@ export const RenderItem = ({ item, navigation }) => {
           </View>
           <View style={{ top: 0 }}>
             <Typography
-              content={item.subtitle}
+              content={item?.value}
               align="left"
-              color={"#CFD9DC"}
+              color={Platform.OS == "ios" ? "#CFD9DC" : colors.dark_blue}
               size={14}
               bold={false}
             />
@@ -58,11 +67,35 @@ export const RenderItem = ({ item, navigation }) => {
 };
 
 export const UserQuestionsScreen = ({ navigation, route }) => {
-  const { data } = route.params;
+  const { data, title } = route.params;
+  const { questionList, setQuestionList } = useContext(AppContext);
+  const [loading, setLoading] = useState(false);
+
+  const isFocused = useIsFocused();
+  const getQuestionListHandler = () => {
+    setLoading(true);
+    getQuestionList()
+      .then((res) => {
+        setQuestionList(res.data.questions.data);
+        setLoading(false);
+        // navigation.navigate("UserQuestionsScreen", {
+        //   data: questions,
+        //   title: fixedTitles.profileTitles["all-questions"].title,
+        // });
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    if (!isFocused) return;
+    getQuestionListHandler();
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+      <TouchableOpacity onPress={() => navigation.pop()} style={styles.header}>
         <TouchableOpacity
           style={styles.spacing}
           onPress={() => navigation.pop()}
@@ -75,21 +108,41 @@ export const UserQuestionsScreen = ({ navigation, route }) => {
         </TouchableOpacity>
         <View>
           <Typography
-            content="أسئلتي"
+            content={title}
             align="left"
             color={colors.focused}
             size={20}
             bold={true}
           />
         </View>
-      </View>
+      </TouchableOpacity>
       <View style={styles.list}>
         <FlatList
-          data={data}
+          refreshControl={
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={getQuestionListHandler}
+              tintColor={colors.dark_blue}
+            />
+          }
+          data={questionList}
           renderItem={({ item }) => (
             <RenderItem item={item} navigation={navigation} />
           )}
           keyExtractor={(item) => item.id}
+          ListEmptyComponent={() => {
+            return (
+              <View style={{ alignSelf: "center" }}>
+                {!loading && (
+                  <Typography
+                    content="You have no question"
+                    color={colors.dark_blue}
+                    size={12}
+                  />
+                )}
+              </View>
+            );
+          }}
         />
       </View>
     </SafeAreaView>
@@ -110,7 +163,7 @@ const styles = StyleSheet.create({
   },
   spacing: {
     marginRight: 10,
-    paddingBottom: 6,
+    paddingBottom: I18nManager.isRTL ? 6 : 0,
   },
   box: {
     width: SCREEN_WIDTH * 0.9,
@@ -131,6 +184,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   list: {
-    height: SCREEN_HEIGHT,
+    height: SCREEN_HEIGHT - 150,
+    paddingBottom: 40,
   },
 });

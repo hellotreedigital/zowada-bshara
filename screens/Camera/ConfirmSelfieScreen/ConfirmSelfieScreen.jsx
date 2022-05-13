@@ -35,7 +35,6 @@ export const ConfirmSelfieScreen = ({ navigation, route }) => {
       })
       .catch((err) => {
         setLoading(false);
-        console.log(er.response.data);
       })
       .finally(() => {
         setLoading(false);

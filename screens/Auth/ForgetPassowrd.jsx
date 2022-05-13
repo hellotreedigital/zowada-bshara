@@ -11,8 +11,8 @@ import {
   Platform,
   ActivityIndicator,
   I18nManager,
+  TouchableOpacity,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import {
   requestOTP,
   resetPassword,
@@ -45,7 +45,6 @@ export const ForgetPassowrd = ({ navigation }) => {
       .then((res) => {
         setLoadingForgetPassword(false);
 
-        console.log("otp sent to:", mail);
         navigation.navigate("otp", {
           email: mail,
           mobile: null,
@@ -58,7 +57,6 @@ export const ForgetPassowrd = ({ navigation }) => {
       .catch((err) => {
         setLoadingForgetPassword(false);
         let error = err.response.data;
-        console.log(err.response.data);
         setErrorObject({
           errorVisible: true,
           errorMessage:

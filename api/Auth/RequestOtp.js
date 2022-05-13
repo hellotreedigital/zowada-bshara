@@ -9,7 +9,6 @@ export async function requestMailOTP(email) {
         resolve(res);
       })
       .catch((err) => {
-        console.log("API ERROR: login user failed", err.response.data);
         reject(err);
       });
   });
@@ -17,14 +16,12 @@ export async function requestMailOTP(email) {
 
 export async function requestMobileOTP(email) {
   let url = `/auth/request-phone-verification/${email}`;
-  console.log(url);
   return new Promise(async function (resolve, reject) {
     API.get(url)
       .then((res) => {
         resolve(res);
       })
       .catch((err) => {
-        console.log("API ERROR: login user failed", err.response.data);
         reject(err);
       });
   });
@@ -38,7 +35,6 @@ export async function requestSocialOTP(fb_id, type) {
         resolve(res);
       })
       .catch((err) => {
-        console.log("API ERROR: Verify otp failed", err.response.data);
         reject(err);
       });
   });

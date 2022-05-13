@@ -1,21 +1,26 @@
 import React from "react";
-import { StyleSheet, Text, View, Linking } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Linking,
+  TouchableOpacity,
+} from "react-native";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import MessageSVG from "../../SVGR/Profile/Message";
 import PhoneSVG from "../../SVGR/Profile/Phone";
 import Typography from "../Typography/Typography";
 
-export const ContactBox = () => {
+export const ContactBox = ({ userData, title, phoneTitle, emailTitle }) => {
   const phoneHandler = () => {
-    Linking.openURL(`tel:76940499`).catch((err) => {
+    Linking.openURL(`tel:${userData?.phone_number}`).catch((err) => {
       alert(err);
     });
   };
 
   const mailHandler = () => {
-    Linking.openURL("mailto:support@example.com").catch((err) => {
+    Linking.openURL(`mailto:${userData?.email}`).catch((err) => {
       alert(err);
     });
   };
@@ -24,7 +29,7 @@ export const ContactBox = () => {
     <View style={styles.container}>
       <View style={styles.headerTitle}>
         <Typography
-          content="تواصل"
+          content={title}
           color={"#E54C2E"}
           sie={14}
           bold={true}
@@ -38,7 +43,7 @@ export const ContactBox = () => {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => phoneHandler()} style={styles.col}>
             <Typography
-              content="الهاتف"
+              content={phoneTitle}
               size={12}
               bold={true}
               color={colors.dark_blue}
@@ -49,7 +54,7 @@ export const ContactBox = () => {
                 size={12}
                 bold={false}
                 color={colors.dark_blue}
-                content="76940499"
+                content={userData?.phone_number}
                 align="left"
               />
             </View>
@@ -61,7 +66,7 @@ export const ContactBox = () => {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => mailHandler()} style={styles.col}>
             <Typography
-              content="بريد إلكتروني"
+              content={emailTitle}
               size={12}
               bold={true}
               color={colors.dark_blue}
@@ -69,7 +74,7 @@ export const ContactBox = () => {
             />
             <View style={styles.subTitle}>
               <Typography
-                content="email@email.com"
+                content={userData?.email}
                 size={12}
                 bold={false}
                 color={colors.dark_blue}
@@ -93,12 +98,12 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 0,
+      height: 2,
     },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     marginTop: 15,
-    elevation: 1,
+    elevation: 10,
   },
   headerTitle: {
     marginHorizontal: SCREEN_WIDTH * 0.04,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -10,52 +10,75 @@ import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import FavoriteSVG from "../../SVGR/Home/Favorite";
 import Typography from "../Typography/Typography";
+import CachedImage from "react-native-expo-cached-image";
 
-export const FullBox = ({ item }) => {
-  // console.log(item);
+export const FullBox = ({ item, setIsLiked, isLiked, ...props }) => {
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity
+      onPress={() => props.press()}
+      style={[
+        styles.card,
+        props.fullWidth && {
+          width: SCREEN_WIDTH - 40,
+          alignSelf: "center",
+          marginRight: 0,
+        },
+      ]}
+    >
       <View>
-        <ImageBackground
+        <CachedImage
           style={[styles.image, { width: "100%", height: 100 }]}
           resizeMode="cover"
-          source={{ uri: item.image }}
+          source={{ uri: item?.formatted_image }}
         />
       </View>
       <View style={styles.info}>
-        <View style={styles.infoRight}>
-          <Typography color="#fff" size={14} content={item.title} />
+        <View style={[styles.infoRight]}>
+          <Typography
+            color="#fff"
+            size={12}
+            fit={true}
+            lines={1}
+            content={item?.name}
+          />
           <View style={styles.locationText}>
-            <Typography color="#CFD9DC" size={12} content={item.location} />
+            <Typography color="#CFD9DC" size={10} content={item?.address} />
           </View>
         </View>
         <View style={styles.infoLeft}>
-          <View style={styles.rankedBox}>
-            <View style={{ top: -1.5 }}>
-              <Typography
-                size={10}
-                content="Top ranked"
-                color="#fff"
-                align="center"
-              />
+          {item?.is_best_shop == 1 && (
+            <View style={styles.rankedBox}>
+              <View style={{ top: -1.5 }}>
+                <Typography
+                  size={8}
+                  content="Top ranked"
+                  color="#fff"
+                  align="center"
+                />
+              </View>
             </View>
-          </View>
+          )}
         </View>
       </View>
-      <View style={styles.fav}>
-        <TouchableOpacity style={styles.favIcon}>
-          <FavoriteSVG />
-        </TouchableOpacity>
-      </View>
+      {!props.myCards && (
+        <View style={styles.fav}>
+          <TouchableOpacity
+            onPress={() => props.addToFavorites()}
+            style={styles.favIcon}
+          >
+            <FavoriteSVG isLiked={item.is_favorite == 1 ? true : false} />
+          </TouchableOpacity>
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    height: SCREEN_HEIGHT * 0.178,
     width: SCREEN_WIDTH * 0.672,
     position: "relative",
+    marginRight: 20,
   },
   image: {
     borderTopRightRadius: 10,
@@ -69,6 +92,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     alignItems: "center",
     justifyContent: "space-between",
+    paddingVertical: 2,
   },
   infoRight: {
     flexDirection: "row",

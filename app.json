@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "zowada-app",
-    "slug": "zowada-app",
+    "name": "zowada",
+    "slug": "zowada",
     "scheme": "mycoolredirect",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,7 +9,6 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain"
-
     },
     "plugins": [
       [
@@ -22,7 +21,6 @@
             "./local/assets/notification-sound-other.wav"
           ]
         }
-        
       ],
       [
         "expo-image-picker",
@@ -34,18 +32,15 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.hellotree.zowada",
-      "config":{
-        "googleSignIn":{
-          "reservedClientId":"com.googleusercontent.apps.1063455717642-irf83ga3hib3q5v2c6slrh232eqe3qcc"
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.1063455717642-irf83ga3hib3q5v2c6slrh232eqe3qcc"
         }
       }
-      
     },
     "android": {
       "adaptiveIcon": {

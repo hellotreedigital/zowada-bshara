@@ -13,7 +13,6 @@ export async function signUpUser(formdata) {
         resolve(res);
       })
       .catch((err) => {
-        console.log("API ERROR: signup user failed", err.response.data);
         reject(err);
       });
   });
@@ -32,7 +31,6 @@ export async function expertSignUp(formdata) {
         resolve(res);
       })
       .catch((err) => {
-        console.log("API ERROR: signup user failed", err.response.data);
         reject(err);
       });
   });

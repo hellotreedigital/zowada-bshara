@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     textAlign: I18nManager.isRTL ? "right" : "left",
     color: colors.dark_blue,
+    textAlignVertical: "top",
   },
   button: {
     width: SCREEN_WIDTH * 0.8,
@@ -147,5 +148,19 @@ const styles = StyleSheet.create({
   wrapper: {
     marginTop: 20,
     marginBottom: 10,
+  },
+  loader: {
+    position: "absolute",
+    alignSelf: "center",
+    top: "50%",
+    zIndex: 1000,
+  },
+  avoidModal: {
+    backgroundColor: "transparent",
+    flex: 1,
+    bottom: Platform.OS === "ios" ? 0 : -40,
+    position: "absolute",
+    width: SCREEN_WIDTH * 0.94,
+    alignSelf: "center",
   },
 });

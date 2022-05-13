@@ -1,15 +1,32 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
+import { Navigation } from "../../navigation";
 import Typography from "../Typography/Typography";
 import { MapStyle } from "./MapStyle";
-const LocationBox = () => {
+const LocationBox = ({
+  editMode,
+  navigation,
+  userData,
+
+  ...props
+}) => {
+  const editMapHandler = () => {
+    if (!editMode) return;
+    navigation.navigate("MapScreen");
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => editMapHandler()}
+      style={styles.container}
+    >
       <View pointerEvents="none" style={styles.mapBorder}>
         <MapView
+          initialRegion={props.location}
           customMapStyle={MapStyle}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
@@ -17,14 +34,14 @@ const LocationBox = () => {
       </View>
       <View style={styles.spacing}>
         <Typography
-          content="الموقع ، المنطقة ، الشارع"
+          content={userData?.address}
           color={colors.dark_blue}
           align="left"
           size={14}
           roman={true}
         />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

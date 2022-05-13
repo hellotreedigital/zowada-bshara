@@ -26,11 +26,32 @@ import AppContext from "../../appContext/AppContext";
 import ExpertSVG from "../../SVGR/BottomTabIcons/Expert";
 import Avatar from "../../components/Avatar/Avatar";
 import AuthContext from "../../appContext/AuthContext";
+import { useIsFocused } from "@react-navigation/native";
+import { logout } from "../../api/Auth/Socials/Login";
 
 export const MenuScreen = ({ navigation }) => {
-  const { setToken, fixedTitles, token, userName, setUserName } = useContext(
-    AppContext
-  );
+  const isFocused = useIsFocused();
+
+  const {
+    setToken,
+    fixedTitles,
+    token,
+    userName,
+    setUserName,
+    setUserData,
+    cartStatus,
+    setStoreModalVisible,
+    setProfilePic,
+    profilePic,
+    expoPushToken
+  } = useContext(AppContext);
+
+  React.useEffect(() => {
+    if (cartStatus?.length > 0) {
+      setStoreModalVisible(true);
+    }
+  }, []);
+
   const MENU_DATA = [
     {
       id: 0,
@@ -38,7 +59,7 @@ export const MenuScreen = ({ navigation }) => {
       icon: <ExpertSVG />,
     },
     {
-      id: 0,
+      id: 7,
       title: fixedTitles.menuTitle["funding"].title,
       icon: <TamwilSVG />,
     },
@@ -74,17 +95,34 @@ export const MenuScreen = ({ navigation }) => {
       icon: <SettingsSVG />,
     },
   ];
-  const { profilePic } = useContext(AuthContext);
+
   const signoutHandler = async () => {
-    try {
-      AsyncStorage.removeItem("@token");
-      setToken(null);
-      setUserName(null);
-      console.log("Logged out");
-    } catch (error) {
-      console.log("cant sign u out try again later or refresh the app ");
-    }
+
+
+    let formdata = new FormData()
+    formdata.append("notification_token",expoPushToken)
+
+    logout(formdata).then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err)
+    }).finally(()=>{
+      try {
+        AsyncStorage.removeItem("@token");
+        setUserData(null);
+        setToken(null);
+        setUserName(null);
+        setProfilePic(null)
+      } catch (error) {
+        console.log('couldnt logout')
+      }
+    })
+
+
+   
   };
+
+
 
   return (
     <View style={styles.container}>
@@ -123,7 +161,10 @@ export const MenuScreen = ({ navigation }) => {
           </View>
           <View style={styles.userinfo}>
             {token !== true && (
-              <TouchableOpacity style={styles.left}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Profile")}
+                style={styles.left}
+              >
                 <Avatar
                   profilePic={profilePic}
                   name={userName}
@@ -138,16 +179,21 @@ export const MenuScreen = ({ navigation }) => {
                 <>
                   <View style={styles.name}>
                     <Typography
-                      content={userName || "مايا"}
+                      content={userName}
                       size={16}
                       color={colors.white}
                       bold={true}
                       align="left"
+                      fit={true}
+                      lines={1}
                     />
                   </View>
-                  <TouchableOpacity style={styles.subtitle}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Profile")}
+                    style={styles.subtitle}
+                  >
                     <Typography
-                      content="عرض الصفحة الشخصية"
+                      content={fixedTitles.menuTitle["view-profile"].title}
                       size={12}
                       bold={true}
                       color={colors.white}
@@ -168,7 +214,7 @@ export const MenuScreen = ({ navigation }) => {
               numColumns={2}
               showsVerticalScrollIndicator={false}
               ItemSeparatorComponent={() => (
-                <View style={{ height: SCREEN_WIDTH * 0.05 }} />
+                <View style={{ height: SCREEN_WIDTH * 0.035 }} />
               )}
               ListFooterComponent={() => {
                 return (
@@ -206,7 +252,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
   },
   header: {
-    marginBottom: SCREEN_HEIGHT * 0.0169,
+    marginBottom: SCREEN_HEIGHT * 0.01,
     marginHorizontal: 22,
   },
   userinfo: {
@@ -253,5 +299,8 @@ const styles = StyleSheet.create({
   subtitle: {
     position: "relative",
     top: -SCREEN_HEIGHT * 0.011,
+  },
+  name: {
+    width: SCREEN_WIDTH * 0.5,
   },
 });

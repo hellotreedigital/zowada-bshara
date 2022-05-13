@@ -8,13 +8,14 @@ import {
   I18nManager,
 } from "react-native";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
-import { RNTextInput } from "../Textinput/TextInput";
+import { MaskedInput, RNTextInput } from "../Textinput/TextInput";
 import ModalDropdown from "react-native-modal-dropdown";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { colors } from "../../globals/colors";
 import Typography from "../Typography/Typography";
 import AppContext from "../../appContext/AppContext";
+import PhonePicker from "../PhonePicker/PhonePicker";
 export const ExpertForm = ({
   values,
   handleChange,
@@ -24,13 +25,12 @@ export const ExpertForm = ({
   experience,
   experienceType,
   experienceValue,
+  setYearsOfExperience,
+  yearsOfExperience,
+  yearsOfExperienceArr,
   ...props
 }) => {
   const { fixedTitles } = useContext(AppContext);
-
-  const [value, setValue] = useState("");
-  const [isFocus, setIsFocus] = useState(false);
-  const Experience = ["test", "test2", "نوع الخبرة"];
 
   return (
     <View style={styles.container}>
@@ -43,7 +43,7 @@ export const ExpertForm = ({
         value={values.fullName}
         handleChange={handleChange("fullName")}
         error={errorObject.fullNameError}
-        isError={errorObject.errorVisible}
+        isError={errorObject.fullNameError}
       />
 
       <RNTextInput
@@ -55,25 +55,30 @@ export const ExpertForm = ({
         value={values.email}
         handleChange={handleChange("email")}
         error={errorObject.emailError}
-        isError={errorObject.errorVisible}
+        isError={errorObject.emailError}
       />
-      <RNTextInput
-        placeholder={fixedTitles.authTitles["phone-number"].title}
-        spacing={true}
-        spacingVal={15}
-        type={"number-pad"}
-        password={false}
-        handleChange={handleChange("mobile")}
-        value={values.mobile}
-        error={errorObject.mobileError}
-        isError={errorObject.errorVisible}
-      />
+      <View>
+        <RNTextInput
+          placeholder={fixedTitles.authTitles["phone-number"].title}
+          spacing={true}
+          spacingVal={15}
+          type={"number-pad"}
+          password={false}
+          handleChange={handleChange("mobile")}
+          value={values.mobile}
+          error={errorObject.mobileError}
+          isError={errorObject.mobileError}
+        />
+        <View style={{ position: "absolute", right: 0 }}>
+          <PhonePicker />
+        </View>
+      </View>
       <>
         <ModalDropdown
           options={experience}
           dropdownStyle={styles.dropdownStyles}
           isFullWidth
-          showsVerticalScrollIndicator
+          showsVerticalScrollIndicator={false}
           style={[
             styles.containerStyles,
             { marginBottom: errorObject.errorVisible ? 0 : 15 },
@@ -102,13 +107,13 @@ export const ExpertForm = ({
             return <View style={styles.arrowContainer} />;
           }}
         />
-        {errorObject.errorVisible && (
-          <View style={{ marginBottom: 15 }}>
+        {errorObject.experienceError && (
+          <View style={{ top: -15 }}>
             <Typography
               size={12}
               align="left"
               color="red"
-              content={errorObject.experienceTypeError}
+              content={errorObject.experienceError}
             />
           </View>
         )}
@@ -118,10 +123,10 @@ export const ExpertForm = ({
           options={experienceType}
           dropdownStyle={styles.dropdownStyles}
           isFullWidth
-          showsVerticalScrollIndicator
+          showsVerticalScrollIndicator={false}
           style={[
             styles.containerStyles,
-            { marginBottom: errorObject.errorVisible ? 0 : 15 },
+            { marginBottom: errorObject.experienceError ? 0 : 15 },
           ]}
           textStyle={styles.label}
           defaultValue={fixedTitles.authTitles["experience"].title}
@@ -147,7 +152,7 @@ export const ExpertForm = ({
             return <View style={styles.arrowContainer} />;
           }}
         />
-        {errorObject.errorVisible && (
+        {errorObject.experienceError && (
           <View style={{ marginBottom: 15 }}>
             <Typography
               content={errorObject.experienceError}
@@ -157,15 +162,27 @@ export const ExpertForm = ({
           </View>
         )}
       </>
-      <RNTextInput
-        placeholder={fixedTitles.authTitles["fees15-mins"].title}
-        spacing={true}
-        spacingVal={15}
-        type={"number-pad"}
-        password={false}
-        handleChange={handleChange("fees")}
-        value={values.fees}
-      />
+      <View style={{ marginBottom: 15 }}>
+        <MaskedInput
+          placeholder={fixedTitles.authTitles["fees15-mins"].title}
+          spacing={true}
+          spacingVal={15}
+          type={"number-pad"}
+          password={false}
+          handleChange={handleChange("fees")}
+          value={values.fees}
+          mask={"money"}
+          options={{
+            precision: 0,
+            separator: ",",
+            delimiter: ",",
+            unit: "LBP",
+            suffixUnit: "",
+          }}
+          error={errorObject.fees}
+          isError={errorObject.fees}
+        />
+      </View>
       <RNTextInput
         placeholder={fixedTitles.authTitles["educational-background"].title}
         spacing={true}
@@ -174,8 +191,10 @@ export const ExpertForm = ({
         password={false}
         handleChange={handleChange("educationalBackground")}
         value={values.educationalBackground}
+        error={errorObject.educationBgError}
+        isError={errorObject.educationBgError}
       />
-      <RNTextInput
+      {/* <RNTextInput
         placeholder={fixedTitles.authTitles["years-of-experience"].title}
         spacing={true}
         spacingVal={15}
@@ -183,7 +202,52 @@ export const ExpertForm = ({
         password={false}
         handleChange={handleChange("experienceYears")}
         value={values.experienceYears}
-      />
+      /> */}
+      <>
+        <ModalDropdown
+          options={yearsOfExperienceArr}
+          dropdownStyle={styles.dropdownStyles}
+          isFullWidth
+          showsVerticalScrollIndicator={false}
+          style={[
+            styles.containerStyles,
+            { marginBottom: errorObject.errorVisible ? 0 : 15 },
+          ]}
+          textStyle={styles.label}
+          defaultValue={fixedTitles.authTitles["years-of-experience"].title}
+          onSelect={(item) => {
+            setYearsOfExperience(item + 1);
+          }}
+          renderRowText={(item) => {
+            return (
+              <View>
+                <Typography
+                  size={12}
+                  content={item}
+                  align="right"
+                  color={colors.dark_blue}
+                />
+              </View>
+            );
+          }}
+          renderSeparator={() => <View />}
+          renderRowComponent={TouchableOpacity}
+          keyboardShouldPersistTaps="handled"
+          renderRightComponent={() => {
+            return <View style={styles.arrowContainer} />;
+          }}
+        />
+        {errorObject.experienceYears && (
+          <View style={{ top: -15 }}>
+            <Typography
+              size={12}
+              align="left"
+              color="red"
+              content={errorObject.experienceYears}
+            />
+          </View>
+        )}
+      </>
       <RNTextInput
         placeholder={fixedTitles.authTitles["password"].title}
         spacing={true}
@@ -193,7 +257,7 @@ export const ExpertForm = ({
         handleChange={handleChange("password")}
         value={values.password}
         error={errorObject.passwordError}
-        isError={errorObject.errorVisible}
+        isError={errorObject.passwordError}
       />
       <RNTextInput
         placeholder={fixedTitles.authTitles["confirm-password"].title}
@@ -203,6 +267,8 @@ export const ExpertForm = ({
         password={true}
         handleChange={handleChange("confirmPassword")}
         value={values.confirmPassword}
+        error={errorObject.confirmPassword}
+        isError={errorObject.confirmPassword}
       />
     </View>
   );
@@ -213,6 +279,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH * 0.9,
     height: "100%",
     alignSelf: "center",
+    fontFamily: "HelveticaLight",
   },
   dropdownStyles: {
     backgroundColor: "white",
@@ -220,21 +287,27 @@ const styles = StyleSheet.create({
     marginTop: 12,
     borderRadius: 10,
     overflow: "hidden",
-    alignItems: !I18nManager.isRTL ? "flex-end" : "flex-start",
+    alignItems: "flex-start",
+    padding: 10,
+    fontFamily: "HelveticaLight",
   },
   containerStyles: {
-    width: SCREEN_WIDTH * 0.9,
-    textAlign: "right",
-    // paddingLeft: 15,
-    paddingBottom: 8,
-    paddingTop: 14,
     backgroundColor: "rgba(255,255,255,0.3)",
+    width: SCREEN_WIDTH - 40,
+    alignSelf: "center",
+    height: 40,
     borderRadius: 10,
-    paddingHorizontal: 15,
-    color: "white",
-    marginBottom: 15,
+    paddingHorizontal: 16,
+    paddingTop: 6,
+    fontFamily: "HelveticaRegular",
+    fontSize: 14,
+    color: colors.dark_blue,
+    textAlign: I18nManager.isRTL ? "right" : "left",
+    // marginVertical: 7,
   },
   label: {
     color: colors.white,
+    fontFamily: "HelveticaLight",
+    fontSize: 14,
   },
 });

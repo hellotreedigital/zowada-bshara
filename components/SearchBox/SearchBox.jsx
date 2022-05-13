@@ -6,14 +6,15 @@ import {
 	TextInput,
 	TouchableOpacity,
 	I18nManager,
+  Platform
 } from "react-native";
 
 import { colors } from "../../globals/colors";
+import CloseBlueSVG from "../../SVGR/Globals/CloseBlue";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import FilterSVG from "../../SVGR/Globals/Filter";
 import SearchSVG from "../../SVGR/Globals/SearchSVG";
 import AppContext from "../../appContext/AppContext";
-
 
 export const SearchBox = ({
   filterEnabled,
@@ -25,12 +26,18 @@ export const SearchBox = ({
   searchString,
   setSearchString,
   onSearchPress,
+  hideFilter,
+  filterHidden,
 }) => {
 
   const {
     fixedTitles
 } = useContext(AppContext);
 
+  const resetSearchBarHandler = () => {
+    setSearchString("");
+  };
+  
   return (
     <>
       {!filterEnabled ? (
@@ -53,22 +60,54 @@ export const SearchBox = ({
       ) : (
         <View style={styles.filteredInput}>
           <View style={styles.row}>
-            <TouchableOpacity
-              onPress={() => onSearchPress()}
-              style={[styles.icon, { right: 0 }]}
-              disabled={searchString == null ? true : false}
+            <View
+              style={[
+                styles.icon,
+                { right: I18nManager.isRTL ? 0 : hideFilter ? 0 : 30 },
+                Platform.OS === "ios"
+                  ? {
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }
+                  : null,
+              ]}
             >
-              <SearchSVG />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => onPress()}
-              style={[styles.icon, { right: 30 }]}
-            >
-              <FilterSVG />
-            </TouchableOpacity>
+              <IconButton
+                mode="text"
+                icon={SearchSVG}
+                compact
+                onPress={() => onSearchPress()}
+                dark={false}
+                disabled={searchString == null ? true : false}
+              />
+            </View>
+            {!hideFilter && (
+              <View
+                style={[
+                  styles.icon,
+                  {
+                    right: I18nManager.isRTL ? 30 : 0,
+                    marginRight: Platform.OS == "android" ? 2 : 0,
+                  },
+                  Platform.OS === "ios"
+                    ? {
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }
+                    : null,
+                ]}
+              >
+                <IconButton icon={FilterSVG} onPress={() => onPress()} />
+              </View>
+            )}
           </View>
           <TextInput
-            style={styles.SearchBox}
+            editable={true}
+            style={[
+              styles.SearchBox,
+              height && { height: height },
+              width && { width: width },
+            ]}
             value={searchString}
             placeholderTextColor={colors.dark_blue}
             placeholderStyle={styles.textboxfieldd}
@@ -148,7 +187,6 @@ export const SearchBoxWOFilter = ({
   );
 };
 
-
 const styles = StyleSheet.create({
   SearchBox: {
     color: colors.dark_blue,
@@ -170,16 +208,18 @@ const styles = StyleSheet.create({
   },
   filteredInput: {
     justifyContent: "center",
+
     zIndex: -1,
   },
   icon: {
-    height: 40,
+    height: SCREEN_HEIGHT * 0.048,
     width: 40,
-    zIndex: 1,
     alignItems: "center",
-    justifyContent: "center",
     position: "absolute",
+    top: Platform.OS == "android" ? SCREEN_HEIGHT * 0.001 : 0,
+    justifyContent: "center",
     alignSelf: I18nManager.isRTL ? "flex-end" : "flex-start",
+    zIndex: 1,
   },
   row: {},
   imagee:{
@@ -187,4 +227,15 @@ const styles = StyleSheet.create({
     height:20,
     margin: 5
 },
+  styledicon: {
+    height: SCREEN_HEIGHT * 0.018,
+    width: SCREEN_HEIGHT * 0.018,
+    backgroundColor: "white",
+    borderRadius: (SCREEN_HEIGHT * 0.018) / 2,
+    alignItems: "center",
+    justifyContent: "center",
+    top: 14,
+    marginHorizontal: 8,
+    alignSelf: "flex-start",
+  },
 });

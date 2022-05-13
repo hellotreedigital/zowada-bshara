@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -18,7 +18,7 @@ import { ConfirmSelfieScreen } from "../screens/Camera/ConfirmSelfieScreen/Confi
 
 export const Navigation = () => {
   return (
-    <NavigationContainer theme={DefaultTheme}>
+    <NavigationContainer>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -32,6 +32,8 @@ const RootNavigator = () => {
     isOnBoardingVisible,
     setIsOnBoardingVisible,
     isCamera,
+    setPusher,
+    userData,
   } = useContext(AppContext);
 
   const onBoardingHandler = async () => {
@@ -61,11 +63,15 @@ const RootNavigator = () => {
       ) : (
         <>
           {!token ? (
-            <Stack.Group>
+            <>
               <Stack.Screen
                 name="login"
                 children={({ navigation }) => (
-                  <Login setToken={setToken} navigation={navigation} />
+                  <Login
+                    setToken={setToken}
+                    navigation={navigation}
+                    setPusher={setPusher}
+                  />
                 )}
               />
               <Stack.Screen
@@ -104,21 +110,21 @@ const RootNavigator = () => {
                   <NewPassword navigation={navigation} route={route} />
                 )}
               />
-            </Stack.Group>
+            </>
           ) : (
-            <Stack.Group>
+            <>
               {isCamera ? (
-                <Stack.Group>
+                <>
                   <Stack.Screen name="cameraScreen" component={CameraScreen} />
                   <Stack.Screen
                     name="confirmSelfie"
                     component={ConfirmSelfieScreen}
                   />
-                </Stack.Group>
+                </>
               ) : (
                 <Stack.Screen name="root" component={BottomTabNavigator} />
               )}
-            </Stack.Group>
+            </>
           )}
         </>
       )}

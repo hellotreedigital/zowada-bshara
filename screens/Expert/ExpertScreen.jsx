@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import {
-
   StyleSheet,
   Text,
   View,
@@ -11,7 +10,8 @@ import {
   ScrollView,
   I18nManager,
   ActivityIndicator,
-
+  Animated,
+  Image
 } from "react-native";
 import AppContext from "../../appContext/AppContext";
 import { AccordationList } from "../../components/AccordationList/AccordationList";
@@ -24,29 +24,34 @@ import { SearchBox } from "../../components/SearchBox/SearchBox";
 import Typography from "../../components/Typography/Typography";
 import { colors } from "../../globals/colors";
 import {
-	SCREEN_HEIGHT,
-	SCREEN_WIDTH,
-	STATUS_BAR_HEIGHT,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  STATUS_BAR_HEIGHT,
 } from "../../globals/globals";
 import NotificationSVG from "../../SVGR/Home/Notification";
 import ShareSVG from "../../SVGR/Home/Share";
 import { FilterModal } from "../../components/Modals/FilterModal";
-import { expertSearch } from "../../api/Expert/Expert";
+import { expertSearch, getExperts } from "../../api/Expert/Expert";
+import ArrowSVG from "../../SVGR/Globals/Arrow";
 export const ExpertScreen = ({ navigation }) => {
-
   const {
     appLanguage,
     userName,
     token,
     bestExperts,
     setBestExperts,
+    fixedTitles,
+    notificationsCounter,
+    chatsCounter,
+    setChatsCounter,
   } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [searchString, setSearchString] = useState(null);
+  const [searchString, setSearchString] = useState("");
   const expertDetailsHandler = (data) => {
     navigation.navigate("expertSingleScreen", {
       data: data,
+      search: false,
     });
   };
 
@@ -58,18 +63,63 @@ export const ExpertScreen = ({ navigation }) => {
         navigation.navigate("ResultScreenScreen", {
           data: res.data.experts.data,
           fees: false,
+          search: true,
+          query: searchString,
         });
         setSearchString(null);
       })
       .catch((err) => {
         setLoading(false);
-        console.log(err);
       });
   };
 
-  // StatusBar.setHidden(true);
+  const viewAllExpertsHandler = () => {
+    // setLoading(true);
+    // getExperts()
+    // 	.then((res) => {
+    // 		setLoading(false);
+    //
+    // 		navigation.navigate("allExperts", {
+    // 			data: res.data.experts,
+    // 		});
+    // 	})
+    // 	.catch((err) => {
+    // 		setLoading(false);
+    //
+    // 	});
+    navigation.navigate("allExperts", {
+      allExpertsMode: true,
+    });
+  };
+  const Header = ({
+    navigation,
+    fixedTitles,
+    userData,
+    setSearchString,
+    searchString,
+    setModalVisible,
+    navigaation,
+    searchHandler,
+    notificationsCounter,
+    chatsCounter,
+  }) => {
+    return (
+      <View style={styles.header}>
+        <View style={styles.imageView}>
+          <Image
+            style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT * 0.3 }}
+            source={{ uri: fixedTitles.expertsTitles["expert-image"].formatted_image }}
+          />
+          <View style={styles.overlay} />
+        </View>
+      </View>
+        
+    )
+  };
+  
   return (
-    <ScrollView
+    <Animated.ScrollView
+      nestedScrollEnabled={true}
       style={{ backgroundColor: "white" }}
       showsVerticalScrollIndicator={false}
     >
@@ -83,26 +133,61 @@ export const ExpertScreen = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.carousel}>
-            <HomeCarousel />
+            <Header navigation={navigation} fixedTitles={fixedTitles} />
           </View>
         </View>
         <View style={styles.status}>
-          <View style={styles.left}>
+          <TouchableOpacity
+            style={[
+              styles.left,
+              { flexDirection: "row", alignItems: "center" },
+            ]}
+          >
+            {/* <View style={{ marginRight: 10 }}>
+              <ArrowSVG />
+            </View> */}
             <Typography
-              content={"خبراء"}
+              content={fixedTitles.expertsTitles["experts"].title}
               color={colors.white}
               size={22}
               bold={true}
               lh={26}
               align="left"
             />
-          </View>
+          </TouchableOpacity>
           <View style={styles.right}>
-            <TouchableOpacity style={styles.icon}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("chatsList", {
+                  title: "chats",
+                  chat: true,
+                })
+              }
+              style={styles.icon}
+            >
               <ShareSVG />
+              {chatsCounter > 0 && (
+                <View style={styles.notification}>
+                  <View style={{ top: -SCREEN_HEIGHT * 0.0026 }}>
+                    <Text style={[styles.smallText, { lineHeight: 14 }]}>
+                      {chatsCounter}
+                    </Text>
+                  </View>
+                </View>
+              )}
             </TouchableOpacity>
-            <TouchableOpacity style={styles.icon}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("notifications")}
+              style={styles.icon}
+            >
               <NotificationSVG />
+              {notificationsCounter > 0 && (
+                <View style={styles.notification}>
+                  <View style={{ top: -SCREEN_HEIGHT * 0.001 }}>
+                    <Text style={styles.smallText}>{notificationsCounter}</Text>
+                  </View>
+                </View>
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -113,6 +198,7 @@ export const ExpertScreen = ({ navigation }) => {
             onSearchPress={() => searchHandler()}
             searchString={searchString}
             setSearchString={setSearchString}
+            placeholder={fixedTitles.expertsTitles["search"].title}
           />
         </View>
       </View>
@@ -123,22 +209,19 @@ export const ExpertScreen = ({ navigation }) => {
               bold={true}
               color={colors.dark_yellow}
               size={16}
-              content="أفضل الخبراء"
+              content={fixedTitles.expertsTitles["best-experts"]?.title}
               align="left"
             />
           </View>
+
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("allExperts", {
-                data: bestExperts,
-              })
-            }
+            onPress={() => viewAllExpertsHandler()}
             style={styles.aboutRight}
           >
             <Typography
               color={colors.dark_blue}
               size={14}
-              content="اظهار الكل"
+              content={fixedTitles.expertsTitles["show-all"].title}
               align="left"
             />
           </TouchableOpacity>
@@ -159,15 +242,40 @@ export const ExpertScreen = ({ navigation }) => {
               );
             })}
           </ScrollView>
+          {/* <FlatList
+            data={bestExperts}
+            renderItem={({ item }) => {
+              return (
+                <ExpertCard
+                  onPress={() => expertDetailsHandler(data)}
+                  data={item}
+
+                  // index={index}
+                />
+              );
+            }}
+            keyExtractor={(item) => item.id}
+            ListEmptyComponent={() => {
+              return (
+                <View style={{ alignSelf: "center" }}>
+                  <Typography
+                    content="no best experts"
+                    color={colors.dark_blue}
+                    size={12}
+                  />
+                </View>
+              );
+            }}
+          /> */}
         </View>
-        <View style={[styles.about, styles.spacing]}>
+        <View style={[styles.about]}>
           <View style={styles.aboutLeft}>
             <Typography
               bold={true}
               align="left"
               color={colors.dark_yellow}
               size={16}
-              content="أسئلة نشطة"
+              content={fixedTitles.expertsTitles["faq"].title}
             />
           </View>
         </View>
@@ -179,8 +287,10 @@ export const ExpertScreen = ({ navigation }) => {
         navigation={navigation}
         visible={modalVisible}
         close={() => setModalVisible(false)}
+        loadingResults={loading}
+        setLoadingResults={setLoading}
       />
-    </ScrollView>
+    </Animated.ScrollView>
   );
 };
 
@@ -219,7 +329,7 @@ const styles = StyleSheet.create({
   },
   searchBox: {
     position: "absolute",
-    bottom: -22,
+    bottom: -SCREEN_HEIGHT * 0.024,
     alignSelf: "center",
     zIndex: 100000000,
   },
@@ -246,7 +356,25 @@ const styles = StyleSheet.create({
   },
   loader: {
     position: "absolute",
-    top: "30%",
+    top: "40%",
     alignSelf: "center",
+    zIndex: 10000,
+    elevation: 1000,
+  },
+  notification: {
+    backgroundColor: colors.dark_blue,
+    height: SCREEN_HEIGHT * 0.013,
+    width: SCREEN_HEIGHT * 0.013,
+    borderRadius: (SCREEN_HEIGHT * 0.013) / 2,
+    position: "absolute",
+    top: 8,
+    right: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  smallText: {
+    color: colors.white,
+    fontSize: 8,
+    lineHeight: 12,
   },
 });

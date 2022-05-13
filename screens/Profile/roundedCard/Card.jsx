@@ -7,9 +7,11 @@ export const Card = ({ item, onPress }) => {
   return (
     <TouchableOpacity onPress={() => onPress()} style={styles.Card}>
       <View>{item.icon}</View>
-      <View>
+      <View style={{ width: 70 }}>
         <Typography
-          size={14}
+          fit={true}
+          lines={1}
+          size={12}
           bold={true}
           content={item.title}
           align="center"
@@ -20,4 +22,6 @@ export const Card = ({ item, onPress }) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  Card: {},
+});

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   ActivityIndicator,
   I18nManager,
@@ -6,32 +6,22 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
 } from "react-native";
 import Modal from "react-native-modal";
 import { BlurView } from "expo-blur";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import Typography from "../Typography/Typography";
 import { colors } from "../../globals/colors";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import CloseSVG from "../../SVGR/Globals/CloseSVG";
-import { getExpertASC } from "../../api/Expert/Expert";
+import {
+  getByExperienceDomain,
+  getByExperienceType,
+  getExpertASC,
+} from "../../api/Expert/Expert";
 import ModalDropdown from "react-native-modal-dropdown";
 import ArrowDownSVG from "../../SVGR/Globals/ArrowDown";
-
-const SORTING_DATA = [
-  {
-    id: "0",
-    title: "A- Z",
-  },
-  {
-    id: "1",
-    title: "الأغلى",
-  },
-  {
-    id: "2",
-    title: "أرخص",
-  },
-];
+import AppContext from "../../appContext/AppContext";
 
 export const FilterModal = ({
   visible,
@@ -39,48 +29,133 @@ export const FilterModal = ({
   cameraHandler,
   imageHandler,
   profilePic,
-
+  allExperts,
+  setAllExperts,
+  loadingResults,
+  setLoadingResults,
   ...props
 }) => {
-  const [loadingResults, setLoadingResults] = useState(false);
+  const { fixedTitles } = useContext(AppContext);
   const [results, setResults] = useState([]);
   const [experiencedValue, setExperienceValue] = useState(null);
-  let experience = ["test", "test1", "test2"];
+
+  let experience = [];
+  let expeienceType = [];
+  let experienceId = [];
+  let experienceTypeId = [];
+
+  React.useEffect(() => {
+    fixedTitles.experience.map((data) => {
+      experience.push(data.title);
+      experienceId.push(data.id);
+    });
+    fixedTitles.experienceType.map((data) => {
+      expeienceType.push(data.title);
+      experienceTypeId.push(data.id);
+    });
+  }, [props]);
+
+  const SORTING_DATA = [
+    {
+      id: "0",
+      title: fixedTitles.expertsTitles["a-z"].title,
+    },
+    {
+      id: "1",
+      title: fixedTitles.expertsTitles["higher-price"].title,
+    },
+    {
+      id: "2",
+      title: fixedTitles.expertsTitles["lower-price"].title,
+    },
+  ];
   const getASCHandler = () => {
     setLoadingResults(true);
+    props.close();
     getExpertASC("full_name", 1, "asc")
       .then((res) => {
         setLoadingResults(false);
-
-        setResults(res.data.experts.data);
-        props.close();
-        navigation.navigate("ResultScreenScreen", {
-          data: res.data.experts.data,
-          fees: false,
-        });
+        if (allExperts) {
+          setAllExperts(res.data.experts);
+          props.close();
+        } else {
+          setResults(res.data.experts);
+          props.close();
+          navigation.navigate("ResultScreenScreen", {
+            data: res.data.experts,
+            fees: false,
+          });
+        }
       })
       .catch((err) => {
         setLoadingResults(false);
-        console.log(err);
+      });
+  };
+
+  const getByEperienceDomainHandler = (id) => {
+    props.close();
+    setLoadingResults(true);
+    getByExperienceDomain(id)
+      .then((res) => {
+        setLoadingResults(false);
+        if (allExperts) {
+          setAllExperts(res.data.experts);
+        } else {
+          navigation.navigate("ResultScreenScreen", {
+            data: res.data.experts,
+            fees: false,
+            search: false,
+            filter: true,
+          });
+        }
+      })
+      .catch((err) => {
+        setLoadingResults(false);
+      });
+  };
+
+  const getByEperienceTypeHandler = (id) => {
+    props.close();
+    setLoadingResults(true);
+    getByExperienceType(id)
+      .then((res) => {
+        setLoadingResults(false);
+        if (allExperts) {
+          setAllExperts(res.data.experts);
+        } else {
+          navigation.navigate("ResultScreenScreen", {
+            data: res.data.experts,
+            fees: false,
+            search: false,
+            filter: true,
+          });
+        }
+      })
+      .catch((err) => {
+        setLoadingResults(false);
       });
   };
 
   const getExpertsByFees = (fees, page, dir) => {
+    props.close();
     setLoadingResults(true);
     getExpertASC(fees, page, dir)
       .then((res) => {
         setLoadingResults(false);
-        setResults(res.data.experts.data);
-        props.close();
-        navigation.navigate("ResultScreenScreen", {
-          data: res.data.experts.data,
-          fees: true,
-          dir: dir,
-        });
+        if (allExperts) {
+          setAllExperts(res.data.experts);
+        } else {
+          setResults(res.data.experts);
+
+          navigation.navigate("ResultScreenScreen", {
+            data: res.data.experts,
+            fees: true,
+            dir: dir,
+          });
+        }
       })
       .catch((err) => {
         setLoadingResults(false);
-        console.log(err);
       });
   };
 
@@ -90,9 +165,11 @@ export const FilterModal = ({
         getASCHandler();
         break;
       case "1":
+        // setFeesDir("desc")
         getExpertsByFees("consultancy_fee", 1, "desc");
         break;
       case "2":
+        // setFeesDir("asc")
         getExpertsByFees("consultancy_fee", 1, "asc");
         break;
       default:
@@ -103,13 +180,6 @@ export const FilterModal = ({
   return (
     <Modal animationType="slide" isVisible={visible} hasBackdrop={true}>
       <BlurView intensity={60} style={styles.blurContainer}>
-        <View style={styles.indicator}>
-          <ActivityIndicator
-            animating={loadingResults}
-            color={colors.dark_blue}
-            size="large"
-          />
-        </View>
         <View style={styles.modalView}>
           <View>
             <TouchableOpacity onPress={() => props.close()}>
@@ -119,7 +189,7 @@ export const FilterModal = ({
           <View style={styles.filterWrapper}>
             <View>
               <Typography
-                content="صنف حسب"
+                content={fixedTitles.expertsTitles["sort-by"].title}
                 color={"#E8AF2E"}
                 size={20}
                 bold={true}
@@ -141,7 +211,7 @@ export const FilterModal = ({
             </View>
             <View>
               <Typography
-                content="تصفية بحسب"
+                content={fixedTitles.expertsTitles["filter"].title}
                 color={"#E8AF2E"}
                 size={20}
                 bold={true}
@@ -150,15 +220,15 @@ export const FilterModal = ({
             </View>
             <View style={{ width: "100%" }}>
               <ModalDropdown
-                isf
                 options={experience}
                 dropdownStyle={styles.dropdownStyles}
-                showsVerticalScrollIndicator
+                showsVerticalScrollIndicator={false}
                 style={[styles.containerStyles, { marginBottom: 15 }]}
                 textStyle={styles.label}
-                defaultValue={"مجال الخبرة"}
+                defaultValue={fixedTitles.expertsTitles["experience"].title}
                 onSelect={(item) => {
-                  setExperienceValue(item);
+                  setExperienceValue(experienceId[item]);
+                  getByEperienceDomainHandler(experienceId[item]);
                 }}
                 renderRowText={(item) => {
                   return (
@@ -174,7 +244,6 @@ export const FilterModal = ({
                 }}
                 isFullWidth
                 renderSeparator={() => <View />}
-                renderRowComponent={TouchableOpacity}
                 keyboardShouldPersistTaps="handled"
                 renderRightComponent={() => {
                   return <View style={styles.arrowContainer} />;
@@ -192,16 +261,25 @@ export const FilterModal = ({
               <ModalDropdown
                 options={experience}
                 dropdownStyle={styles.dropdownStyles}
-                showsVerticalScrollIndicator
+                showsVerticalScrollIndicator={false}
                 style={[styles.containerStyles, { marginBottom: 15 }]}
                 textStyle={styles.label}
-                defaultValue={"  نوع الخبرة"}
+                defaultValue={
+                  fixedTitles.expertsTitles["experience-type"].title
+                }
                 onSelect={(item) => {
-                  setExperienceValue(item);
+                  setExperienceValue(experienceTypeId[item]);
+                  getByEperienceTypeHandler(experienceTypeId[item]);
                 }}
                 renderRowText={(item) => {
                   return (
-                    <View>
+                    <View
+                      style={
+                        {
+                          // alignSelf: "flex-start",
+                        }
+                      }
+                    >
                       <Typography
                         size={12}
                         content={item}
@@ -213,7 +291,6 @@ export const FilterModal = ({
                 }}
                 isFullWidth
                 renderSeparator={() => <View />}
-                renderRowComponent={TouchableOpacity}
                 keyboardShouldPersistTaps="handled"
                 renderRightComponent={() => {
                   return (
@@ -235,7 +312,7 @@ const styles = StyleSheet.create({
   modalView: {
     paddingHorizontal: SCREEN_WIDTH * 0.05,
     paddingTop: SCREEN_HEIGHT * 0.022,
-    height: SCREEN_HEIGHT * 0.5,
+    height: SCREEN_HEIGHT * 0.55,
     position: "relative",
     bottom: Platform.OS == "ios" ? -30 : 0,
     marginTop: "auto",
@@ -260,7 +337,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   filterWrapper: {
-    marginHorizontal: SCREEN_WIDTH * 0.032,
+    // marginHorizontal: SCREEN_WIDTH * 0.032,
   },
   indicator: {
     position: "absolute",
@@ -273,22 +350,20 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   dropdownStyles: {
-    // width: SCREEN_WIDTH * 0.9,
-    // alignSelf: "center",
-    height: 100,
     marginTop: 12,
-    borderRadius: 10,
-    overflow: "hidden",
-    alignItems: !I18nManager.isRTL ? "flex-end" : "flex-start",
-    position: "absolute",
+    // borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingTop: 5,
+    height: 100,
+    alignItems: I18nManager.isRTL ? "flex-end" : "flex-start",
   },
   containerStyles: {
     textAlign: "right",
     paddingVertical: 10,
     // alignItems: "flex-start",
     backgroundColor: "#F2F5F6",
-    width: "auto",
-    borderRadius: 10,
+    // width: "auto",
+    // borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 15,
   },
@@ -298,7 +373,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   arrowContainer: {
-    width: SCREEN_WIDTH * 0.6,
+    position: "absolute",
     alignItems: "flex-end",
+    right: 10,
   },
 });

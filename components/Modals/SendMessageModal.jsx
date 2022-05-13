@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
 	Platform,
 	StyleSheet,
 	Text,
 	View,
+	ActivityIndicator,
 	TouchableOpacity,
 } from "react-native";
 import Modal from "react-native-modal";
@@ -14,35 +15,52 @@ import { colors } from "../../globals/colors";
 import CloseSVG from "../../SVGR/Globals/CloseSVG";
 import { SearchBox } from "../SearchBox/SearchBox";
 import { KeyboardAccessoryView } from "react-native-keyboard-accessory";
-
+import { useKeyboard } from "../../hooks/useKeyboard";
+import AppContext from "../../appContext/AppContext";
 export const SendMessageModal = ({
 	visible,
 	navigation,
-	setModalVisible,
+	loadingQuestion,
+	value,
+	setValue,
+	subject,
+	setSubject,
+	submit,
 	...props
 }) => {
+	const keyboardHeight = useKeyboard();
+	const { fixedTitles } = useContext(AppContext);
+
 	return (
 		<Modal animationType="slide" isVisible={visible} hasBackdrop={true}>
 			<BlurView intensity={60} style={styles.blurContainer}>
-				<View style={styles.avoidModal}>
+				<View style={[styles.avoidModal]}>
 					<KeyboardAccessoryView
-						avoidKeyboard={Platform.OS == "android" ? false : true}
-						androidAdjustResize={Platform.OS == "android" ? true : false}
 						style={{ borderRadius: 10 }}
 						hideBorder
 						alwaysVisible
+						androidAdjustResize={Platform.OS === "android" ? true : false}
+						bumperHeight={
+							Platform.OS == "android" ? (keyboardHeight > 0 ? -140 : 10) : 0
+						}
 					>
 						<View style={styles.modalView}>
+							<View style={styles.loader}>
+								<ActivityIndicator
+									animating={loadingQuestion}
+									size="large"
+									color={colors.dark_blue}
+								/>
+							</View>
 							<View style={styles.header}>
-								<TouchableOpacity
-									style={{ zIndex: 1 }}
-									onPress={() => props.close()}
-								>
+								<TouchableOpacity onPress={() => props.close()}>
 									<CloseSVG />
 								</TouchableOpacity>
 								<View>
 									<Typography
-										content="أدخل السؤال هنا"
+										content={
+											fixedTitles.expertsTitles["enter-your-question"].title
+										}
 										color={"#E8AF2E"}
 										bold={true}
 										size={20}
@@ -52,10 +70,16 @@ export const SendMessageModal = ({
 							</View>
 							<View style={styles.body}>
 								<View>
-									<SearchBox placeholder="موضوع الاستفسار" />
+									<SearchBox
+										searchString={value}
+										setSearchString={setValue}
+										placeholder="موضوع الاستفسار"
+									/>
 								</View>
 								<View style={{ marginTop: SCREEN_HEIGHT * 0.015 }}>
 									<SearchBox
+										searchString={subject}
+										setSearchString={setSubject}
 										placeholder="السؤال"
 										multiline={true}
 										height={SCREEN_HEIGHT * 0.19}
@@ -63,7 +87,10 @@ export const SendMessageModal = ({
 								</View>
 							</View>
 							<View>
-								<TouchableOpacity style={styles.button}>
+								<TouchableOpacity
+									onPress={() => submit()}
+									style={styles.button}
+								>
 									<Typography size={16} content="إرسل" color={colors.white} />
 								</TouchableOpacity>
 							</View>
@@ -110,12 +137,11 @@ const styles = StyleSheet.create({
 	avoidModal: {
 		backgroundColor: "white",
 		flex: 1,
-		bottom: Platform.OS === "ios" ? 0 : 40,
+		bottom: Platform.OS === "ios" ? 0 : 30,
 		position: "absolute",
 		width: SCREEN_WIDTH,
 		borderTopRightRadius: 10,
 		borderTopLeftRadius: 10,
-		zIndex: 1000,
 	},
 	button: {
 		width: SCREEN_WIDTH * 0.9,
@@ -135,6 +161,11 @@ const styles = StyleSheet.create({
 		elevation: 5,
 		marginTop: SCREEN_HEIGHT * 0.036,
 		marginBottom: SCREEN_HEIGHT * 0.036,
-		zIndex: 1000000,
+	},
+	loader: {
+		position: "absolute",
+		alignSelf: "center",
+		top: "45%",
+		zIndex: 1000,
 	},
 });

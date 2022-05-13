@@ -1,19 +1,28 @@
 import React, { useContext, useState } from "react";
-import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import AppContext from "../../appContext/AppContext";
-import { SCREEN_WIDTH } from "../../globals/globals";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import { RNTextInput } from "../Textinput/TextInput";
 import { CalendarModal } from "../Calendar/CalendarPicker";
+import WheelPicker from "../WheelPicker/WheelPicker";
+import PhonePicker from "../PhonePicker/PhonePicker";
 export const Form = ({
   values,
   handleChange,
   errorObject,
   selectedStartDate,
   setSelectedStartDate,
+  isCalendar,
+  setIsCalendar,
   ...props
 }) => {
   const { fixedTitles } = useContext(AppContext);
-  const [isCalendar, setIsCalendar] = useState(false);
   return (
     <View style={styles.container}>
       <RNTextInput
@@ -38,17 +47,28 @@ export const Form = ({
         error={errorObject.emailError}
         isError={errorObject.errorVisible}
       />
-      <RNTextInput
-        placeholder={fixedTitles.authTitles["phone-number"].title}
-        spacing={true}
-        spacingVal={15}
-        type={"number-pad"}
-        password={false}
-        handleChange={handleChange("mobile")}
-        value={values.mobile}
-        error={errorObject.mobileError}
-        isError={errorObject.errorVisible}
-      />
+      <View>
+        <RNTextInput
+          placeholder={fixedTitles.authTitles["phone-number"].title}
+          spacing={true}
+          spacingVal={15}
+          type={"number-pad"}
+          password={false}
+          handleChange={handleChange("mobile")}
+          value={values.mobile}
+          error={errorObject.mobileError}
+          isError={errorObject.errorVisible}
+        />
+        <View
+          style={{
+            position: "absolute",
+            right: 0,
+            alignItems: "center",
+          }}
+        >
+          <PhonePicker />
+        </View>
+      </View>
       <RNTextInput
         placeholder={fixedTitles.authTitles["date-of-birth"].title}
         spacing={true}
@@ -97,13 +117,12 @@ export const Form = ({
         handleChange={handleChange("confirmPassword")}
         value={values.confirmPassword}
       />
-      {isCalendar && (
-        <CalendarModal
-          selectedStartDate={selectedStartDate}
-          setSelectedStartDate={setSelectedStartDate}
-          setIsCalendar={setIsCalendar}
-        />
-      )}
+
+      <WheelPicker
+        setSelectedStartDate={setSelectedStartDate}
+        visible={isCalendar}
+        close={() => setIsCalendar(false)}
+      />
     </View>
   );
 };

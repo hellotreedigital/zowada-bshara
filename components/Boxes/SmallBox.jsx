@@ -5,6 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
@@ -15,28 +16,25 @@ export const SmallBox = ({ item, onPress }) => {
   return (
     <TouchableOpacity onPress={() => onPress()} style={styles.card}>
       <View>
-        {item.image ? (
+        {item.image_absolute_url ? (
           <ImageBackground
-            style={[
-              styles.image,
-              {
-                width: SCREEN_HEIGHT * 0.143,
-                height: SCREEN_HEIGHT * 0.143,
-              },
-            ]}
-            resizeMode="contain"
-            source={{ uri: item.iamge }}
+            style={[styles.image]}
+            resizeMode="cover"
+            source={{ uri: item.image_absolute_url }}
           />
         ) : (
           <Avatar loader={false} name={item.full_name} custom={true} />
         )}
       </View>
       <View style={styles.info}>
-        <View style={styles.infoRight}>
+        <View style={[styles.infoRight, { top: -SCREEN_HEIGHT * 0.002 }]}>
           <Typography
+            fit={true}
+            lines={2}
             color={colors.dark_blue}
-            size={14}
+            size={13}
             content={item.full_name}
+            align="left"
           />
         </View>
         <View style={styles.infoLeft}></View>
@@ -52,9 +50,11 @@ const styles = StyleSheet.create({
     borderRadius: SCREEN_HEIGHT * 0.012,
   },
   image: {
-    borderRadius: 10,
+    // borderRadius: 10,
     overflow: "hidden",
-    zIndex: 99999
+    height: SCREEN_HEIGHT * 0.12,
+    width: SCREEN_HEIGHT * 0.12,
+    borderRadius: SCREEN_HEIGHT * 0.012,
   },
   info: {
     flexDirection: "row",

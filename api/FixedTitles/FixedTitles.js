@@ -9,7 +9,6 @@ export async function getFixedTitles() {
         resolve(res);
       })
       .catch((err) => {
-        console.log("API ERROR: reset password failed", err.response.data);
         reject(err);
       });
   });

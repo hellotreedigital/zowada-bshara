@@ -1,0 +1,8 @@
+{
+  "appId": "1255921",
+  "key": "4ef0fb6e1bc393c8ded7",
+  "secret": "c386cb91f88594c2dd07",
+  "cluster": "ap2",
+  "encrypted": true,
+  "restServer": "https://staging.zowada-backend.hellotree.dev/api/"
+}

@@ -5,16 +5,16 @@ function ArrowLeftSVG(props) {
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
-      width={7.178}
-      height={12.356}
-      viewBox="0 0 7.178 12.356"
+      width={8.51}
+      height={15.522}
+      viewBox="0 0 8.761 15.522"
       {...props}
     >
       <Path
         data-name="Path 961"
-        d="M5.764 1.414L1 6.178l4.764 4.763"
+        d="M6.347 0L0 6.347l6.347 6.347"
         fill="none"
-        stroke="#e8af2e"
+        stroke={props.fill ? props.fill : "#e8af2e"}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}

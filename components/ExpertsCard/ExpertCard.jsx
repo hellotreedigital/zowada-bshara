@@ -1,113 +1,157 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
-	ImageBackground,
-	Platform,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
+  ActivityIndicator,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import AppContext from "../../appContext/AppContext";
 import { PrimaryButton } from "../../buttons/PrimaryButton";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
+import numeral from "numeral";
 import Typography from "../Typography/Typography";
+import * as Animatable from "react-native-animatable";
 
-export const ExpertCard = ({ data, onPress }) => {
-	return (
-		<TouchableOpacity onPress={() => onPress(data)} style={styles.container}>
-			<View style={styles.top}>
-				<View>
-					<View style={styles.image}>
-						<ImageBackground
-							source={{ uri: data.image || data.image_absolute_url }}
-							style={styles.dp}
-						/>
-					</View>
-				</View>
-				<View style={styles.ratingBox}>
-					<Typography content="4.1" color="#E8AF2E" size={10} bold={false} />
-				</View>
-				<View style={styles.userinfo}>
-					<View>
-						<Typography
-							content={data.full_name}
-							size={14}
-							bold={true}
-							color={colors.dark_blue}
-							align="left"
-						/>
-					</View>
-					<View style={styles.experience}>
-						<View>
-							<Typography
-								size={12}
-								roman={true}
-								color={colors.dark_blue}
-								content={data?.experience_domain?.title}
-								align="left"
-							/>
-						</View>
-						<View style={styles.seperatorContainer}>
-							<View style={styles.sperator} />
-						</View>
-						<View>
-							<Typography
-								size={12}
-								roman={true}
-								color={colors.dark_blue}
-								content={data.years_of_experience + " عاما من الخبرة"}
-								align="left"
-							/>
-						</View>
-					</View>
-					{data.location && (
-						<View style={[styles.experience, styles.location]}>
-							<Typography content={data.location} color={"#CFD9DC"} size={12} />
-						</View>
-					)}
-					<View style={styles.fee}>
-						<Typography
-							content={`${data.consultancy_fee} LBP / الساعة`}
-							color={"#E8AF2E"}
-							size={12}
-							roman={true}
-							align="left"
-						/>
-					</View>
-					<View style={{ top: -SCREEN_WIDTH * 0.03 }}>
-						<TouchableOpacity onPress={onPress} style={styles.button}>
-							<Typography
-								content="عرض الملف الشخصي"
-								color={colors.white}
-								size={12}
-								roman={true}
-								align="left"
-							/>
-						</TouchableOpacity>
-					</View>
-				</View>
-			</View>
-		</TouchableOpacity>
-	);
+export const ExpertCard = ({ data, onPress, index }) => {
+  const { fixedTitles } = useContext(AppContext);
+  const fadeIn = {
+    from: {
+      opacity: 0,
+    },
+    to: {
+      opacity: 1,
+    },
+  };
+  return (
+    <Animatable.View animation={fadeIn} delay={index ? 250 * index : 250}>
+      <TouchableOpacity onPress={() => onPress(data)} style={styles.container}>
+        <View style={styles.top}>
+          <View>
+            <View style={styles.image}>
+              <ImageBackground
+                source={{ uri: data.image_absolute_url }}
+                style={styles.dp}
+              />
+            </View>
+          </View>
+
+          {data.rating > 0 && (
+            <View style={styles.ratingBox}>
+              <Typography
+                content={parseFloat(data.rating).toFixed(1)}
+                color="#E8AF2E"
+                size={10}
+                bold={false}
+              />
+            </View>
+          )}
+
+          <View style={styles.userinfo}>
+            <View style={styles.name}>
+              <Typography
+                content={data?.full_name}
+                size={14}
+                bold={true}
+                color={colors.dark_blue}
+                align="left"
+                fit={true}
+                lines={1}
+              />
+            </View>
+            <View style={styles.experience}>
+              <View>
+                <Typography
+                  size={12}
+                  roman={true}
+                  color={colors.dark_blue}
+                  content={data?.experience_domain?.title}
+                  align="left"
+                  fit={true}
+                  lines={1}
+                />
+              </View>
+              <View style={styles.seperatorContainer}>
+                <View style={styles.sperator} />
+              </View>
+              <View>
+                <Typography
+                  size={12}
+                  roman={true}
+                  color={colors.dark_blue}
+                  content={
+                    data?.years_of_experience_id +
+                    " " +
+                    fixedTitles.expertsTitles["years-of-experience"].title
+                  }
+                  align="left"
+                  fit={true}
+                  lines={1}
+                />
+              </View>
+            </View>
+            {data.location && (
+              <View style={[styles.experience, styles.location]}>
+                <Typography
+                  content={data.location}
+                  color={"#CFD9DC"}
+                  size={12}
+                />
+              </View>
+            )}
+            <View style={styles.fee}>
+              <Typography
+                content={`${numeral(data.consultancy_fee).format(
+                  "0,0"
+                )} LBP / ${fixedTitles.expertsTitles["hour"].title}`}
+                color={"#E8AF2E"}
+                size={12}
+                roman={true}
+                align="left"
+                fit={true}
+                lines={1}
+              />
+            </View>
+            <View style={{ top: -SCREEN_WIDTH * 0.03 }}>
+              <TouchableOpacity onPress={onPress} style={styles.button}>
+                <Typography
+                  fit={true}
+                  lines={1}
+                  content={
+                    fixedTitles.expertsTitles["view-expert-profile"].title
+                  }
+                  color={colors.white}
+                  size={12}
+                  roman={true}
+                  align="left"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </Animatable.View>
+  );
 };
 
 const styles = StyleSheet.create({
-
   container: {
-    height: SCREEN_HEIGHT * 0.18,
+    minHeight: SCREEN_HEIGHT * 0.17,
     backgroundColor: "#fff",
-    width: "100%",
+    width: SCREEN_WIDTH,
 
-    shadowColor: "#00000080",
+    shadowColor: "#000",
     borderRadius: 10,
     shadowOffset: {
       width: 0,
-      height: -1,
+      height: 0,
     },
     shadowOpacity: 0.16,
     shadowRadius: 6.51,
 
-    elevation: 1,
+    elevation: 5,
     marginBottom: SCREEN_HEIGHT * 0.005,
     marginTop: SCREEN_HEIGHT * 0.0144,
     width: SCREEN_WIDTH * 0.9,
@@ -132,6 +176,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     position: "relative",
     top: -SCREEN_HEIGHT * 0.01,
+    flexWrap: "wrap",
+    width: "91%",
   },
   location: {
     top: -SCREEN_HEIGHT * 0.017,
@@ -149,7 +195,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button: {
-    width: SCREEN_WIDTH * 0.32,
+    width: SCREEN_WIDTH * 0.37,
     backgroundColor: "#E8AF2E",
     alignItems: "center",
     borderRadius: 5,
@@ -170,8 +216,14 @@ const styles = StyleSheet.create({
     borderColor: "#E8AF2E",
     position: "absolute",
     top: SCREEN_HEIGHT * 0.05,
+    zIndex: 1000,
+    elevation: 20,
   },
   image: {
     position: "relative",
+    zIndex: 10000,
+  },
+  name: {
+    width: SCREEN_WIDTH * 0.5,
   },
 });

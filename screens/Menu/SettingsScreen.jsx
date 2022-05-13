@@ -6,9 +6,11 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 import AppContext from "../../appContext/AppContext";
+import { Header } from "../../components/Header/Header";
 import Typography from "../../components/Typography/Typography";
 import { colors } from "../../globals/colors";
 import {
@@ -27,7 +29,7 @@ const SettingsScreen = ({ navigation }) => {
     },
     {
       id: 1,
-      title: fixedTitles.settingsTitles["terms--conditions"].title,
+      title: fixedTitles.settingsTitles["privacy-policy"].title,
     },
     {
       id: 2,
@@ -41,10 +43,18 @@ const SettingsScreen = ({ navigation }) => {
 
   const navigatorHandler = (slug) => {
     switch (slug) {
+      case 0:
+        navigation.navigate("TermsConditionScreen");
+        break;
+      case 1:
+        navigation.navigate("PrivacyPolicyScreen");
+        break;
+      case 2:
+        navigation.navigate("RefundPolicyScreen");
+        break;
       case 3:
         navigation.navigate("chooseLang");
         break;
-
       default:
         break;
     }
@@ -53,30 +63,11 @@ const SettingsScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        <View style={styles.header}>
-          <View style={styles.row}>
-            <TouchableOpacity onPress={() => navigation.pop()}>
-              <ArrowSVG
-                fill="#E54C2E"
-                style={{
-                  transform: [
-                    { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
-                  ],
-                }}
-              />
-            </TouchableOpacity>
-            <View style={styles.headerText}>
-              <Typography
-                size={20}
-                bold={true}
-                lh={32}
-                content={fixedTitles.settingsTitles["settings"].title}
-                align="left"
-                color={colors.focused}
-              />
-            </View>
-          </View>
-        </View>
+        <Header
+          red
+          title={fixedTitles.settingsTitles["settings"].title}
+          navigation={navigation}
+        />
         <View style={styles.list}>
           <FlatList
             data={DATA}
@@ -107,19 +98,20 @@ export default SettingsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    width: SCREEN_WIDTH * 0.9,
-    marginHorizontal: SCREEN_WIDTH * 0.064,
-    marginTop: STATUS_BAR_HEIGHT,
+    width: SCREEN_WIDTH,
+    // marginHorizontal: 20,
+    backgroundColor: colors.white,
   },
   list: {
     height: SCREEN_HEIGHT,
-    marginTop: SCREEN_HEIGHT * 0.037,
+    marginTop: SCREEN_HEIGHT * 0.009,
+    marginHorizontal: 20,
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
   },
   headerText: {
-    marginLeft: SCREEN_WIDTH * 0.037,
+    // marginLeft: SCREEN_WIDTH * 0.037,
   },
 });

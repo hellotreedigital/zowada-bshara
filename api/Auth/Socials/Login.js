@@ -13,7 +13,23 @@ export async function authCheckAndLogin(type, formdata) {
         resolve(res);
       })
       .catch((err) => {
-        console.log("API ERROR: signup user failed", err.response.data);
+        reject(err);
+      });
+  });
+}
+export async function logout(formdata) {
+  let url = `/auth/logout`;
+
+  return new Promise(async function (resolve, reject) {
+    API.post(url, formdata, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
         reject(err);
       });
   });

@@ -1,5 +1,12 @@
 import React, { useState, useRef, useContext } from "react";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  ImageBackground,
+  Linking,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import AppContext from "../../appContext/AppContext";
 import { WhiteButton } from "../../buttons/WhiteButton";
@@ -12,51 +19,40 @@ import {
 import Typography from "../Typography/Typography";
 import AnimatedDotsCarousel from "react-native-animated-dots-carousel";
 
-const DATA = [
-  {
-    id: 0,
-    image:
-      "https://images.pexels.com/photos/2627945/pexels-photo-2627945.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    button: true,
-    title: "العنوان هنا",
-    text:
-      "لوريم إيبسوم هو ببساطة نص شكلي بمعنى أن الغاية هي الشكل وليس المحتوى)",
-  },
-  {
-    id: 1,
-    image:
-      "https://images.pexels.com/photos/1098365/pexels-photo-1098365.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    button: false,
-    title: "العنوان هنا",
-    text:
-      "لوريم إيبسوم هو ببساطة نص شكلي بمعنى أن الغاية هي الشكل وليس المحتوى)",
-  },
+const RenderCasousel = ({
+  item,
+  singleJobHandler,
+  fixedTitles,
+  singleShopHandler,
+}) => {
+  console.log(item);
 
-  {
-    id: 2,
-    image:
-      "https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    button: true,
-    title: "العنوان هنا",
-    text:
-      "لوريم إيبسوم هو ببساطة نص شكلي بمعنى أن الغاية هي الشكل وليس المحتوى)",
-  },
-  {
-    id: 3,
-    image:
-      "https://images.pexels.com/photos/4215113/pexels-photo-4215113.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-    button: true,
-    title: "العنوان هنا",
-    text:
-      "لوريم إيبسوم هو ببساطة نص شكلي بمعنى أن الغاية هي الشكل وليس المحتوى)",
-  },
-];
-const renderCasousel = ({ item }) => {
+  const redirectHandler = () => {
+    if (item.link) {
+      Linking.openURL(item.link).catch((err) => {
+        alert(err);
+      });
+    } else {
+      switch (item.redirect_option.title) {
+        case "Course":
+          // get single course
+          break;
+        case "Shop":
+          singleJobHandler(item.redirect_option.id);
+
+        case "Store":
+          singleShopHandler(item.redirect_option.id);
+        default:
+          break;
+      }
+    }
+  };
+
   return (
     <View style={styles.carouselItem}>
-      <View>
+      <View style={{ width: SCREEN_WIDTH }}>
         <ImageBackground
-          source={{ uri: item.image }}
+          source={{ uri: item.formatted_image }}
           resizeMode="cover"
           style={{ width: "100%", height: "100%", position: "relative" }}
         />
@@ -79,27 +75,48 @@ const renderCasousel = ({ item }) => {
             color={colors.white}
           />
         </View>
-        {item.button && (
-          <View style={styles.button}>
-            <WhiteButton content="عرض المزيد" size={13} home={true} />
-          </View>
-        )}
+        <View style={styles.button}>
+          <WhiteButton
+            onPress={() => redirectHandler()}
+            content={fixedTitles.landingTitles["view-more"].title}
+            size={13}
+            home={true}
+          />
+        </View>
       </View>
     </View>
   );
 };
 
-export const HomeCarousel = () => {
+export const HomeCarousel = ({ singleJobHandler, singleShopHandler }) => {
   const [activeSlide, setActiveSlide] = useState(0);
+
+  const { landingData, fixedTitles } = useContext(AppContext);
+  const [index, setIndex] = useState(0);
   const carousel = useRef();
   return (
     <View>
-      <Carousel
-        data={DATA}
-        renderItem={renderCasousel}
-        sliderWidth={SCREEN_WIDTH}
-        itemWidth={SCREEN_WIDTH}
-        onSnapToItem={(index) => setActiveSlide(index)}
+      <FlatList
+        contentContainerStyle={{ flexGrow: 1 }}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        data={landingData.swiper}
+        renderItem={({ item }) => (
+          <RenderCasousel
+            fixedTitles={fixedTitles}
+            item={item}
+            singleShopHandler={(id) => singleShopHandler(id)}
+            singleJobHandler={(id) => singleJobHandler(id)}
+          />
+        )}
+        onMomentumScrollEnd={(event) => {
+          const index = Math.floor(
+            Math.floor(event.nativeEvent.contentOffset.x) /
+              Math.floor(event.nativeEvent.layoutMeasurement.width)
+          );
+          setIndex(index);
+        }}
       />
       <View
         style={{
@@ -108,9 +125,9 @@ export const HomeCarousel = () => {
         }}
       >
         <AnimatedDotsCarousel
-          length={DATA.length}
+          length={landingData.swiper.length}
           interpolateOpacityAndColor={true}
-          currentIndex={activeSlide}
+          currentIndex={index}
           maxIndicators={4}
           inactiveIndicatorConfig={{
             color: "white",

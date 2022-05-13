@@ -48,9 +48,8 @@ import * as WebBrowser from "expo-web-browser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const Signup = ({ route, navigation }) => {
-  const { setToken, setVerificationTypes, fixedTitles } = useContext(
-    AppContext
-  );
+  const { setToken, setVerificationTypes, fixedTitles, country } =
+    useContext(AppContext);
 
   const { isExpert, expoPushToken } = route.params;
   const [signUpLoader, setSignUpLoader] = useState(false);
@@ -61,7 +60,8 @@ export const Signup = ({ route, navigation }) => {
   const [errModal, setErrModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-
+  const [isCalendar, setIsCalendar] = useState(false);
+  const [yearsOfExperience, setYearsOfExperience] = useState();
   const [errorObject, setErrorObject] = useState({
     errorVisible: false,
     emailError: null,
@@ -75,6 +75,7 @@ export const Signup = ({ route, navigation }) => {
   });
   let experience = [];
   let expeienceType = [];
+  let yearsOfExperienceArr = [];
   React.useEffect(() => {
     fixedTitles.experience.map((data) => {
       experience.push(data.title);
@@ -82,7 +83,10 @@ export const Signup = ({ route, navigation }) => {
     fixedTitles.experienceType.map((data) => {
       expeienceType.push(data.title);
     });
-  }, [experience, experienceType]);
+    fixedTitles.yearsExp.map((data) => {
+      yearsOfExperienceArr.push(data.title);
+    });
+  }, [experience, experienceType, yearsOfExperienceArr]);
 
   WebBrowser.maybeCompleteAuthSession();
 
@@ -101,16 +105,11 @@ export const Signup = ({ route, navigation }) => {
       await Facebook.initializeAsync({
         appId: FACEBOOK_APP_ID,
       });
-      const {
-        type,
-        token,
-        expirationDate,
-        permissions,
-        declinedPermissions,
-      } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ["public_profile", "email"],
-        behavior: "web",
-      });
+      const { type, token, expirationDate, permissions, declinedPermissions } =
+        await Facebook.logInWithReadPermissionsAsync({
+          permissions: ["public_profile", "email"],
+          behavior: "web",
+        });
       if (type === "success") {
         fetch(
           `https://graph.facebook.com/me?fields=id,name,email,birthday&access_token=${token}`
@@ -130,7 +129,6 @@ export const Signup = ({ route, navigation }) => {
                 setErrorObject({
                   errorVisible: false,
                 });
-                console.log(res);
 
                 if (res.data.token) {
                   setToken(res.data.token);
@@ -173,7 +171,6 @@ export const Signup = ({ route, navigation }) => {
                   );
                 } else {
                   setErrorMessage(err.response.data.errors["email_or_phone"]);
-                  console.log(err.response.data.errors["email_or_phone"]);
                   setErrModal(true);
                   // setExpertModalVisible(true);
                 }
@@ -187,7 +184,6 @@ export const Signup = ({ route, navigation }) => {
       }
     } catch ({ message }) {
       setSignUpLoader(false);
-      console.log(`Facebook Login Error: ${message}`);
     }
   };
 
@@ -266,14 +262,12 @@ export const Signup = ({ route, navigation }) => {
               setErrModal(true);
             }
           } else {
-            console.log("err");
           }
         })
         .finally(() => {
           setSignUpLoader(false);
         });
     } else {
-      console.log("Google signup unsuccessful!");
       setSignUpLoader(false);
     }
   };
@@ -304,7 +298,6 @@ export const Signup = ({ route, navigation }) => {
               setToken(data.data.token);
               AsyncStorage.setItem("@token", JSON.stringify(res.data.token));
             } else {
-              console.log(data);
               navigation.navigate("continueSignup", {
                 apple_id: body.user_id,
                 email: body.email,
@@ -343,7 +336,6 @@ export const Signup = ({ route, navigation }) => {
                 setErrModal(true);
               }
             } else {
-              console.log("err");
             }
           })
           .finally(() => {
@@ -351,14 +343,11 @@ export const Signup = ({ route, navigation }) => {
           });
       } else {
         setSignUpLoader(false);
-
-        console.log("Apple signup error");
       }
     } catch (e) {
       setSignUpLoader(false);
 
       if (e.code === "ERR_CANCELED") {
-        console.log("appleLogin err: ", e.code);
       } else {
         if (e.code == "ERR_APPLE_AUTHENTICATION_UNAVAILABLE") {
           setModalTitle(e.code);
@@ -372,12 +361,10 @@ export const Signup = ({ route, navigation }) => {
   const authHandler = (values) => {
     switch (isExpert) {
       case false:
-        console.log("user");
         handleUserlogin(values);
         break;
 
       case true:
-        console.log("expert");
         handleExpertLogin(values);
         break;
 
@@ -387,18 +374,18 @@ export const Signup = ({ route, navigation }) => {
   };
 
   const handleUserlogin = (values) => {
+    let mobile = country.callingCode[0] + values.mobile;
     setSignUpLoader(true);
     var formdata = new FormData();
     formdata.append("full_name", values.fullName);
     formdata.append("email", values.email);
-    formdata.append("phone_number", values.mobile);
+    formdata.append("phone_number", mobile);
     formdata.append("password", values.password);
     formdata.append("password_confirmation", values.confirmPassword);
     formdata.append("address", values.location);
     formdata.append("birthday", values.dob);
     formdata.append("notification_token", expoPushToken);
     formdata.append("terms_conditions", toggleCheckBox);
-    console.log("user signing up");
 
     signUpUser(formdata)
       .then((res) => {
@@ -420,7 +407,6 @@ export const Signup = ({ route, navigation }) => {
           phoneVerification: true,
           facebookLogin: false,
         });
-        console.log(res);
         setSignUpLoader(false);
       })
       .catch((err) => {
@@ -445,30 +431,67 @@ export const Signup = ({ route, navigation }) => {
             err.response.data.errors.terms_conditions &&
             err.response.data.errors.terms_conditions[0],
         });
-        console.log(`err`, err.response.data);
       });
   };
   const handleExpertLogin = (values) => {
+    let mobile = country.callingCode[0] + values.mobile;
     setSignUpLoader(true);
     var formdata = new FormData();
-    formdata.append("full_name", values.fullName);
-    formdata.append("email", values.email);
-    formdata.append("phone_number", values.mobile);
-    formdata.append("password", values.password);
-    formdata.append("password_confirmation", values.confirmPassword);
-    formdata.append("experience_domain_id", experienceValue);
-    formdata.append("experience_type_id", experienceType);
-    formdata.append("educational_background", values.educationalBackground);
-    formdata.append("years_of_experience", values.experienceYears);
-    formdata.append("consultancy_fee", values.fees);
+    if (values.fullName) {
+      formdata.append("full_name", values.fullName);
+    }
+    if (values.email) {
+      formdata.append("email", values.email);
+    }
+    if (values.mobile) {
+      formdata.append("phone_number", mobile);
+    }
+    if (values.password) {
+      formdata.append("password", values.password);
+    }
+    if (values.confirmPassword) {
+      formdata.append("password_confirmation", values.confirmPassword);
+    }
+
+    if (experienceValue) {
+      formdata.append("experience_domain_id", experienceValue);
+    }
+
+    if (experienceType) {
+      formdata.append("experience_type_id", experienceType);
+    }
+    if (values.educationalBackground) {
+      formdata.append("educational_background", values.educationalBackground);
+    }
+
+    if (yearsOfExperience) {
+      formdata.append("years_of_experience_id", yearsOfExperience);
+    }
+    if (values.fees) {
+      formdata.append(
+        "consultancy_fee",
+        Number(values.fees.split("LBP")[1].replaceAll(",", ""))
+      );
+    }
     formdata.append("consultancy_fee_currency_id", "1");
     formdata.append("notification_token", expoPushToken);
     formdata.append("terms_conditions", toggleCheckBox);
-    console.log(formdata);
+
     expertSignUp(formdata)
       .then((res) => {
         setErrorObject({
           errorVisible: false,
+          emailError: null,
+          fullNameError: null,
+          passwordError: null,
+          mobileError: null,
+          termsConditionError: null,
+          experienceTypeError: null,
+          experienceError: null,
+          birthdayError: null,
+          educationBgError: null,
+          experienceYears: null,
+          fees: null,
         });
         setSignUpLoader(false);
         setExpertModalVisible(true);
@@ -490,12 +513,12 @@ export const Signup = ({ route, navigation }) => {
         // });
 
         // setExpertModalVisible(true);
-        console.log(res);
       })
       .catch((err) => {
+        console.log(err.response.data);
         setSignUpLoader(false);
         setErrorObject({
-          errorVisible: true,
+          errorVisible: false,
           emailError:
             err.response.data.errors.email && err.response.data.errors.email[0],
           fullNameError:
@@ -516,243 +539,264 @@ export const Signup = ({ route, navigation }) => {
           experienceTypeError:
             err.response.data.errors.experience_type_id &&
             err.response.data.errors.experience_type_id[0],
+          educationBgError:
+            err.response.data.errors.educational_background &&
+            err.response.data.errors.educational_background[0],
+          experienceYears:
+            err.response.data.errors.years_of_experience_id &&
+            err.response.data.errors.years_of_experience_id[0],
+          fees:
+            err.response.data.errors.consultancy_fee &&
+            err.response.data.errors.consultancy_fee[0],
         });
       });
   };
+
   return (
-    <View style={styles.container}>
-      <Formik
-        initialValues={{
-          fullName: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-          dob: "",
-          location: "",
-          mobile: "",
-          fees: "",
-          educationalBackground: "",
-          experienceYears: "",
-        }}
-      >
-        {({ handleChange, values }) => (
-          <LinearGradient
-            colors={[
-              "#104251",
-              "#12515A",
-              "#197A74",
-              "#1F9B89",
-              "#419E79",
-              "#6DA265",
-              "#93A654",
-              "#B2A946",
-              "#C9AC3B",
-              "#DAAD33",
-              "#E4AE2F",
-              "#E8AF2E",
-              "#E8AF2E",
-              "#E8AF2E",
-              "#E8AF2E",
-            ]}
-            start={{ x: 0, y: 0.2 }}
-            end={{ x: 1, y: 1.5 }}
-            style={styles.background}
-          >
-            <SafeAreaView>
-              <ScrollView
-                style={{ height: SCREEN_HEIGHT }}
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                  paddingBottom: 64,
-                }}
-              >
-                <View style={styles.loader}>
-                  <ActivityIndicator
-                    animating={signUpLoader}
-                    color={colors.dark_blue}
-                    size="large"
-                    hidesWhenStopped={true}
-                  />
-                </View>
-                <KeyboardAvoidingView
-                  keyboardVerticalOffset={-120}
-                  behavior={Platform.OS === "ios" ? "position" : "padding"}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "position" : "height"}
+    >
+      <View style={styles.container}>
+        <Formik
+          initialValues={{
+            fullName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            dob: "",
+            location: "",
+            mobile: "",
+            fees: "",
+            educationalBackground: "",
+            experienceYears: "",
+          }}
+        >
+          {({ handleChange, values }) => (
+            <LinearGradient
+              colors={[
+                "#104251",
+                "#12515A",
+                "#197A74",
+                "#1F9B89",
+                "#419E79",
+                "#6DA265",
+                "#93A654",
+                "#B2A946",
+                "#C9AC3B",
+                "#DAAD33",
+                "#E4AE2F",
+                "#E8AF2E",
+                "#E8AF2E",
+                "#E8AF2E",
+                "#E8AF2E",
+              ]}
+              start={{ x: 0, y: 0.2 }}
+              end={{ x: 1, y: 1.5 }}
+              style={styles.background}
+            >
+              <SafeAreaView>
+                <ScrollView
+                  style={{ height: SCREEN_HEIGHT }}
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingBottom: 64,
+                  }}
                 >
-                  <View style={styles.logo}>
-                    <ImageBackground
-                      style={{ width: 125, height: 105 }}
-                      source={require("../../assets/LOGO.png")}
-                      resizeMode="contain"
-                    />
-                    <View style={styles.arrow}>
-                      <TouchableOpacity
-                        style={{ width: 40, height: 40 }}
-                        onPress={() => navigation.pop()}
-                      >
-                        <ArrowSVG
-                          style={{
-                            transform: [
-                              {
-                                rotateY: I18nManager.isRTL ? "0deg" : "180deg",
-                              },
-                            ],
-                          }}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <View style={styles.content}>
-                    <View style={styles.title}>
-                      <Typography
-                        content={
-                          isExpert
-                            ? fixedTitles.authTitles["sign-up-expert"].title
-                            : fixedTitles.authTitles["sign-up-user"].title
-                        }
-                        color={colors.white}
-                        bold={true}
-                        size={20}
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.loader}>
+                      <ActivityIndicator
+                        animating={signUpLoader}
+                        color={colors.dark_blue}
+                        size="large"
+                        hidesWhenStopped={true}
                       />
                     </View>
-
-                    <View style={styles.row}>
-                      {Platform.OS === "ios" && (
+                    <View style={styles.logo}>
+                      <ImageBackground
+                        style={{ width: 125, height: 105 }}
+                        source={require("../../assets/LOGO.png")}
+                        resizeMode="contain"
+                      />
+                      <View style={styles.arrow}>
                         <TouchableOpacity
-                          onPress={() => appleAuthHandler()}
+                          style={{ width: 40, height: 40 }}
+                          onPress={() => navigation.pop()}
+                        >
+                          <ArrowSVG
+                            style={{
+                              transform: [
+                                {
+                                  rotateY: I18nManager.isRTL
+                                    ? "0deg"
+                                    : "180deg",
+                                },
+                              ],
+                            }}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                    <View style={styles.content}>
+                      <View style={styles.title}>
+                        <Typography
+                          content={
+                            isExpert
+                              ? fixedTitles.authTitles["sign-up-expert"].title
+                              : fixedTitles.authTitles["sign-up-user"].title
+                          }
+                          color={colors.white}
+                          bold={true}
+                          size={20}
+                        />
+                      </View>
+
+                      <View style={styles.row}>
+                        {Platform.OS === "ios" && (
+                          <TouchableOpacity
+                            onPress={() => appleAuthHandler()}
+                            style={styles.icon}
+                          >
+                            <AppleSVG />
+                          </TouchableOpacity>
+                        )}
+                        <TouchableOpacity
+                          onPress={() => googleAuthHandler()}
+                          style={[styles.icon, { marginHorizontal: 30 }]}
+                        >
+                          <GoogleSVG />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => facebookAuthHandler()}
                           style={styles.icon}
                         >
-                          <AppleSVG />
+                          <FacebookSVG />
                         </TouchableOpacity>
-                      )}
-                      <TouchableOpacity
-                        onPress={() => googleAuthHandler()}
-                        style={[styles.icon, { marginHorizontal: 30 }]}
-                      >
-                        <GoogleSVG />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => facebookAuthHandler()}
-                        style={styles.icon}
-                      >
-                        <FacebookSVG />
-                      </TouchableOpacity>
-                      {Platform.OS === "android" && (
-                        <View
-                          style={[
-                            styles.icons,
-                            { marginHorizontal: I18nManager.isRTL ? 0 : 20 },
-                          ]}
-                        ></View>
-                      )}
-                    </View>
-                    <View style={styles.or}>
-                      <Typography
-                        content={fixedTitles.authTitles["sign-in-or"].title}
-                        color={colors.white}
-                        size={16}
-                        lh={19}
-                        align="center"
-                      />
-                    </View>
-                    <View style={styles.form}>
-                      {!isExpert ? (
-                        <Form
-                          handleChange={handleChange}
-                          values={values}
-                          toggleCheckBox={toggleCheckBox}
-                          setToggleCheckBox={setToggleCheckBox}
-                          errorObject={errorObject}
-                          selectedStartDate={selectedStartDate}
-                          setSelectedStartDate={setSelectedStartDate}
-                        />
-                      ) : (
-                        <ExpertForm
-                          handleChange={handleChange}
-                          values={values}
-                          toggleCheckBox={toggleCheckBox}
-                          setToggleCheckBox={setToggleCheckBox}
-                          setExperienceValue={setExperienceValue}
-                          setExperienceType={setExperienceType}
-                          errorObject={errorObject}
-                          experience={experience}
-                          experienceType={expeienceType}
-                          experienceValue={experienceValue}
-                        />
-                      )}
-                    </View>
-                  </View>
-                  <>
-                    {errorObject.errorVisible && (
-                      <View
-                        style={{
-                          width: SCREEN_WIDTH * 0.9,
-                          marginHorizontal: 24,
-                          marginBottom: 15,
-                        }}
-                      >
-                        <Typography
-                          content={errorObject.termsConditionError}
-                          color="red"
-                          size={12}
-                          align="left"
-                        />
+                        {Platform.OS === "android" && (
+                          <View
+                            style={[
+                              styles.icons,
+                              {
+                                marginHorizontal: I18nManager.isRTL ? 0 : 20,
+                              },
+                            ]}
+                          ></View>
+                        )}
                       </View>
-                    )}
-                    <View style={[styles.policy]}>
-                      <View>
-                        <Checkbox
-                          style={styles.checkbox}
-                          value={toggleCheckBox}
-                          onValueChange={setToggleCheckBox}
-                          color={
-                            toggleCheckBox
-                              ? colors.dark_blue
-                              : "rgba(255, 255, 255, 0.6)"
-                          }
-                        />
-                      </View>
-                      <TouchableOpacity
-                        onPress={() => setToggleCheckBox(!toggleCheckBox)}
-                        style={{ marginRight: 12 }}
-                      >
+                      <View style={styles.or}>
                         <Typography
-                          size={12}
+                          content={fixedTitles.authTitles["sign-in-or"].title}
                           color={colors.white}
-                          align="left"
-                          content={fixedTitles.authTitles["terms"].title}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.button}>
-                      <View style={styles.submit}>
-                        <WhiteButton
                           size={16}
-                          content={fixedTitles.authTitles["sign-up"].title}
-                          onPress={() => authHandler(values)}
+                          lh={19}
+                          align="center"
                         />
                       </View>
+                      <View style={styles.form}>
+                        {!isExpert ? (
+                          <Form
+                            handleChange={handleChange}
+                            values={values}
+                            toggleCheckBox={toggleCheckBox}
+                            setToggleCheckBox={setToggleCheckBox}
+                            errorObject={errorObject}
+                            selectedStartDate={selectedStartDate}
+                            setSelectedStartDate={setSelectedStartDate}
+                            isCalendar={isCalendar}
+                            setIsCalendar={setIsCalendar}
+                          />
+                        ) : (
+                          <ExpertForm
+                            handleChange={handleChange}
+                            values={values}
+                            toggleCheckBox={toggleCheckBox}
+                            setToggleCheckBox={setToggleCheckBox}
+                            setExperienceValue={setExperienceValue}
+                            setExperienceType={setExperienceType}
+                            errorObject={errorObject}
+                            experience={experience}
+                            experienceType={expeienceType}
+                            experienceValue={experienceValue}
+                            yearsOfExperience={yearsOfExperience}
+                            setYearsOfExperience={setYearsOfExperience}
+                            yearsOfExperienceArr={yearsOfExperienceArr}
+                          />
+                        )}
+                      </View>
                     </View>
-                  </>
-                </KeyboardAvoidingView>
-              </ScrollView>
-            </SafeAreaView>
-          </LinearGradient>
-        )}
-      </Formik>
-      <MessageModal
-        visible={expertModalVisible}
-        message={errorMessage}
-        title={!errModal && "شكرا لك على التسجيل"}
-        desc={
-          !errModal &&
-          "تم إنشاء ملف التعريف الخاص بك بنجاح. سوف يتم الرد عليك قريبا من قبل عملائنا."
-        }
-        withButton={errModal ? false : true}
-        expert={errModal ? false : true}
-        close={() => modalHandler()}
-      />
-    </View>
+                    <>
+                      {errorObject.termsConditionError && (
+                        <View
+                          style={{
+                            width: SCREEN_WIDTH * 0.9,
+                            marginHorizontal: 24,
+                            marginBottom: 15,
+                          }}
+                        >
+                          <Typography
+                            content={errorObject.termsConditionError}
+                            color="red"
+                            size={12}
+                            align="left"
+                          />
+                        </View>
+                      )}
+                      <View style={[styles.policy]}>
+                        <View>
+                          <Checkbox
+                            style={styles.checkbox}
+                            value={toggleCheckBox}
+                            onValueChange={setToggleCheckBox}
+                            color={
+                              toggleCheckBox
+                                ? colors.dark_blue
+                                : "rgba(255, 255, 255, 0.6)"
+                            }
+                          />
+                        </View>
+                        <TouchableOpacity
+                          onPress={() => setToggleCheckBox(!toggleCheckBox)}
+                          style={{ marginRight: 12 }}
+                        >
+                          <Typography
+                            size={12}
+                            color={colors.white}
+                            align="left"
+                            content={fixedTitles.authTitles["terms"].title}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <View style={styles.button}>
+                        <View style={styles.submit}>
+                          <WhiteButton
+                            size={16}
+                            content={fixedTitles.authTitles["sign-up"].title}
+                            onPress={() => authHandler(values)}
+                          />
+                        </View>
+                      </View>
+                    </>
+                  </View>
+                </ScrollView>
+              </SafeAreaView>
+            </LinearGradient>
+          )}
+        </Formik>
+        <MessageModal
+          visible={expertModalVisible}
+          message={errorMessage}
+          title={!errModal && "شكرا لك على التسجيل"}
+          desc={
+            !errModal &&
+            "تم إنشاء ملف التعريف الخاص بك بنجاح. سوف يتم الرد عليك قريبا من قبل عملائنا."
+          }
+          withButton={errModal ? false : true}
+          expert={errModal ? false : true}
+          close={() => modalHandler()}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

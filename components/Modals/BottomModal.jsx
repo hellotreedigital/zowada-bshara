@@ -1,11 +1,17 @@
-import React from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import React, { useContext } from "react";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import Modal from "react-native-modal";
 import { BlurView } from "expo-blur";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import Typography from "../Typography/Typography";
 import { colors } from "../../globals/colors";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import AppContext from "../../appContext/AppContext";
 
 const BottomModal = ({
   visible,
@@ -13,43 +19,52 @@ const BottomModal = ({
   cameraHandler,
   imageHandler,
   profilePic,
+  funding,
   ...props
 }) => {
+  const { fixedTitles } = useContext(AppContext);
+
   return (
     <Modal animationType="slide" isVisible={visible} hasBackdrop={true}>
       <BlurView intensity={60} style={styles.blurContainer}>
         <View style={styles.modalView}>
           <View style={styles.list}>
-            <TouchableOpacity
-              disabled={!profilePic ? true : false}
-              style={[styles.box]}
-            >
-              <Typography
-                content="ازل الصوره الحاليه"
-                color={profilePic ? colors.dark_blue : "gray"}
-                roman={true}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => cameraHandler()}
-              style={styles.box}
-            >
-              <Typography
-                content="تصوير"
-                color={colors.dark_blue}
-                roman={true}
-              />
-            </TouchableOpacity>
+            {!funding && (
+              <TouchableOpacity
+                disabled={!profilePic ? true : false}
+                style={[styles.box]}
+              >
+                <Typography
+                  content={fixedTitles.profileTitles["remove-picture"].title}
+                  color={profilePic ? colors.dark_blue : "gray"}
+                  roman={true}
+                />
+              </TouchableOpacity>
+            )}
+            {!funding && (
+              <TouchableOpacity
+                onPress={() => cameraHandler()}
+                style={styles.box}
+              >
+                <Typography
+                  content={
+                    fixedTitles.profileTitles["choose-from-camera"].title
+                  }
+                  color={colors.dark_blue}
+                  roman={true}
+                />
+              </TouchableOpacity>
+            )}
             <TouchableOpacity onPress={() => imageHandler()} style={styles.box}>
               <Typography
-                content="اختيار من الصور"
+                content={fixedTitles.profileTitles["choose-from-gallery"].title}
                 color={colors.dark_blue}
                 roman={true}
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => props.close()} style={styles.box}>
               <Typography
-                content="إلغاء"
+                content={fixedTitles.profileTitles["modal-close"].title}
                 color={colors.dark_blue}
                 roman={true}
               />
@@ -65,9 +80,10 @@ export default BottomModal;
 
 const styles = StyleSheet.create({
   modalView: {
-    height: SCREEN_HEIGHT * 0.35,
+    height: "auto",
     position: "relative",
-    bottom: Platform.OS == "ios" ? -30 : 0,
+    paddingBottom: 20,
+    bottom: Platform.OS == "ios" ? 0 : 30,
     marginTop: "auto",
     backgroundColor: "white",
     width: SCREEN_WIDTH,

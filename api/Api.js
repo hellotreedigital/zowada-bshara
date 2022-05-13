@@ -19,7 +19,7 @@ apiInstance.interceptors.request.use(
         Accept: "application/json",
       };
     }
-
+    console.log(token);
     if (locale) {
       let localRegion = locale === "1" ? "en" : "ar";
 

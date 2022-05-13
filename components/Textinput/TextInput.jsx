@@ -6,6 +6,7 @@ import {
   TextInput,
   ShadowPropTypesIOS,
   I18nManager,
+  TouchableOpacity,
 } from "react-native";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
@@ -28,6 +29,7 @@ export const RNTextInput = ({ ...props }) => {
               color="#fff"
               size={14}
               roman={true}
+              align="left"
             />
           </TouchableOpacity>
         </View>

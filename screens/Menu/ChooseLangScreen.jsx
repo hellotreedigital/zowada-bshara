@@ -19,6 +19,7 @@ import {
 import ArrowSVG from "../../SVGR/Globals/Arrow";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Updates from "expo-updates";
+import { Header } from "../../components/Header/Header";
 
 const ChooseLangScreen = ({ navigation }) => {
   let arrOReng = I18nManager.isRTL === false ? 1 : 0;
@@ -43,9 +44,7 @@ const ChooseLangScreen = ({ navigation }) => {
         // setAppLanguage(id);
         // await I18nManager.forceRTL(id == "1" ? true : false);
         await Updates.reloadAsync();
-      } catch (error) {
-        console.log("couldnt update the app language");
-      }
+      } catch (error) {}
     }
   };
 
@@ -65,30 +64,12 @@ const ChooseLangScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        <View style={styles.header}>
-          <View style={styles.row}>
-            <TouchableOpacity onPress={() => navigation.pop()}>
-              <ArrowSVG
-                fill="#E54C2E"
-                style={{
-                  transform: [
-                    { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
-                  ],
-                }}
-              />
-            </TouchableOpacity>
-            <View style={styles.headerText}>
-              <Typography
-                size={20}
-                bold={true}
-                lh={32}
-                content={fixedTitles.settingsTitles["languages"].title}
-                align="left"
-                color={colors.focused}
-              />
-            </View>
-          </View>
-        </View>
+        <Header
+          navigation={navigation}
+          red
+          title={fixedTitles.settingsTitles["languages"].title}
+        />
+
         <View style={styles.list}>
           <FlatList
             data={data}
@@ -123,12 +104,12 @@ export default ChooseLangScreen;
 
 const styles = StyleSheet.create({
   container: {
-    width: SCREEN_WIDTH * 0.9,
-    marginHorizontal: 24,
-    marginTop: STATUS_BAR_HEIGHT,
+    flex: 1,
+    backgroundColor: "white",
   },
   list: {
-    height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH - 40,
+    alignSelf: "center",
     marginTop: 30,
   },
   row: {

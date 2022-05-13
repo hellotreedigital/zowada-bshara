@@ -27,6 +27,9 @@ import { signInUser } from "../../api/Auth/SignIn";
 import { verifyOTP } from "../../api/Auth/ResetPassword/ResetPassword";
 import { requestSocialOTP } from "../../api/Auth/RequestOtp";
 import { authCheckAndLogin } from "../../api/Auth/Socials/Login";
+import { getCasesList, getQuestionList } from "../../api/Profile/Profile";
+import { getUserData } from "../../api/Userinfo/UserInformation";
+import { getBestExperts, getExperts } from "../../api/Expert/Expert";
 export const Otp = ({ navigation, route }) => {
   const {
     email,
@@ -44,7 +47,19 @@ export const Otp = ({ navigation, route }) => {
     mailVerification,
   } = route.params;
 
-  const { setToken, fixedTitles, setUserName } = useContext(AppContext);
+  const {
+    setToken,
+    fixedTitles,
+    setUserName,
+    setQuestionList,
+    setCasesList,
+    setUserData,
+    setProfilePic,
+    setUserId,
+    setTermAccepted,
+    setExperts,
+    setBestExperts,
+  } = useContext(AppContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [code, setCode] = useState(null);
@@ -62,7 +77,6 @@ export const Otp = ({ navigation, route }) => {
         navigation.navigate("newpassword", {
           formdata: formdata,
         });
-        console.log(res);
       })
       .catch((err) => {
         setLoadingOtp(false);
@@ -71,8 +85,57 @@ export const Otp = ({ navigation, route }) => {
           setErrorMessage(err.response.data.errors.code);
           setModalVisible(true);
         }
-        console.log(err);
       });
+  };
+
+  const getExpertsHandler = () => {
+    getExperts()
+      .then((res) => {
+        setExperts(res.data.experts);
+      })
+      .catch((err) => {});
+    return () => null;
+  };
+  const getBestExpertsHandler = () => {
+    getBestExperts()
+      .then((res) => {
+        setBestExperts(res.data.experts.data);
+        setFaq(res.data.faqs);
+      })
+      .catch((err) => {});
+    return () => null;
+  };
+
+  const userDataHandler = () => {
+    getUserData()
+      .then((res) => {
+        console.error(res.data);
+        setUserData(res.data.user);
+        setProfilePic(res.data.user.image_absolute_url);
+        setUserName(res.data.user.full_name);
+        setUserId(res.data.user.id);
+        setTermAccepted(res.data.user.terms_conditions_accepted);
+        // setCanBookForFree(res.data.user.free_consultation_taken);
+      })
+      .catch((err) => {
+        alert("err", err);
+      });
+  };
+
+  const getCasesListHandler = () => {
+    getCasesList()
+      .then((res) => {
+        setCasesList(res.data.cases.data);
+      })
+      .catch((err) => {});
+  };
+
+  const getQuestionListHandler = () => {
+    getQuestionList()
+      .then((res) => {
+        setQuestionList(res.data.questions.data);
+      })
+      .catch((err) => {});
   };
 
   const loginHandler = () => {
@@ -80,29 +143,36 @@ export const Otp = ({ navigation, route }) => {
     if (facebookLogin) {
       authCheckAndLogin("facebook-auth", formdata)
         .then((res) => {
-          setLoadingOtp(false);
-
           setToken(res.data.token);
-          console.log(`logged in`);
+          setLoadingOtp(false);
+          setUserName(res.data.user.full_name);
+          getExpertsHandler();
+          getBestExpertsHandler();
+          getCasesListHandler();
+          getQuestionListHandler();
+          userDataHandler();
         })
         .catch((err) => {
           setLoadingOtp(false);
           setModalVisible(true);
           setErrorMessage(err.response.data.errors["email_or_phone"]);
-          console.log(err.response.data);
         });
     } else {
       signInUser(formdata)
         .then((res) => {
           setLoadingOtp(false);
 
+          setUserName(res.data.user.full_name);
+          userDataHandler();
+          getExpertsHandler();
+          getBestExpertsHandler();
+          getCasesListHandler();
+          getQuestionListHandler();
           setToken(res.data.token);
-          console.log(res);
         })
         .catch((err) => {
           setLoadingOtp(false);
           let error = err.response.data.errors;
-          console.log(err.response.data);
           setModalVisible(true);
           setErrorMessage(
             error["email_or_phone"] && error["email_or_phone"][0]
@@ -120,44 +190,26 @@ export const Otp = ({ navigation, route }) => {
       !mailVerification
     ) {
       requestMobileOTP(email)
-        .then((res) => {
-          console.log("verify mobile otp has been sent to ", email);
-        })
-        .catch((err) => {
-          console.log(err.response.data);
-        });
+        .then((res) => {})
+        .catch((err) => {});
     } else if (facebookLogin) {
       //email == facebook
       requestSocialOTP(email, "facebook")
-        .then((res) => {
-          console.log("OTp sent to ", email);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        .then((res) => {})
+        .catch((err) => {});
     } else if (googleLogin) {
       requestSocialOTP(googleId, "google")
-        .then((res) => {
-          console.log("OTp sent to ", googleId);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        .then((res) => {})
+        .catch((err) => {});
     } else if (appleLogin) {
-      console.log("sending apple otp");
       requestSocialOTP(appleId, "apple")
-        .then((res) => {
-          console.log("OTp sent to ", appleId);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        .then((res) => {})
+        .catch((err) => {});
     }
   };
 
   React.useEffect(() => {
     if (!sendOtp) return;
-    console.log("sending OTP");
     requestOtpHandler();
   }, []);
 
@@ -194,20 +246,36 @@ export const Otp = ({ navigation, route }) => {
           // setLoadingOtp(false);
           otpCode = null;
           setCode(null);
-          console.log(res.data);
 
-          console.log(res.data.token);
           if (res.data.token) {
             if (res.data.user.is_expert === 1) {
               if (res.data.user.expert_approved !== null) {
-                setToken(res.data.token);
+                // setUserName(res.data.user.full_name);
+                // userDataHandler();
+                // getExpertsHandler();
+                // getBestExpertsHandler();
+                // getCasesListHandler();
+                // getQuestionListHandler();
+                navigation.pop();
+                // setToken(res.data.token);
               } else {
+                setUserName(res.data.user.full_name);
+                userDataHandler();
+                getExpertsHandler();
+                getBestExpertsHandler();
+                getCasesListHandler();
+                getQuestionListHandler();
+                setToken(res.data.token);
                 setIsExpert(true);
                 setModalVisible(true);
               }
             } else {
               setToken(res.data.token);
               setUserName(res.data.user.full_name);
+              getExpertsHandler();
+              getBestExpertsHandler();
+              getCasesListHandler();
+              getQuestionListHandler();
             }
           }
         })
@@ -224,10 +292,12 @@ export const Otp = ({ navigation, route }) => {
           );
 
           setModalVisible(true);
-          // console.log(err.response.data);
+          //
+        })
+        .finally(() => {
+          userDataHandler();
         });
     } else {
-      console.log("Verifying OTP please wait !");
       resetPasswordHandler();
     }
   };
@@ -330,9 +400,7 @@ export const Otp = ({ navigation, route }) => {
                     autoFocusOnLoad
                     codeInputFieldStyle={styles.underlineStyleBase}
                     codeInputHighlightStyle={styles.underlineStyleHighLighted}
-                    onCodeFilled={(code) => {
-                      console.log(`Code is ${code}, you are good to go!`);
-                    }}
+                    onCodeFilled={(code) => {}}
                   />
                 </View>
                 <View style={styles.submit}>

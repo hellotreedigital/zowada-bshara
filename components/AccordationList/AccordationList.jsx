@@ -1,6 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { StyleSheet, Text, View, Animated } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
+import AppContext from "../../appContext/AppContext";
 import { colors } from "../../globals/colors";
 import { SCREEN_WIDTH } from "../../globals/globals";
 import ArrowDownSVG from "../../SVGR/Globals/ArrowDown";
@@ -14,10 +15,13 @@ const RenderHeader = ({
   section,
   index,
   SECTIONS,
-  activeSections,
   animatedValue,
+  activeSections,
+
   ...props
 }) => {
+  let arr = [];
+  arr.push(section);
   let arrLength = SECTIONS.length - 1;
 
   return (
@@ -27,63 +31,46 @@ const RenderHeader = ({
         {
           borderTopRightRadius: index == 0 ? 10 : 0,
           borderTopLeftRadius: index == 0 ? 10 : 0,
-          borderBottomWidth: index == arrLength ? 1 : 0,
-          borderBottomRightRadius:
-            index == arrLength && !activeSections.includes(arrLength.toString())
-              ? 10
-              : 0,
-          borderBottomLeftRadius:
-            index == arrLength && !activeSections.includes(arrLength.toString())
-              ? 10
-              : 0,
+          borderBottomWidth: index === SECTIONS.length ? 1 : 1,
+          borderBottomRightRadius: 0,
+          borderBottomLeftRadius: 1,
+          height: "auto",
+          minHeight: 50,
         },
       ]}
     >
-      <Typography align="left" content={section} color={colors.dark_blue} />
-      <View style={{ transform: [{ rotateX: 0 }] }}>
+      <View style={{ width: "100%" }}>
+        <Typography align="left" content={section} color={colors.dark_blue} />
+      </View>
+      <View style={{ left: -10 }}>
         <ArrowDownSVG />
       </View>
     </View>
   );
 };
-const renderContent = (section) => {
+const renderContent = (section, index) => {
   return (
-    <View style={[styles.content, { borderTopWidth: 0 }]}>
-      <Typography align="left" content={section} color={colors.dark_blue} />
+    <View
+      style={[
+        styles.content,
+        {
+          borderTopWidth: 1,
+          borderBottomWidth: 1,
+          minHeight: 50,
+          height: "auto",
+        },
+      ]}
+    >
+      <View style={{ height: "auto" }}>
+        <Typography align="left" content={section} color={colors.dark_blue} />
+      </View>
     </View>
   );
 };
-export const AccordationList = () => {
+export const AccordationList = ({ data }) => {
+  const { faq } = useContext(AppContext);
   const [activeSections, setActiveSections] = useState([]);
   const animatedValue = React.useRef(new Animated.Value(0)).current;
-
-  const SECTIONS = [
-    {
-      id: "0",
-      title: "السؤال هنا",
-      content: "Lorem ipsum...",
-    },
-    {
-      id: "1",
-      title: "السؤال هنا",
-      content: "Lorem ipsum...",
-    },
-    {
-      id: "2",
-      title: "السؤال هنا",
-      content: "Lorem ipsum...",
-    },
-    {
-      id: "3",
-      title: "السؤال هنا",
-      content: "Lorem ipsum...",
-    },
-    {
-      id: "4",
-      title: "السؤال هنا",
-      content: "Lorem ipsum...",
-    },
-  ];
 
   const updateSections = (value) => {
     setActiveSections(value);
@@ -92,19 +79,22 @@ export const AccordationList = () => {
   return (
     <View style={styles.container}>
       <Accordion
-        sections={SECTIONS}
+        renderAsFlatList
+        sections={data ? data : faq}
         activeSections={activeSections}
         renderSectionTitle={() => renderSelectionTitle()}
-        renderHeader={({ title }, index) => (
-          <RenderHeader
-            section={title}
-            index={index}
-            SECTIONS={SECTIONS}
-            activeSections={activeSections}
-            animatedValue={animatedValue}
-          />
-        )}
-        renderContent={({ content }) => renderContent(content)}
+        renderHeader={({ question, ...props }, index) => {
+          return (
+            <RenderHeader
+              section={question}
+              index={index}
+              SECTIONS={faq}
+              activeSections={activeSections}
+              animatedValue={animatedValue}
+            />
+          );
+        }}
+        renderContent={({ answer }, index) => renderContent(answer, index)}
         onChange={(activeSections) => updateSections(activeSections)}
         keyExtractor={(item) => item.id}
         underlayColor={"white"}

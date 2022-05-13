@@ -22,9 +22,10 @@ import { expertAuth, userAuth } from "../../api/Auth/Socials/CheckAuth";
 import ModalDropdown from "react-native-modal-dropdown";
 import MessageModal from "../../components/Modals/MessageModal";
 import AppContext from "../../appContext/AppContext";
+import PhonePicker from "../../components/PhonePicker/PhonePicker";
 
 export const ContinueSignup = ({ navigation, route }) => {
-  const { fixedTitles } = useContext(AppContext);
+  const { fixedTitles, country } = useContext(AppContext);
 
   const Experience = ["test", "test2", "نوع الخبرة"];
 
@@ -68,11 +69,13 @@ export const ContinueSignup = ({ navigation, route }) => {
   };
 
   const continueSignupUser = (mobile, fullName) => {
+    let phoneNumber = country.callingCode[0] + mobile;
+
     if (!googleAuth && !appleLogin) {
       setLoading(true);
       var formdata = new FormData();
       formdata.append("facebook_id", facebook_id);
-      formdata.append("phone_number", mobile);
+      formdata.append("phone_number", phoneNumber);
       formdata.append("access_token", access_token);
       formdata.append("terms_conditions", true);
       formdata.append("notification_token", expoPushToken);
@@ -131,8 +134,10 @@ export const ContinueSignup = ({ navigation, route }) => {
           });
         });
     } else if (googleAuth) {
+      let phoneNumber = country.callingCode[0] + mobile;
+
       let googleFormData = new FormData();
-      googleFormData.append("phone_number", mobile);
+      googleFormData.append("phone_number", phoneNumber);
       googleFormData.append("id_token", idToken);
       googleFormData.append("client_id", clientId);
       googleFormData.append("terms_conditions", true);
@@ -201,9 +206,10 @@ export const ContinueSignup = ({ navigation, route }) => {
           console.log(err);
         });
     } else if (appleLogin) {
-      console.log("apple id ");
+      let phoneNumber = country.callingCode[0] + mobile;
+
       let appleFormdata = new FormData();
-      appleFormdata.append("phone_number", mobile);
+      appleFormdata.append("phone_number", phoneNumber);
       appleFormdata.append("id_token", idToken);
       appleFormdata.append("user_id", clientId);
       appleFormdata.append("full_name", fullName);
@@ -251,18 +257,22 @@ export const ContinueSignup = ({ navigation, route }) => {
     yearsOfExperience,
     fullName
   ) => {
+    const [yearsOfExperienceID, setYearsOfExperienceId] = useState();
+
     setLoading(true);
     if (!googleAuth && !appleLogin) {
+      let phoneNumber = country.callingCode[0] + mobile;
+
       setLoading(true);
       var formdata = new FormData();
       formdata.append("access_token", access_token);
       formdata.append("facebook_id", facebook_id);
-      formdata.append("phone_number", mobile);
+      formdata.append("phone_number", phoneNumber);
       formdata.append("notification_token", expoPushToken);
       formdata.append("experience_domain_id", experienceValue);
       formdata.append("experience_type_id", experienceType);
       formdata.append("educational_background", educationalBg);
-      formdata.append("years_of_experience", yearsOfExperience);
+      formdata.append("years_of_experience_id", yearsOfExperienceID);
       formdata.append("consultancy_fee", fees);
       formdata.append("consultancy_fee_currency_id", "1");
       formdata.append("terms_conditions", true);
@@ -303,25 +313,28 @@ export const ContinueSignup = ({ navigation, route }) => {
               err.response.data.errors.phone_number &&
               err.response.data.errors.phone_number[0],
             experienceError:
-              err.response.data.errors.years_of_experience &&
-              err.response.data.errors.years_of_experience[0],
+              err.response.data.errors.years_of_experience_id &&
+              err.response.data.errors.years_of_experience_id[0],
           });
           console.log(err.response.data);
         });
     } else if (googleAuth) {
+      let phoneNumber = country.callingCode[0] + mobile;
+
       setErrorObject({
         errorVisible: false,
       });
+
       let googleFormData = new FormData();
       googleFormData.append("access_token", access_token);
       googleFormData.append("client_id", clientId);
       googleFormData.append("id_token", idToken);
-      googleFormData.append("phone_number", mobile);
+      googleFormData.append("phone_number", phoneNumber);
       googleFormData.append("notification_token", expoPushToken);
       googleFormData.append("experience_domain_id", experienceValue);
       googleFormData.append("experience_type_id", experienceType);
       googleFormData.append("educational_background", educationalBg);
-      googleFormData.append("years_of_experience", yearsOfExperience);
+      googleFormData.append("years_of_experience_id", yearsOfExperienceID);
       googleFormData.append("terms_conditions", true);
       googleFormData.append("consultancy_fee", fees);
       googleFormData.append("consultancy_fee_currency_id", "1");
@@ -367,15 +380,16 @@ export const ContinueSignup = ({ navigation, route }) => {
               err.response.data.errors.phone_number &&
               err.response.data.errors.phone_number[0],
             experienceError:
-              err.response.data.errors.years_of_experience &&
-              err.response.data.errors.years_of_experience[0],
+              err.response.data.errors.years_of_experience_id &&
+              err.response.data.errors.years_of_experience_id[0],
           });
         });
     } else if (appleLogin) {
       console.log("apple id ");
+      let phoneNumber = country.callingCode[0] + mobile;
 
       let appleFormdata = new FormData();
-      appleFormdata.append("phone_number", mobile);
+
       appleFormdata.append("id_token", idToken);
       appleFormdata.append("user_id", clientId);
       appleFormdata.append("full_name", fullName);
@@ -383,8 +397,8 @@ export const ContinueSignup = ({ navigation, route }) => {
       appleFormdata.append("educational_background", educationalBg);
       appleFormdata.append("experience_domain_id", experienceValue);
       appleFormdata.append("experience_type_id", experienceType);
-      appleFormdata.append("phone_number", mobile);
-      appleFormdata.append("years_of_experience", yearsOfExperience);
+      appleFormdata.append("phone_number", phoneNumber);
+      appleFormdata.append("years_of_experience_id", yearsOfExperienceID);
       appleFormdata.append("notification_token", expoPushToken);
       appleFormdata.append("terms_conditions", true);
 
@@ -430,8 +444,8 @@ export const ContinueSignup = ({ navigation, route }) => {
               err.response.data.errors.phone_number &&
               err.response.data.errors.phone_number[0],
             experienceError:
-              err.response.data.errors.years_of_experience &&
-              err.response.data.errors.years_of_experience[0],
+              err.response.data.errors.years_of_experience_id &&
+              err.response.data.errors.years_of_experience_id[0],
           });
         })
         .finally(() => {
@@ -439,6 +453,12 @@ export const ContinueSignup = ({ navigation, route }) => {
         });
     }
   };
+  let yearsOfExperienceArr = [];
+  React.useEffect(() => {
+    fixedTitles.yearsExp.map((data) => {
+      yearsOfExperienceArr.push(data.title);
+    });
+  }, [experienceType, yearsOfExperienceArr]);
 
   return (
     <View style={styles.container}>
@@ -530,16 +550,21 @@ export const ContinueSignup = ({ navigation, route }) => {
                                 />
                               </View>
                             )}
-                            <RNTextInput
-                              value={values.mobile}
-                              placeholder={
-                                fixedTitles.authTitles["phone-number"].title
-                              }
-                              type="number-pad"
-                              handleChange={handleChange("mobile")}
-                              isError={errorObject.errorVisible}
-                              error={errorObject.mobileError}
-                            />
+                            <>
+                              <RNTextInput
+                                value={values.mobile}
+                                placeholder={
+                                  fixedTitles.authTitles["phone-number"].title
+                                }
+                                type="number-pad"
+                                handleChange={handleChange("mobile")}
+                                isError={errorObject.errorVisible}
+                                error={errorObject.mobileError}
+                              />
+                              <View style={{ position: "absolute", right: 0 }}>
+                                <PhonePicker />
+                              </View>
+                            </>
                           </View>
                           <View style={styles.submit}>
                             <WhiteButton
@@ -683,7 +708,7 @@ export const ContinueSignup = ({ navigation, route }) => {
                             error={errorObject.educationError}
                             isError={errorObject.errorVisible}
                           />
-                          <RNTextInput
+                          {/* <RNTextInput
                             placeholder={
                               fixedTitles.authTitles["years-of-experience"]
                                 .title
@@ -696,7 +721,47 @@ export const ContinueSignup = ({ navigation, route }) => {
                             value={values.experienceYears}
                             error={errorObject.experienceError}
                             isError={errorObject.errorVisible}
-                          />
+                          /> */}
+                          <>
+                            <ModalDropdown
+                              options={yearsOfExperienceArr}
+                              dropdownStyle={styles.dropdownStyles}
+                              isFullWidth
+                              showsVerticalScrollIndicator={false}
+                              style={styles.containerStyles}
+                              textStyle={styles.label}
+                              defaultValue={
+                                fixedTitles.authTitles["years-of-experience"]
+                                  .title
+                              }
+                              onSelect={(item) => {
+                                setYearsOfExperienceId(item + 1);
+                              }}
+                              renderRowText={(item) => {
+                                return (
+                                  <View
+                                    style={{
+                                      alignItems: "flex-start",
+                                      paddingHorizontal: 6,
+                                    }}
+                                  >
+                                    <Typography
+                                      size={12}
+                                      content={item}
+                                      align="right"
+                                      color={colors.dark_blue}
+                                    />
+                                  </View>
+                                );
+                              }}
+                              renderSeparator={() => <View />}
+                              renderRowComponent={TouchableOpacity}
+                              keyboardShouldPersistTaps="handled"
+                              renderRightComponent={() => {
+                                return <View style={styles.arrowContainer} />;
+                              }}
+                            />
+                          </>
                           <View style={styles.submit}>
                             <WhiteButton
                               size={16}
@@ -773,6 +838,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     borderRadius: 10,
     overflow: "hidden",
+    padding: 10,
   },
   containerStyles: {
     width: SCREEN_WIDTH * 0.9,

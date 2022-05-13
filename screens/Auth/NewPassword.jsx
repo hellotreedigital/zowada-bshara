@@ -40,7 +40,6 @@ export const NewPassword = ({ navigation, route }) => {
       .catch((err) => {
         setNewPassLoading(false);
 
-        console.log(err.response.data);
         let error = err.response.data;
         setErrorObject({
           errorVisible: true,

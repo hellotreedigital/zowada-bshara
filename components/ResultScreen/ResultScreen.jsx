@@ -7,8 +7,9 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
+  Platform,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { getExpertASC } from "../../api/Expert/Expert";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
@@ -19,17 +20,18 @@ import Typography from "../Typography/Typography";
 
 const ResultScreen = ({ navigation, route }) => {
   const [loading, setLoading] = React.useState(false);
-
   const expertDetailsHandler = (data) => {
     navigation.navigate("expertSingleScreen", {
       data: data,
     });
   };
-  const { data, fees, dir } = route.params;
+  const { data, fees, dir, search, query, filter } = route.params;
+  const [searchString, setSearchString] = useState(query);
 
   const [resultData, setResulstData] = useState([]);
 
   useEffect(() => {
+    setSearchString(query);
     setResulstData(data);
   }, []);
 
@@ -46,7 +48,6 @@ const ResultScreen = ({ navigation, route }) => {
       })
       .catch((err) => {
         setLoading(false);
-        console.log(err);
       });
   };
   const getExpertsByFees = () => {
@@ -65,10 +66,8 @@ const ResultScreen = ({ navigation, route }) => {
         })
         .catch((err) => {
           setLoading(false);
-          console.log(err);
         });
     } else {
-      console.log("end reached");
     }
   };
 
@@ -77,7 +76,7 @@ const ResultScreen = ({ navigation, route }) => {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.pop()}
-          style={styles.spacing}
+          style={[styles.spacing, styles.arrow]}
         >
           <RedArrowSVG
             style={{
@@ -85,33 +84,58 @@ const ResultScreen = ({ navigation, route }) => {
             }}
           />
         </TouchableOpacity>
-        <View>
+        {/* <View>
           <SearchBox
-            height={SCREEN_HEIGHT * 0.04}
+            height={Platform.OS == "android" && SCREEN_HEIGHT * 0.06}
             width={SCREEN_WIDTH * 0.84}
+            searchString={searchString}
+            setSearchString={setSearchString}
           />
-        </View>
+        </View> */}
       </View>
       <View style={styles.list}>
-        <FlatList
-          data={resultData}
-          keyExtractor={(item) => item.id.toString()}
-          enableEmptySections={true}
-          renderItem={({ item }) => {
-            return (
-              <ExpertCard
-                data={item}
-                onPress={() => expertDetailsHandler(item)}
-              />
-            );
-          }}
-          ListEmptyComponent={() => (
-            <View style={{ alignSelf: "center" }}>
-              <Typography content="Empty list" />
-            </View>
+        <>
+          {search || filter ? (
+            <FlatList
+              data={resultData}
+              keyExtractor={(item) => item.id.toString()}
+              enableEmptySections={true}
+              renderItem={({ item }) => {
+                return (
+                  <ExpertCard
+                    data={item}
+                    onPress={() => expertDetailsHandler(item)}
+                  />
+                );
+              }}
+              ListEmptyComponent={() => (
+                <View style={{ alignSelf: "center" }}>
+                  <Typography content="Empty list" />
+                </View>
+              )}
+            />
+          ) : (
+            <FlatList
+              data={resultData}
+              keyExtractor={(item) => item.id.toString()}
+              enableEmptySections={true}
+              renderItem={({ item }) => {
+                return (
+                  <ExpertCard
+                    data={item}
+                    onPress={() => expertDetailsHandler(item)}
+                  />
+                );
+              }}
+              ListEmptyComponent={() => (
+                <View style={{ alignSelf: "center" }}>
+                  <Typography content="Empty list" />
+                </View>
+              )}
+              // onEndReached={fees ? getExpertsByFees : getASCHandler}
+            />
           )}
-          onEndReached={fees ? getExpertsByFees : getASCHandler}
-        />
+        </>
       </View>
     </SafeAreaView>
   );
@@ -125,11 +149,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   header: {
-    width: SCREEN_WIDTH - 20,
+    width: SCREEN_WIDTH - 40,
     alignSelf: "center",
-    marginVertical: 20,
+    marginTop: 20,
+    marginBottom: 10,
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
     flexDirection: "row",
   },
   spacing: {
@@ -137,13 +162,18 @@ const styles = StyleSheet.create({
   },
   list: {
     // height: "auto",
-    // backgroundColor: "red",
-    paddingBottom: SCREEN_HEIGHT * 0.12,
+
+    paddingBottom: 60,
+    flexGrow: 1,
   },
   footer: {
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+  },
+  arrow: {
+    width: 40,
+    height: 15,
   },
 });

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useEffect } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,16 +7,24 @@ import {
   View,
   ScrollView,
   I18nManager,
-  Platform,
+  ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import RenderHTML, { defaultSystemFonts } from "react-native-render-html";
+import { bookNewCase } from "../../api/Booking/Booking";
+import { acceptTerms } from "../../api/Profile/Profile";
+import AppContext from "../../appContext/AppContext";
 import { CenteredModal } from "../../components/Modals/CenterModal/CenteredModal";
 import Typography from "../../components/Typography/Typography";
 import { colors } from "../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
 import RedArrowSVG from "../../SVGR/Globals/RedArrow";
-export const TermsConditionsScreen = ({ navigation }) => {
+export const TermsConditionsScreen = ({ navigation, route }) => {
+  const { setCanBookForFree, setTermAccepted } = useContext(AppContext);
+  const { bookingType, date, time, booknewCaseHandler, data, price, terms } =
+    route.params;
+
+  const [loader, setLoader] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const systemFonts = [
     ...defaultSystemFonts,
@@ -25,13 +34,45 @@ export const TermsConditionsScreen = ({ navigation }) => {
   ];
 
   const bookingHandler = () => {
-    setModalVisible(false);
-    navigation.navigate("PaymentScreen");
+    bookNewCase(data)
+      .then((res) => {
+        setModalVisible(false);
+        if (bookingType === "free") {
+          setCanBookForFree(true);
+          navigation.navigate("expertScreen");
+        } else {
+          navigation.navigate("PaymentScreen");
+        }
+      })
+      .catch((err) => {});
+  };
+
+  const acceptTermsHandler = () => {
+    setModalVisible(true);
+    var formdata = new FormData();
+    formdata.append("terms", 1);
+    setLoader(true);
+    acceptTerms(formdata)
+      .then((res) => {
+        setTermAccepted(1);
+        setLoader(false);
+        setModalVisible(true);
+      })
+      .catch((err) => {
+        setLoader(false);
+      });
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View>
+        <View style={styles.loader}>
+          <ActivityIndicator
+            animating={loader}
+            color={colors.dark_blue}
+            size="large"
+          />
+        </View>
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => navigation.pop()}
@@ -39,15 +80,13 @@ export const TermsConditionsScreen = ({ navigation }) => {
           >
             <RedArrowSVG
               style={{
-                transform: [
-                  { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
-                ],
+                transform: [{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" }],
               }}
             />
           </TouchableOpacity>
           <View>
             <Typography
-              content="شروط الخدمة"
+              content={terms.terms_conditions.title}
               size={20}
               bold={true}
               color={colors.focused}
@@ -60,8 +99,7 @@ export const TermsConditionsScreen = ({ navigation }) => {
         <View>
           <RenderHTML
             source={{
-              html:
-                "<p>هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحرف)</p>",
+              html: terms.terms_conditions.text,
             }}
             contentWidth={SCREEN_WIDTH}
             tagsStyles={{
@@ -89,8 +127,7 @@ export const TermsConditionsScreen = ({ navigation }) => {
         <View>
           <RenderHTML
             source={{
-              html:
-                "<p>هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحرف)</p>",
+              html: "<p>هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام “هنا يوجد محتوى نصي، هنا يوجد محتوى نصي” فتجعلها تبدو (أي الأحرف)</p>",
             }}
             contentWidth={SCREEN_WIDTH}
             tagsStyles={{
@@ -109,7 +146,7 @@ export const TermsConditionsScreen = ({ navigation }) => {
         <View style={styles.wrapper}>
           <TouchableOpacity
             onPress={() => {
-              setModalVisible(true);
+              acceptTermsHandler();
             }}
             style={styles.button}
           >
@@ -123,9 +160,16 @@ export const TermsConditionsScreen = ({ navigation }) => {
         </View>
       </ScrollView>
       <CenteredModal
+        list={true}
         visible={modalVisible}
         close={() => setModalVisible(false)}
         submit={() => bookingHandler()}
+        bookingType={bookingType}
+        date={date}
+        time={`${time[0].from}-${time[0].to}`}
+        loading={loader}
+        addLink={false}
+        price={price}
       />
     </SafeAreaView>
   );
@@ -135,7 +179,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
     flex: 1,
-    paddingTop: Platform.OS == "android" ? 40 : 0,
   },
   header: {
     width: SCREEN_WIDTH * 0.9,
@@ -167,5 +210,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     marginTop: 30,
     elevation: 5,
+  },
+  loader: {
+    position: "absolute",
+    height: SCREEN_HEIGHT * 0.9,
+    alignSelf: "center",
+    justifyContent: "center",
   },
 });

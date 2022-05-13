@@ -8,7 +8,6 @@ export async function getUserData() {
         resolve(res);
       })
       .catch((err) => {
-        console.log("API ERROR: get user data failed", err.response.data);
         reject(err);
       });
   });

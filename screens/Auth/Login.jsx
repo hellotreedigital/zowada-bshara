@@ -12,6 +12,8 @@ import {
   Animated,
   Platform,
   ActivityIndicator,
+  ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -19,7 +21,6 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "../../globals/globals";
-import { SafeAreaView } from "react-native-safe-area-context";
 import ZowadaSVG from "../../SVGR/Logo/Zowada";
 import Typography from "../../components/Typography/Typography";
 import { colors } from "../../globals/colors";
@@ -27,7 +28,6 @@ import FacebookSVG from "../../SVGR/Socials/Facebook";
 import GoogleSVG from "../../SVGR/Socials/Google";
 import AppleSVG from "../../SVGR/Socials/Apple";
 import { RNTextInput } from "../../components/Textinput/TextInput";
-import { ScrollView } from "react-native-gesture-handler";
 import { WhiteButton } from "../../buttons/WhiteButton";
 import { useKeyboard } from "../../hooks/useKeyboard";
 import { Formik } from "formik";
@@ -46,7 +46,12 @@ import {
   googleAuthAndLogin,
 } from "../../api/Auth/Socials/CheckAuth";
 import AuthContext from "../../appContext/AuthContext";
-export const Login = ({ navigation, setToken }) => {
+import { getBestExperts, getExperts } from "../../api/Expert/Expert";
+import { getCasesList, getQuestionList } from "../../api/Profile/Profile";
+import { getUserData } from "../../api/Userinfo/UserInformation";
+import PhonePicker from "../../components/PhonePicker/PhonePicker";
+let pusherSubscribed = false;
+export const Login = ({ navigation, setToken, setPusher }) => {
   const {
     expoPushToken,
     fixedTitles,
@@ -54,6 +59,16 @@ export const Login = ({ navigation, setToken }) => {
     verificationTypes,
     setUserName,
     userName,
+    setUserData,
+    setExperts,
+    setBestExperts,
+    setFaq,
+    setCasesList,
+    setQuestionList,
+    setProfilePic,
+    setUserId,
+    setTermAccepted,
+    setAvailabilyHours,
   } = useContext(AppContext);
 
   const { setAuthState, user, setUser } = useContext(AuthContext);
@@ -86,22 +101,76 @@ export const Login = ({ navigation, setToken }) => {
     }
   };
 
+  const getExpertsHandler = () => {
+    getExperts()
+      .then((res) => {
+        setExperts(res.data.experts);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return () => null;
+  };
+  const getBestExpertsHandler = () => {
+    getBestExperts()
+      .then((res) => {
+        setBestExperts(res.data.experts.data);
+        setFaq(res.data.faqs);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return () => null;
+  };
+
+  const getCasesListHandler = () => {
+    getCasesList()
+      .then((res) => {
+        setCasesList(res.data.cases.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getQuestionListHandler = () => {
+    getQuestionList()
+      .then((res) => {
+        setQuestionList(res.data.questions.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const userDataHandler = async () => {
+    getUserData()
+      .then((res) => {
+        setProfilePic(res.data.user.image_absolute_url);
+
+        setAvailabilyHours(res.data);
+        setUserData(res.data.user);
+        setUserName(res.data.user.full_name);
+        setUserId(res.data.user.id);
+        setTermAccepted(res.data.user.terms_conditions_accepted);
+        // setCanBookForFree(res.data.user.free_consultation_taken);
+      })
+      .catch((err) => {
+        console.error(err.response.data);
+      })
+      .finally(() => {});
+  };
+
   const facebookAuthHandler = async () => {
     try {
       setLoadingLogin(true);
       await Facebook.initializeAsync({
         appId: FACEBOOK_APP_ID,
       });
-      const {
-        type,
-        token,
-        expirationDate,
-        permissions,
-        declinedPermissions,
-      } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ["public_profile", "email"],
-        behavior: "web",
-      });
+      const { type, token, expirationDate, permissions, declinedPermissions } =
+        await Facebook.logInWithReadPermissionsAsync({
+          permissions: ["public_profile", "email"],
+          behavior: "web",
+        });
       if (type === "success") {
         fetch(
           `https://graph.facebook.com/me?fields=id,name,email,birthday&access_token=${token}`
@@ -125,7 +194,13 @@ export const Login = ({ navigation, setToken }) => {
 
                 if (res.data.token) {
                   setUserName(res.data.user.full_name);
-                  setToken(res.data.token);
+                  userDataHandler();
+                  getExpertsHandler();
+                  getBestExpertsHandler();
+                  getCasesListHandler();
+                  getQuestionListHandler();
+                  setToken(JSON.stringify(res.data.token));
+
                   AsyncStorage.setItem(
                     "@token",
                     JSON.stringify(res.data.token)
@@ -180,21 +255,26 @@ export const Login = ({ navigation, setToken }) => {
     formdata.append("password", password);
     formdata.append("notification_token", expoPushToken);
     signInUser(formdata)
-      .then((res) => {
-        console.log("User logged in ");
-
-        storeToken(res.data.token);
-        setToken(res.data.token);
-        AsyncStorage.setItem("@token", JSON.stringify(res.data.token));
+      .then(async (res) => {
+        setUserName(res.data.user.full_name);
+        getExpertsHandler();
+        getBestExpertsHandler();
+        getCasesListHandler();
+        getQuestionListHandler();
+        userDataHandler();
         AsyncStorage.setItem("@userId", JSON.stringify(res.data.user.id));
         AsyncStorage.setItem("@user", JSON.stringify(res.data.user));
         setUser(res.data.user);
-        console.log("USER DATA :", res.data.user, 'fdghjkmnbvfgjklbnvfghyu');
+        setLoadingLogin(false);
+        // setAuthState(res.data.user);
+        console.log("USER DATA :", res.data.user);
         setUserName(res.data.user.full_name);
         setErrorObject({
           errorVisible: false,
         });
-        setLoadingLogin(false);
+        setToken(res.data.token);
+        storeToken(res.data.token);
+        AsyncStorage.setItem("@token", JSON.stringify(res.data.token));
       })
       .catch((err) => {
         console.log(err.response.data);
@@ -244,7 +324,8 @@ export const Login = ({ navigation, setToken }) => {
               err.response.data.errors.password[0],
           });
         }
-      });
+      })
+      .finally(() => {});
   };
 
   const appleAuthHandler = async () => {
@@ -272,8 +353,13 @@ export const Login = ({ navigation, setToken }) => {
             setLoadingLogin(false);
             if (data.data.token) {
               setUserName(data.data.user.full_name);
+              userDataHandler();
+              getExpertsHandler();
+              getBestExpertsHandler();
+              getCasesListHandler();
+              getQuestionListHandler();
               setToken(data.data.token);
-              AsyncStorage.setItem("@token", JSON.stringify(res.data.token));
+              AsyncStorage.setItem("@token", JSON.stringify(data.data.token));
             } else {
               navigation.navigate("continueSignup", {
                 apple_id: body.user_id,
@@ -356,10 +442,8 @@ export const Login = ({ navigation, setToken }) => {
       "790761510394-pqrof43a2ojr6l32cukeqfujri6p5nc5.apps.googleusercontent.com",
     androidClientId:
       "790761510394-7crbvqe7anf54kt5h3ke08b4c9ipqhmt.apps.googleusercontent.com",
-
-    webClientId:
-      "790761510394-pqrof43a2ojr6l32cukeqfujri6p5nc5.apps.googleusercontent.com",
   });
+
   const googleAuthHandler = async () => {
     setLoadingLogin(true);
     let res = await promptAsync();
@@ -382,6 +466,12 @@ export const Login = ({ navigation, setToken }) => {
 
           if (res.data.token) {
             setUserName(res.data.user.full_name);
+            setUserName(res.data.user.full_name);
+            userDataHandler();
+            getExpertsHandler();
+            getBestExpertsHandler();
+            getCasesListHandler();
+            getQuestionListHandler();
             setToken(res.data.token);
             AsyncStorage.setItem("@token", JSON.stringify(res.data.token));
           } else {
@@ -459,6 +549,8 @@ export const Login = ({ navigation, setToken }) => {
           "#E8AF2E",
           "#E8AF2E",
           "#E8AF2E",
+          "#E8AF2E",
+          "#E8AF2E",
         ]}
         start={{ x: 0, y: 0.2 }}
         end={{ x: 1, y: 1.5 }}
@@ -481,10 +573,12 @@ export const Login = ({ navigation, setToken }) => {
             </View>
             <KeyboardAvoidingView
               style={{ flex: 1 }}
-              keyboardVerticalOffset={0}
-              behavior={Platform.OS === "ios" ? "padding" : "padding"}
+              behavior={Platform.OS === "ios" ? "position" : "position"}
+              keyboardVerticalOffset={
+                Platform.OS == "ios" ? -SCREEN_HEIGHT * 0.26 : -100
+              }
             >
-              <TouchableWithoutFeedback>
+              <View>
                 <View
                   style={{
                     height:
@@ -568,8 +662,13 @@ export const Login = ({ navigation, setToken }) => {
                             value={values.email}
                             handleChange={handleChange("email")}
                             error={errorObject.mailError}
-                            isError={errorObject.errorVisible}
+                            isError={errorObject.mailError}
                           />
+                          {/* <View
+                            style={{ position: "absolute", right: 30, top: 2 }}
+                          >
+                            <PhonePicker />
+                          </View> */}
                         </View>
                         <View style={styles.input}>
                           <RNTextInput
@@ -580,7 +679,7 @@ export const Login = ({ navigation, setToken }) => {
                             value={values.password}
                             handleChange={handleChange("password")}
                             error={errorObject.passwordError}
-                            isError={errorObject.errorVisible}
+                            isError={errorObject.passwordError}
                           />
                         </View>
                         <View style={styles.forgetPassword}>
@@ -651,7 +750,7 @@ export const Login = ({ navigation, setToken }) => {
                         </View>
                       </View>
                     </View>
-                    <View
+                    <TouchableOpacity
                       style={[
                         styles.bottom,
                         { display: keyboardHeight === 0 ? "flex" : "none" },
@@ -666,10 +765,10 @@ export const Login = ({ navigation, setToken }) => {
                           content={fixedTitles.authTitles["skip-login"]?.title}
                         />
                       </TouchableOpacity>
-                    </View>
+                    </TouchableOpacity>
                   </Animated.View>
                 </View>
-              </TouchableWithoutFeedback>
+              </View>
             </KeyboardAvoidingView>
           </ScrollView>
           <MessageModal
