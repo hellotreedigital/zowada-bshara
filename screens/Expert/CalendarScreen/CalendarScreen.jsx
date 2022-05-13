@@ -16,7 +16,6 @@ import { colors } from "../../../globals/colors";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../globals/globals";
 import ArrowSVG from "../../../SVGR/Globals/Arrow";
 import ArrowLeftSVG from "../../../SVGR/Globals/ArrowLeft";
-import moment from "moment";
 export const CalendarScreen = ({ navigation, route }) => {
   const { data, bookingType } = route.params;
   const [selectedStartDate, setSelectedStartDate] = useState(null);
@@ -35,23 +34,6 @@ export const CalendarScreen = ({ navigation, route }) => {
     "NOVEMBER",
     "DECEMBER",
   ]);
-  const [disbaledDates, setDisabledDates] = useState([]);
-  let dates = [];
-  function getDaysInMonth(month, year, days) {
-    let pivot = moment().month(month).year(year).startOf("month");
-    const end = moment().month(month).year(year).endOf("month");
-
-    while (pivot.isBefore(end)) {
-      days.forEach((day) => {
-        dates.push(pivot.day(day).toISOString());
-      });
-      pivot.add(7, "days");
-    }
-    return dates;
-  }
-
-  const DISABLED_DAYS = ["Monday", "Friday", "Sunday"];
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -59,11 +41,7 @@ export const CalendarScreen = ({ navigation, route }) => {
           onPress={() => navigation.pop()}
           style={styles.header}
         >
-          <ArrowSVG
-            style={{
-              transform: [{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" }],
-            }}
-          />
+          <ArrowSVG />
         </TouchableOpacity>
         <View style={styles.userImage}>
           {data.image ? (
@@ -104,7 +82,6 @@ export const CalendarScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.calendar}>
           <CalendarPicker
-            disabledDates={disbaledDates}
             weekdays={weekdays}
             months={months}
             textStyle={{ color: colors.dark_blue, fontSize: 12 }}
@@ -119,11 +96,6 @@ export const CalendarScreen = ({ navigation, route }) => {
             onDateChange={(date) => {
               setSelectedStartDate(date);
             }}
-            onMonthChange={(date) => {
-              setDisabledDates(
-                getDaysInMonth(date.month(), date.year(), DISABLED_DAYS)
-              );
-            }}
             width={SCREEN_WIDTH * 0.8}
             selectMonthTitle="Select Month"
             selectedDayTextColor="white"
@@ -131,43 +103,13 @@ export const CalendarScreen = ({ navigation, route }) => {
             dayLabelsWrapper={styles.dayHeader}
             previousComponent={
               I18nManager.isRTL ? (
-                <ArrowSVG
-                  style={{
-                    transform: [
-                      { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
-                    ],
-                  }}
-                  fill={"#E8AF2E"}
-                />
+                <ArrowSVG fill={"#E8AF2E"} />
               ) : (
-                <ArrowSVG
-                  style={{
-                    transform: [
-                      { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
-                    ],
-                  }}
-                  fill={"#E8AF2E"}
-                />
+                <ArrowSVG fill={"#E8AF2E"} />
               )
             }
             nextComponent={
-              I18nManager.isRTL ? (
-                <ArrowLeftSVG
-                  style={{
-                    transform: [
-                      { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
-                    ],
-                  }}
-                />
-              ) : (
-                <ArrowLeftSVG
-                  style={{
-                    transform: [
-                      { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
-                    ],
-                  }}
-                />
-              )
+              I18nManager.isRTL ? <ArrowLeftSVG /> : <ArrowLeftSVG />
             }
             monthTitleStyle={[styles.boldText, styles.subtitle]}
             yearTitleStyle={[styles.boldText, styles.yearTitle]}
@@ -220,7 +162,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#E8AF2E",
-    paddingTop: Platform.OS == "android" ? 40 : 0,
   },
   header: {
     width: SCREEN_WIDTH * 0.9,

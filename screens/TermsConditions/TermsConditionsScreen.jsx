@@ -6,7 +6,6 @@ import {
   View,
   ScrollView,
   I18nManager,
-  Platform,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import RenderHTML, { defaultSystemFonts } from "react-native-render-html";
@@ -37,13 +36,7 @@ export const TermsConditionsScreen = ({ navigation }) => {
             onPress={() => navigation.pop()}
             style={styles.spacing}
           >
-            <RedArrowSVG
-              style={{
-                transform: [
-                  { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
-                ],
-              }}
-            />
+            <RedArrowSVG />
           </TouchableOpacity>
           <View>
             <Typography
@@ -135,7 +128,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
     flex: 1,
-    paddingTop: Platform.OS == "android" ? 40 : 0,
   },
   header: {
     width: SCREEN_WIDTH * 0.9,

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import {
-
   StyleSheet,
   Text,
   View,
@@ -33,7 +32,6 @@ import ShareSVG from "../../SVGR/Home/Share";
 import { FilterModal } from "../../components/Modals/FilterModal";
 import { expertSearch } from "../../api/Expert/Expert";
 export const ExpertScreen = ({ navigation }) => {
-
   const {
     appLanguage,
     userName,

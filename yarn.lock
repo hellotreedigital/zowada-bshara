@@ -1386,10 +1386,17 @@
     css-to-react-native "^3.0.0"
     csstype "^3.0.8"
 
+<<<<<<< Updated upstream
 "@native-html/transient-render-engine@11.2.3":
   version "11.2.3"
   resolved "https://registry.yarnpkg.com/@native-html/transient-render-engine/-/transient-render-engine-11.2.3.tgz#e4de0e7c8c023224a2dc27f3bd2b30d3984d94a4"
   integrity sha512-zXwgA3gPUEmFs3I3syfnvDvS6WiUHXEE6jY09OBzK+trq7wkweOSFWIoyXiGkbXrozGYG0KY90YgPyr8Tg8Uyg==
+=======
+"@native-html/transient-render-engine@11.2.2":
+  version "11.2.2"
+  resolved "https://registry.yarnpkg.com/@native-html/transient-render-engine/-/transient-render-engine-11.2.2.tgz#e8c20ae7feabc013cf1c9a08908ed92713ae4577"
+  integrity sha512-z0LgQStGJf4gCIeuD8oJiPbk+sUEQ9FOzHlDWwK+uVam+1Q5mmh6PqblCdTCP3IRGBtPLzMM0VZ9njm1TEvb8Q==
+>>>>>>> Stashed changes
   dependencies:
     "@native-html/css-processor" "1.11.0"
     "@types/ramda" "^0.27.44"
@@ -1398,7 +1405,11 @@
     domhandler "^4.2.2"
     domutils "^2.8.0"
     htmlparser2 "^7.1.2"
+<<<<<<< Updated upstream
     ramda "^0.27.2"
+=======
+    ramda "^0.27.1"
+>>>>>>> Stashed changes
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -1607,6 +1618,7 @@
   resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.2.1.tgz#86f19781c6f34a5c9dd25dca99915e0306f477d1"
   integrity sha512-EnmAbKMsptrliRKf95rdgS6BhMjML+mIns06+G1Vdih6BrEo7/0iytThUv3WBf99AI76dyEq/cqLUwHPiFzXWg==
 
+<<<<<<< Updated upstream
 "@react-navigation/material-top-tabs@^6.2.1":
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/@react-navigation/material-top-tabs/-/material-top-tabs-6.2.1.tgz#747d17bd0138a7d50c791e9cce1adc350904f67d"
@@ -1615,6 +1627,8 @@
     color "^3.1.3"
     warn-once "^0.1.0"
 
+=======
+>>>>>>> Stashed changes
 "@react-navigation/native@^6.0.6":
   version "6.0.6"
   resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-6.0.6.tgz#0f2577358d73d7b21ff5b2455f0a2d51b1ad2837"
@@ -2795,11 +2809,14 @@ entities@^3.0.1:
   resolved "https://registry.yarnpkg.com/entities/-/entities-3.0.1.tgz#2b887ca62585e96db3903482d336c1006c3001d4"
   integrity sha512-WiyBqoomrwMdFG1e0kqvASYfnlb0lp8M5o5Fw2OFq1hNZxxcNk8Ik0Xm7LxzBhuidnZB/UtBqVCgUz3kBOP51Q==
 
+<<<<<<< Updated upstream
 entities@~2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.3.tgz#5c487e5742ab93c15abb5da22759b8590ec03b7f"
   integrity sha512-MyoZ0jgnLvB2X3Lg5HqpFmn1kybDiIfEQmKzTb5apr51Rb+T3KdmMiqa70T+bhGnyv7bQ6WMj2QMHpGMmlrUYQ==
 
+=======
+>>>>>>> Stashed changes
 envinfo@^7.7.2:
   version "7.8.1"
   resolved "https://registry.yarnpkg.com/envinfo/-/envinfo-7.8.1.tgz#06377e3e5f4d379fea7ac592d5ad8927e0c4d475"
@@ -2986,6 +3003,7 @@ expo-auth-session@~3.5.0:
     invariant "^2.2.4"
     qs "6.9.1"
 
+<<<<<<< Updated upstream
 expo-av@~10.2.0:
   version "10.2.1"
   resolved "https://registry.yarnpkg.com/expo-av/-/expo-av-10.2.1.tgz#c08bce464d673d0e90c68cac082bfb75a9437f25"
@@ -2993,6 +3011,8 @@ expo-av@~10.2.0:
   dependencies:
     "@expo/config-plugins" "^4.0.2"
 
+=======
+>>>>>>> Stashed changes
 expo-blur@~11.0.0:
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/expo-blur/-/expo-blur-11.0.0.tgz#3542afed5c0037554657d98c31a5933dd78098dd"
@@ -3201,11 +3221,14 @@ expo-updates@~0.11.3:
     resolve-from "^5.0.0"
     uuid "^3.4.0"
 
+<<<<<<< Updated upstream
 expo-video-thumbnails@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/expo-video-thumbnails/-/expo-video-thumbnails-6.2.0.tgz#ebf33500b6b32a9efdaf498a08dd0d9ac2add049"
   integrity sha512-iW49Atk3fijqxFY7PLfmOL2QhWsD/A7Sh+4X8YtNGG0T2Bd16fMEvl5BdvBZdAz+A67VidGkI4hxNWTDWw/bVw==
 
+=======
+>>>>>>> Stashed changes
 expo-web-browser@~10.1.0:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-10.1.0.tgz#fd91695c44e0f3006da3089f230573c1cb3b026a"
@@ -4331,6 +4354,7 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
+<<<<<<< Updated upstream
 linkify-it@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-2.2.0.tgz#e3b54697e78bf915c70a38acd78fd09e0058b1cf"
@@ -4338,6 +4362,8 @@ linkify-it@^2.0.0:
   dependencies:
     uc.micro "^1.0.1"
 
+=======
+>>>>>>> Stashed changes
 locate-path@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-3.0.0.tgz#dbec3b3ab759758071b58fe59fc41871af21400e"
@@ -4482,6 +4508,7 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+<<<<<<< Updated upstream
 markdown-it@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-10.0.0.tgz#abfc64f141b1722d663402044e43927f1f50a8dc"
@@ -4493,6 +4520,8 @@ markdown-it@^10.0.0:
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
 
+=======
+>>>>>>> Stashed changes
 md5-file@^3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/md5-file/-/md5-file-3.2.3.tgz#f9bceb941eca2214a4c0727f5e700314e770f06f"
@@ -4505,11 +4534,14 @@ mdn-data@2.0.14:
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.14.tgz#7113fc4281917d63ce29b43446f701e68c25ba50"
   integrity sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==
 
+<<<<<<< Updated upstream
 mdurl@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
   integrity sha1-/oWy7HWlkDfyrf7BAP1sYBdhFS4=
 
+=======
+>>>>>>> Stashed changes
 merge-options@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/merge-options/-/merge-options-3.0.4.tgz#84709c2aa2a4b24c1981f66c179fe5565cc6dbb7"
@@ -5529,10 +5561,17 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
+<<<<<<< Updated upstream
 ramda@^0.27.2:
   version "0.27.2"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.27.2.tgz#84463226f7f36dc33592f6f4ed6374c48306c3f1"
   integrity sha512-SbiLPU40JuJniHexQSAgad32hfwd+DRUdwF2PlVuI5RZD0/vahUco7R8vD86J/tcEKKF9vZrUVwgtmGCqlCKyA==
+=======
+ramda@^0.27.1:
+  version "0.27.1"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.27.1.tgz#66fc2df3ef873874ffc2da6aa8984658abacf5c9"
+  integrity sha512-PgIdVpn5y5Yns8vqb8FzBUEYn98V3xcPgawAkkgj0YJ0qDsnHCiNmZYfOGMgOvoB0eWFLpYbhxUR3mxfDIMvpw==
+>>>>>>> Stashed changes
 
 range-parser@~1.2.1:
   version "1.2.1"
@@ -5636,6 +5675,7 @@ react-native-element-dropdown@^1.5.7:
   resolved "https://registry.yarnpkg.com/react-native-element-dropdown/-/react-native-element-dropdown-1.5.7.tgz#28e58072e1a64d142df937cc448d7d52b10f34cc"
   integrity sha512-+M2SbQWv9ZJBHtKWdDE2FcI8n7pL0DdiJQJDim7+vSa470QTQ32pBhubZb/uMGkMAKQa6jI1B6QU0AkK2l4JRg==
 
+<<<<<<< Updated upstream
 react-native-fast-image@^8.5.11:
   version "8.5.11"
   resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.5.11.tgz#e3dc969d0e4e8df026646bf18194465aa55cbc2b"
@@ -5648,6 +5688,8 @@ react-native-fit-image@^1.5.5:
   dependencies:
     prop-types "^15.5.10"
 
+=======
+>>>>>>> Stashed changes
 react-native-gesture-handler@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.1.0.tgz#be7a83a7bd340a2316551a4d30d7abf06b46c1da"
@@ -5664,11 +5706,14 @@ react-native-image-header-scroll-view@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-native-image-header-scroll-view/-/react-native-image-header-scroll-view-1.0.0.tgz#1b8a9de1c17821646138c3292bce0395254d0feb"
   integrity sha512-34r9pc9DWQaB9fbgZkK+BPFDGv2UBvtMRQG+Ovr4z5GRVdLtelGWd1VrhjEv4JIw2ufJ3EE6DPyKecuDA22z6w==
 
+<<<<<<< Updated upstream
 react-native-image-modal@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-native-image-modal/-/react-native-image-modal-2.0.4.tgz#c3cbfad43d0dd33a2f106b1f5688d96c4900b82c"
   integrity sha512-BTHOUAznjAHStrxg2D3k6R/3YPXMos2w6jZv5LdOR6xY2vHVHgMnSbjeszq882brbge51ZjS06FCi8sM6WNwxg==
 
+=======
+>>>>>>> Stashed changes
 react-native-iphone-x-helper@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
@@ -5686,6 +5731,7 @@ react-native-maps@0.29.4:
   dependencies:
     "@types/geojson" "^7946.0.7"
 
+<<<<<<< Updated upstream
 react-native-markdown-display@^7.0.0-alpha.2:
   version "7.0.0-alpha.2"
   resolved "https://registry.yarnpkg.com/react-native-markdown-display/-/react-native-markdown-display-7.0.0-alpha.2.tgz#a48a70d3cb5c510a52ecf7f1509a4a3d14d728aa"
@@ -5696,6 +5742,8 @@ react-native-markdown-display@^7.0.0-alpha.2:
     prop-types "^15.7.2"
     react-native-fit-image "^1.5.5"
 
+=======
+>>>>>>> Stashed changes
 react-native-masked-text@^1.13.0:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/react-native-masked-text/-/react-native-masked-text-1.13.0.tgz#533fde8c45ccbaa1d6b0df30bf19b84b4ace3de3"
@@ -5758,11 +5806,14 @@ react-native-modal@^13.0.0:
     prop-types "^15.6.2"
     react-native-animatable "1.3.3"
 
+<<<<<<< Updated upstream
 react-native-pager-view@^5.4.15:
   version "5.4.15"
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.15.tgz#075fef5ae4ba6ecc37e49b6c4a24770131a2a3cc"
   integrity sha512-5NssD840wFCuOL4B1ZRiRADvt+Vx2Dgify4SmAUqHXCx03yiGPnRWmFjYXyQeK6gq/8VY+gPGE4bTy9ahzBbDw==
 
+=======
+>>>>>>> Stashed changes
 react-native-parallax-header@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/react-native-parallax-header/-/react-native-parallax-header-1.1.4.tgz#5f4b072f69f3b24cf2035b3930981669cc6d2066"
@@ -5775,6 +5826,7 @@ react-native-parallax-scroll-view@^0.21.3:
   dependencies:
     prop-types "^15.6.0"
 
+<<<<<<< Updated upstream
 react-native-progress@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-5.0.0.tgz#f5ac6ceaeee27f184c660b00f29419e82a9d0ab0"
@@ -5782,6 +5834,8 @@ react-native-progress@^5.0.0:
   dependencies:
     prop-types "^15.7.2"
 
+=======
+>>>>>>> Stashed changes
 react-native-ratings@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-8.1.0.tgz#3fa9ad29128dc3a88e59518ba151e61c59dd0647"
@@ -5789,6 +5843,7 @@ react-native-ratings@^8.1.0:
   dependencies:
     lodash "^4.17.15"
 
+<<<<<<< Updated upstream
 react-native-render-html@^6.3.4:
   version "6.3.4"
   resolved "https://registry.yarnpkg.com/react-native-render-html/-/react-native-render-html-6.3.4.tgz#01684897bed2de84829e540a1dbb3a7bdf9d0e57"
@@ -5801,6 +5856,20 @@ react-native-render-html@^6.3.4:
     "@types/urijs" "^1.19.15"
     prop-types "^15.5.7"
     ramda "^0.27.2"
+=======
+react-native-render-html@^6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-render-html/-/react-native-render-html-6.3.1.tgz#04675c9f77e1a6f7e17ccea5880ff24962ad58c2"
+  integrity sha512-vEL3Q2JaxX1RtYw9R68qKUVCkSnjerms8ZrSNAnKbDTcm+PFrCCm8ko96GxZpmqt3t3I8Apkcz1zgEWBiXC8sg==
+  dependencies:
+    "@jsamr/counter-style" "^2.0.1"
+    "@jsamr/react-native-li" "^2.3.0"
+    "@native-html/transient-render-engine" "11.2.2"
+    "@types/ramda" "^0.27.40"
+    "@types/urijs" "^1.19.15"
+    prop-types "^15.5.7"
+    ramda "^0.27.1"
+>>>>>>> Stashed changes
     stringify-entities "^3.1.0"
     urijs "^1.19.6"
 
@@ -5857,11 +5926,14 @@ react-native-swipe-gestures@^1.0.5:
   resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz#a172cb0f3e7478ccd681fd36b8bfbcdd098bde7c"
   integrity sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==
 
+<<<<<<< Updated upstream
 react-native-tab-view@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz#1f8d7a835ab4f5b1b1407ec8dddc1053b53fa3c6"
   integrity sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw==
 
+=======
+>>>>>>> Stashed changes
 react-native-user-avatar@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/react-native-user-avatar/-/react-native-user-avatar-1.0.8.tgz#d3f5f1d538344a13bfa72026127a1fd6c3bba05e"
@@ -6781,11 +6853,14 @@ ua-parser-js@^0.7.30:
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.31.tgz#649a656b191dffab4f21d5e053e27ca17cbff5c6"
   integrity sha512-qLK/Xe9E2uzmYI3qLeOmI0tEOt+TBBQyUIAh4aAgU05FVYzeZrKUdkAZfBNVGRaHVgV0TDkdEngJSw/SyQchkQ==
 
+<<<<<<< Updated upstream
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.6.tgz#9c411a802a409a91fc6cf74081baba34b24499ac"
   integrity sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==
 
+=======
+>>>>>>> Stashed changes
 uglify-es@^3.1.9:
   version "3.3.9"
   resolved "https://registry.yarnpkg.com/uglify-es/-/uglify-es-3.3.9.tgz#0c1c4f0700bed8dbc124cdb304d2592ca203e677"

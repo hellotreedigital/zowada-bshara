@@ -73,11 +73,7 @@ export const AboutScreen = ({ navigation }) => {
           onPress={() => navigation.pop()}
           style={{ marginRight: 10 }}
         >
-          <RedArrowSVG
-            style={{
-              transform: [{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" }],
-            }}
-          />
+          <RedArrowSVG />
         </TouchableOpacity>
         <View>
           <Typography

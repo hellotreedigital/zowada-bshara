@@ -83,12 +83,7 @@ export const PaymentScreen = ({ navigation }) => {
           onPress={() => navigation.pop()}
           style={styles.spacing}
         >
-          <RedArrowSVG
-            style={{
-              transform: [{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" }],
-            }}
-            secondary={true}
-          />
+          <RedArrowSVG secondary={true} />
         </TouchableOpacity>
         <View>
           <Typography

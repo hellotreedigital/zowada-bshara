@@ -1,7 +1,6 @@
 import React from "react";
 import {
   FlatList,
-  I18nManager,
   ImageBackground,
   SafeAreaView,
   StyleSheet,
@@ -67,11 +66,7 @@ export const UserQuestionsScreen = ({ navigation, route }) => {
           style={styles.spacing}
           onPress={() => navigation.pop()}
         >
-          <RedArrowSVG
-            style={{
-              transform: [{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" }],
-            }}
-          />
+          <RedArrowSVG />
         </TouchableOpacity>
         <View>
           <Typography

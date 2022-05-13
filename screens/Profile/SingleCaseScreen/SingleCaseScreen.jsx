@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ImageBackground,
-  I18nManager,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { PrimaryButton } from "../../../buttons/PrimaryButton";
@@ -42,14 +41,7 @@ const SingleCaseScreen = ({ navigation, route }) => {
               onPress={() => navigation.pop()}
               style={styles.spacing}
             >
-              <ArrowSVG
-                style={{
-                  transform: [
-                    { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
-                  ],
-                }}
-                fill={colors.dark_yellow}
-              />
+              <ArrowSVG fill={colors.dark_yellow} />
             </TouchableOpacity>
             <View>
               <Typography
@@ -295,7 +287,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: SCREEN_WIDTH,
     backgroundColor: "white",
-    marginTop: Platform.OS === "android" ? 40 : 0,
   },
   row: {
     flexDirection: "row",

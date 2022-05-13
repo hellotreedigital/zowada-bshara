@@ -1,8 +1,6 @@
 import React from "react";
 import {
   FlatList,
-  I18nManager,
-  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -90,12 +88,7 @@ const CasesListScreen = ({ navigation, route }) => {
             onPress={() => navigation.pop()}
             style={styles.spacing}
           >
-            <ArrowSVG
-              style={{
-                transform: [{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" }],
-              }}
-              fill={colors.dark_yellow}
-            />
+            <ArrowSVG fill={colors.dark_yellow} />
           </TouchableOpacity>
           <View>
             <Typography
@@ -130,8 +123,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: SCREEN_WIDTH,
-    // backgroundColor: "red",
-    marginTop: Platform.OS === "android" ? 40 : 0,
+    backgroundColor: "white",
   },
   row: {
     flexDirection: "row",
@@ -183,11 +175,11 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 0,
+      height: 1,
     },
     shadowOpacity: 0.16,
     shadowRadius: 5.65,
 
-    elevation: 5,
+    elevation: 1,
   },
 });

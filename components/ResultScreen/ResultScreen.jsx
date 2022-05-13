@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
-  I18nManager,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -79,11 +78,7 @@ const ResultScreen = ({ navigation, route }) => {
           onPress={() => navigation.pop()}
           style={styles.spacing}
         >
-          <RedArrowSVG
-            style={{
-              transform: [{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" }],
-            }}
-          />
+          <RedArrowSVG />
         </TouchableOpacity>
         <View>
           <SearchBox

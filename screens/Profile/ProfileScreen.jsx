@@ -42,7 +42,7 @@ export const ProfileScreen = ({ navigation }) => {
   const { setProfilePic, profilePic } = useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [loader, setLoader] = useState(false);
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (token === true) {
       setToken(null);
     }
@@ -168,7 +168,7 @@ export const ProfileScreen = ({ navigation }) => {
   ];
 
   const [hasPermission, setHasPermission] = useState(null);
-
+  if (token === true) return;
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -229,9 +229,6 @@ export const ProfileScreen = ({ navigation }) => {
     switch (id) {
       case 1:
         navigation.navigate("myCases");
-        break;
-      case 3:
-        navigation.navigate('Menu', {screen: 'ELearning', initial: false, params:{ screen: 'myCoursesScreen', initial: false }});
         break;
       default:
         break;

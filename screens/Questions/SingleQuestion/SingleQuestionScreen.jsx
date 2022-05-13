@@ -1,7 +1,6 @@
 import React from "react";
 import {
   FlatList,
-  I18nManager,
   ImageBackground,
   SafeAreaView,
   StyleSheet,
@@ -57,11 +56,7 @@ export const SingleQuestionScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.pop()}>
-          <RedArrowSVG
-            style={{
-              transform: [{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" }],
-            }}
-          />
+          <RedArrowSVG />
         </TouchableOpacity>
         <View>
           <ImageBackground style={styles.image} source={{ uri: data.image }} />

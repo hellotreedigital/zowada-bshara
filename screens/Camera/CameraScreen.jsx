@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   SafeAreaView,
   BackHandler,
-  I18nManager,
 } from "react-native";
 import { Camera } from "expo-camera";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../globals/globals";
@@ -61,11 +60,7 @@ const CameraScreen = ({ navigation, route }) => {
             <FlashSVG />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => backHandler()} style={styles.icon}>
-            <ArrowSVG
-              style={{
-                transform: [{ rotateY: I18nManager.isRTL ? "0deg" : "180deg" }],
-              }}
-            />
+            <ArrowSVG />
           </TouchableOpacity>
         </SafeAreaView>
       </View>

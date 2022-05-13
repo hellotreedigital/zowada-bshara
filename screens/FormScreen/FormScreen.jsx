@@ -162,11 +162,6 @@ const FormScreen = ({ navigation, route }) => {
           <View style={styles.spacing}>
             <TouchableOpacity onPress={() => navigation.pop()}>
               <ArrowSVG
-                style={{
-                  transform: [
-                    { rotateY: I18nManager.isRTL ? "0deg" : "180deg" },
-                  ],
-                }}
                 fill={editProfile ? colors.focused : colors.dark_yellow}
               />
             </TouchableOpacity>
@@ -290,8 +285,6 @@ export default FormScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS == "android" ? 40 : 0,
-
     backgroundColor: "white",
   },
   header: {

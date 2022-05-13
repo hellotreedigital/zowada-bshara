@@ -58,9 +58,9 @@ export default function App() {
     shopTitles:null,
     coursesTitles: null
   });
+  const [user, setUser] = useState(null);
   const [authState, setAuthState] = useState({});
   const [userName, setUserName] = useState(null);
-  const [user, setUser] = useState(null);
   const [profilePic, setProfilePic] = useState(null);
   const [verificationTypes, setVerificationTypes] = useState({
     phone: null,
@@ -150,7 +150,6 @@ export default function App() {
   const fixedTitlesHandler = () => {
     getFixedTitles()
       .then((res) => {
-        console.log(res.data.courses_titles)
         setFixedTitle({
           authTitles: res.data.auth_titles,
           menuTitle: res.data.menu_titles,
@@ -230,7 +229,6 @@ export default function App() {
         setProfilePic(server + res.data.user.image);
         setUserName(res.data.user.full_name);
         setUser(res.data.user)
-        console.log(res.data.user, 'fdfsddrtyu')
       })
       .catch((err) => {
         console.log(err);
