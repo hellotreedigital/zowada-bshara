@@ -69,7 +69,6 @@ export default function App() {
   const [notification, setNotification] = useState(false);
   const [appLanguage, setAppLanguage] = useState(null);
   const [token, setToken] = useState(null);
-  const [userId, setUserId] = useState(null);
   const [onBoarding, setOnBoarding] = useState([]);
   const [isOnBoardingVisible, setIsOnBoardingVisible] = React.useState(true);
   const [languageLoaded, setLanguageLoaded] = useState(false);
@@ -92,13 +91,20 @@ export default function App() {
     experienceType: null,
     bottomBarText: null,
     settingsTitles: null,
-    courses_types: null,
-    shopTitles:null,
-    coursesTitles: null
+    expertsTitles: null,
+    profileTitles: null,
+    rejections: null,
+    yearsExp: null,
+    paymentType: null,
+    updates: null,
+    coursesTitles:null
   });
   const [authState, setAuthState] = useState({});
   const [userName, setUserName] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [user, setUser] = useState(null);
+  const [price, setPrice] = React.useState(null);
+  const [temrsAccepted, setTermAccepted] = useState(null);
   const [profilePic, setProfilePic] = useState(null);
   const [verificationTypes, setVerificationTypes] = useState({
     phone: null,
@@ -236,12 +242,7 @@ export default function App() {
 
     return token;
   }
-  
-  const checkForUserId = async () => {
-    const value = await AsyncStorage.getItem("@userId");
-    if (value === null) return;
-    setUserId(value);
-  }
+
   const checkForToken = async () => {
     const value = await AsyncStorage.getItem("@token");
     if (value === null) return;
@@ -250,6 +251,13 @@ export default function App() {
 
     setPuhserToken(value.replace('"', ""));
   };
+  
+  const checkForUserId = async () => {
+    const value = await AsyncStorage.getItem("@userId");
+    if (value === null) return;
+    setUserId(value);
+  };
+
   const onBoardingStatus = async () => {
     const value = await AsyncStorage.getItem("@onboardingStatus");
     if (value === null) return;
@@ -326,9 +334,6 @@ export default function App() {
           experienceType: res.data.experience_type,
           bottomBarText: res.data.bottom_menu,
           settingsTitles: res.data.setting_titles,
-          coursesTypes: res.data.courses_types,
-          shopTitles: res.data.shop_titles,
-          coursesTitles: res.data.courses_titles,
           expertsTitles: res.data.experts_fixed_titles,
           profileTitles: res.data.profile_titles,
           rejections: res.data.rejection_reasons,
@@ -357,6 +362,8 @@ export default function App() {
           contactTitles: res.data.contact_us_titles,
           landingTitles: res.data.landing_titles,
           withdrawalTitles: res.data.withdrawal_payment_type,
+          coursesTitles: res.data.courses_Titles,
+
         });
 
         setAppIsReady(true);
@@ -428,9 +435,7 @@ export default function App() {
       .then((res) => {
         setOnBoarding(res.data.onboardings);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   const userDataHandler = () => {
@@ -440,18 +445,15 @@ export default function App() {
         setAvailabilyHours(res.data);
         setIntervals(res.data.intervals);
         setUserData(res.data.user);
-
+        setAvailability(res.data.user.availability);
         setUserName(res.data.user.full_name);
         setUserId(res.data.user.id);
-        setUser(res.data.user)
-
+        setUser(res.data.user);
         setTermAccepted(res.data.user.terms_conditions_accepted);
         // setCanBookForFree(res.data.user.free_consultation_taken);
       })
       .catch((err) => {})
-      .finally(() => {
-        setAvailability(res.data.user.availability);
-      });
+      .finally(() => {});
   };
 
   const getCasesListHandler = () => {
@@ -526,10 +528,6 @@ export default function App() {
     async function prepare() {
       try {
         await checkForToken();
-        await checkForUserId();
-
-        getOnBoardings();
-        await fixedTitlesHandler();
         await getCartStatusHandler();
         getExpertsHandler();
         landingHandler();
@@ -561,6 +559,7 @@ export default function App() {
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
         await onBoardingStatus();
+        await checkForToken();
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (e) {
         console.warn(e);
@@ -645,7 +644,7 @@ export default function App() {
     >
       <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
         {appIsReady && languageLoaded && (
-          <AuthContext.Provider value={{ profilePic, setProfilePic }}>
+          <AuthContext.Provider value={{ profilePic, setProfilePic, user, setUser }}>
             <AppContext.Provider
               value={{
                 setIsExpert,
